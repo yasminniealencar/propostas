@@ -1,12 +1,19 @@
-# Inovar Gôndolas — v2.5.1
+# Inovar Gôndolas — v2.6 Planner 2D
 
-Refinamento visual do catálogo:
-- remove imagens genéricas incorretas de produtos sem foto;
-- usa placeholder neutro quando não existe foto cadastrada;
-- origem da tabela simplificada;
-- títulos alinhados em até 3 linhas;
-- preço destacado como “Preço de venda”;
-- botão “Detalhes” mais claro;
-- selo de ausência de foto mais discreto.
+## Novo módulo: Inovar Store Planner 2D
+- planta configurável por largura e comprimento;
+- grade de 10 cm, 25 cm, 50 cm ou 1 m;
+- biblioteca com gôndola de parede, gôndola central, ponta e checkout;
+- arrastar e soltar no desktop;
+- toque para adicionar em tablet/celular;
+- reposicionamento por arraste;
+- rotação de 90°;
+- duplicação e exclusão;
+- edição de largura, profundidade, posição e quantidade;
+- vínculo de cada elemento com um produto real do catálogo;
+- total estimado do projeto;
+- seleção de cliente;
+- geração automática de orçamento agrupando produtos iguais;
+- salvamento local com sincronização Supabase quando a tabela planner_projects está disponível.
 
-Não exige alteração no Supabase.
+Hospedagem principal: Cloudflare Pages.

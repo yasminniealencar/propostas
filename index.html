@@ -271,6 +271,70 @@ html,body{max-width:100%;overflow-x:hidden}
 }
 </style>
 
+
+<style id="v26-planner-css">
+/* ===== v2.6 • Inovar Store Planner 2D ===== */
+.planner-shell{display:grid;grid-template-columns:270px minmax(0,1fr) 290px;gap:14px;align-items:start}
+.planner-panel{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+.planner-panel-head{padding:14px 15px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.planner-panel-head h3{font-size:13px;margin:0}.planner-panel-body{padding:14px}
+.planner-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.planner-toolbar .field-mini{display:flex;gap:6px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:6px 9px}
+.planner-toolbar .field-mini label{font-size:9px;color:var(--muted);font-weight:900;text-transform:uppercase}
+.planner-toolbar .field-mini input,.planner-toolbar .field-mini select{border:0;background:transparent;outline:0;width:76px;color:var(--ink);font-weight:850}
+.planner-toolbar .field-mini select{width:auto}
+.planner-stage-panel{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);min-width:0}
+.planner-stage-top{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.planner-stage-wrap{padding:16px;min-height:520px;display:flex;align-items:center;justify-content:center;overflow:auto;background:linear-gradient(180deg,rgba(16,35,57,.018),rgba(16,35,57,.035))}
+.planner-floor{position:relative;background:#fff;border:2px solid #173e70;border-radius:8px;box-shadow:0 16px 42px rgba(16,35,57,.14);min-width:360px;max-width:100%;user-select:none;touch-action:none;overflow:hidden}
+body.theme-dark .planner-floor{background:#f8fafc}
+.planner-floor::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(to right,rgba(23,62,112,.13) 1px,transparent 1px),linear-gradient(to bottom,rgba(23,62,112,.13) 1px,transparent 1px);background-size:var(--gx,5%) var(--gy,5%)}
+.planner-floor::after{content:attr(data-size);position:absolute;right:8px;bottom:6px;color:#66758b;font-size:9px;font-weight:800;pointer-events:none;background:rgba(255,255,255,.8);padding:2px 5px;border-radius:5px}
+.planner-object{position:absolute;border:1.5px solid #244f80;border-radius:6px;background:rgba(36,79,128,.12);color:#173e70;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:grab;touch-action:none;transition:box-shadow .08s,border-color .08s}
+.planner-object:active{cursor:grabbing}.planner-object.selected{border:2px solid #91c900;box-shadow:0 0 0 3px rgba(145,201,0,.20),0 8px 24px rgba(16,35,57,.14);z-index:6}
+.planner-object.type-wall{background:rgba(55,99,149,.12)}
+.planner-object.type-center{background:rgba(145,201,0,.16);border-color:#6f9a00}
+.planner-object.type-end{background:rgba(240,156,39,.15);border-color:#c47713}
+.planner-object.type-checkout{background:rgba(104,66,166,.13);border-color:#6842a6}
+.planner-object .obj-label{font-size:8px;font-weight:950;text-align:center;line-height:1.1;padding:2px;pointer-events:none;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.planner-object .obj-price{position:absolute;right:2px;bottom:1px;font-size:6px;background:rgba(255,255,255,.82);border-radius:3px;padding:1px 2px;color:#173e70;pointer-events:none}
+.planner-object .obj-index{position:absolute;left:2px;top:1px;font-size:6px;color:#173e70;font-weight:900;pointer-events:none}
+.planner-palette{display:grid;gap:8px}
+.planner-palette-item{border:1px solid var(--line);background:var(--soft);border-radius:13px;padding:10px;display:grid;grid-template-columns:36px 1fr auto;gap:9px;align-items:center;cursor:grab;transition:.14s}
+.planner-palette-item:hover{border-color:#9eb4c7;transform:translateY(-1px)}.planner-palette-item:active{cursor:grabbing}
+.planner-palette-icon{height:34px;border-radius:9px;display:grid;place-items:center;background:var(--card);border:1px solid var(--line);font-size:18px}
+.planner-palette-item b{display:block;font-size:10px}.planner-palette-item small{display:block;color:var(--muted);font-size:8px;margin-top:2px;line-height:1.25}
+.planner-palette-item span.add{font-size:17px;font-weight:900;color:var(--green)}
+.planner-kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.planner-kpi{border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--soft)}
+.planner-kpi small{display:block;font-size:8px;color:var(--muted);font-weight:900;text-transform:uppercase}.planner-kpi strong{display:block;font-size:16px;margin-top:2px}
+.planner-selected-empty{border:1px dashed var(--line);border-radius:12px;padding:18px;text-align:center;color:var(--muted);font-size:10px;line-height:1.45}
+.planner-form{display:grid;grid-template-columns:1fr 1fr;gap:8px}.planner-form .full{grid-column:1/-1}
+.planner-form label{display:block;font-size:8px;color:var(--muted);font-weight:900;text-transform:uppercase;margin-bottom:4px}
+.planner-form input,.planner-form select{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:9px;padding:8px 9px;font-size:10px;outline:0}
+.planner-form input:focus,.planner-form select:focus{border-color:#7d9cb8}
+.planner-actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.planner-actions-grid .btn{justify-content:center}
+.planner-products-mini{display:grid;gap:6px;max-height:190px;overflow:auto}
+.planner-product-row{display:grid;grid-template-columns:42px 1fr auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:6px;background:var(--card)}
+.planner-product-row img{width:42px;height:38px;object-fit:contain;background:white;border-radius:7px;border:1px solid var(--line)}
+.planner-product-row b{font-size:9px;display:block;line-height:1.2}.planner-product-row small{font-size:7px;color:var(--muted);display:block;margin-top:2px}
+.planner-project-list{display:grid;gap:7px;max-height:210px;overflow:auto}
+.planner-project-card{border:1px solid var(--line);border-radius:11px;padding:9px;background:var(--soft);cursor:pointer}
+.planner-project-card:hover,.planner-project-card.active{border-color:#94b315;background:rgba(145,201,0,.08)}
+.planner-project-card b{font-size:9px;display:block}.planner-project-card small{display:block;font-size:7px;color:var(--muted);margin-top:2px}
+.planner-link-pill{display:inline-flex;align-items:center;gap:4px;border-radius:999px;background:rgba(145,201,0,.12);border:1px solid rgba(145,201,0,.3);padding:4px 7px;font-size:8px;font-weight:900;margin-top:5px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.planner-hint{font-size:8px;color:var(--muted);line-height:1.45;margin-top:8px}
+.planner-status{font-size:8px;font-weight:900;padding:4px 7px;border-radius:999px;background:var(--soft);border:1px solid var(--line)}
+.planner-empty-canvas{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;color:#789;opacity:.7;text-align:center;font-size:11px;font-weight:800;padding:20px}
+.planner-modal-wide{max-width:900px!important}
+.planner-modal-search{display:flex;gap:8px;margin-bottom:10px}.planner-modal-search input{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:10px}
+.planner-floor-dimension{position:absolute;color:#5f7088;font-size:7px;font-weight:900;pointer-events:none}
+.planner-floor-dimension.top{left:50%;top:3px;transform:translateX(-50%)}.planner-floor-dimension.left{left:3px;top:50%;transform:translateY(-50%) rotate(-90deg)}
+@media(max-width:1250px){.planner-shell{grid-template-columns:230px minmax(0,1fr)}.planner-right{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:14px}.planner-right>.planner-panel{height:100%}}
+@media(max-width:850px){.planner-shell{grid-template-columns:1fr}.planner-right{grid-template-columns:1fr}.planner-stage-wrap{min-height:420px;padding:8px}.planner-floor{min-width:300px}.planner-toolbar{align-items:stretch}.planner-toolbar .field-mini{flex:1;min-width:120px}}
+@media(max-width:560px){.planner-stage-wrap{min-height:360px}.planner-floor{min-width:270px}.planner-form{grid-template-columns:1fr}.planner-form .full{grid-column:auto}.planner-kpis{grid-template-columns:1fr 1fr}.planner-stage-top{align-items:flex-start}.planner-toolbar .field-mini{min-width:105px}.planner-palette{grid-template-columns:1fr 1fr}.planner-palette-item{grid-template-columns:30px 1fr;padding:8px}.planner-palette-item span.add{display:none}.planner-palette-icon{height:30px}.planner-palette-item small{display:none}}
+</style>
+
 </head>
 <body>
 <div id="authGate" class="auth-gate">
@@ -326,6 +390,7 @@ html,body{max-width:100%;overflow-x:hidden}
     <button data-view="quote"><span class="ico">＋</span>Novo orçamento</button>
     <button data-view="quotes"><span class="ico">▤</span>Orçamentos</button>
     <button data-view="catalog"><span class="ico">▦</span>Catálogo</button>
+    <button data-view="planner"><span class="ico">▧</span>Planner 2D</button>
     <button data-view="clients"><span class="ico">♙</span>Clientes</button>
     <button data-view="sellers"><span class="ico">◎</span>Vendedores</button>
     <button data-view="deliveries"><span class="ico">▣</span>Notas de entrega</button>
@@ -340,6 +405,7 @@ html,body{max-width:100%;overflow-x:hidden}
     <section class="view" id="view-quote"></section>
     <section class="view" id="view-quotes"></section>
     <section class="view" id="view-catalog"></section>
+    <section class="view" id="view-planner"></section>
     <section class="view" id="view-clients"></section>
     <section class="view" id="view-sellers"></section>
     <section class="view" id="view-deliveries"></section>
@@ -801,6 +867,364 @@ async function refreshProposalTracking(showToast=true){if(!cloudReady||!currentA
 async function openViewHistory(quoteId){const q=(state.quotes||[]).find(x=>x.id===quoteId);if(!q)return;if(!cloudReady){toast('Histórico disponível no modo online');return}const root=$('#modalRoot');root.innerHTML=`<div class="modal-back open" id="modalBack"><div class="modal"><div class="modal-head"><h3>👁 Acessos • ${escapeHtml(q.number||'')}</h3><button class="btn icon" onclick="closeModal()">×</button></div><div class="modal-body"><div class="tracking-card" style="margin-bottom:14px"><div class="tracking-card-grid"><div><small>Total de acessos</small><strong>${+q.viewCount||0}</strong></div><div><small>Visitantes</small><strong>${+q.uniqueViewCount||0}</strong></div><div><small>Primeiro acesso</small><strong>${v24DateTime(q.firstViewedAt)}</strong></div><div><small>Último acesso</small><strong>${v24DateTime(q.lastViewedAt)}</strong></div></div></div><div id="viewHistoryBody"><div class="empty">Carregando histórico...</div></div></div><div class="modal-foot"><button class="btn" onclick="closeModal()">Fechar</button></div></div></div>`;try{const {data,error}=await sb.from('proposal_view_events').select('viewed_at,visitor_id').eq('quote_id',quoteId).order('viewed_at',{ascending:false}).limit(50);if(error)throw error;const body=$('#viewHistoryBody');if(!body)return;body.innerHTML=(data||[]).length?`<div class="view-history-list">${data.map((r,i)=>`<div class="view-history-row"><div><b>Acesso ${(+q.viewCount||0)-i}</b><small style="display:block">${v24DateTime(r.viewed_at)}</small></div><span class="status Visualizado">Visualização</span></div>`).join('')}</div>`:'<div class="empty">Nenhum acesso registrado.</div>'}catch(e){const body=$('#viewHistoryBody');if(body)body.innerHTML=`<div class="empty">Não foi possível carregar o histórico.<br>${escapeHtml(e.message)}</div>`}}
 
 setInterval(()=>{if(document.visibilityState==='visible'&&currentAuth&&['dashboard','quotes'].includes(currentView))refreshProposalTracking(false)},30000);
+
+
+
+/* ===== v2.6 • Inovar Store Planner 2D ===== */
+const PLANNER_LOCAL_KEY='inovar_planner_v26';
+const PLANNER_TYPES={
+  wall:{label:'Gôndola de parede',short:'Parede',icon:'▥',w:0.92,d:0.45,css:'type-wall'},
+  center:{label:'Gôndola central',short:'Central',icon:'▤',w:0.92,d:0.90,css:'type-center'},
+  end:{label:'Ponta de gôndola',short:'Ponta',icon:'▰',w:0.90,d:0.55,css:'type-end'},
+  checkout:{label:'Checkout',short:'Checkout',icon:'▱',w:1.80,d:0.80,css:'type-checkout'}
+};
+let plannerProjects=[];
+let plannerCurrent=null;
+let plannerSelectedId='';
+let plannerLoaded=false;
+let plannerCloudAvailable=null;
+let plannerDrag=null;
+let plannerPaletteType='';
+let plannerRenderTimer=0;
+
+function plannerBlank(){
+  return {
+    id:null,name:'Novo projeto',clientId:'',sellerId:currentProfile?.seller_id||'',
+    width:20,length:12,grid:0.25,status:'Rascunho',objects:[],
+    createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()
+  };
+}
+function plannerLoadLocal(){
+  try{plannerProjects=JSON.parse(localStorage.getItem(PLANNER_LOCAL_KEY)||'[]')||[]}catch{plannerProjects=[]}
+}
+function plannerSaveLocal(){
+  try{localStorage.setItem(PLANNER_LOCAL_KEY,JSON.stringify(plannerProjects))}catch(e){console.warn(e)}
+}
+async function plannerEnsureLoaded(force=false){
+  if(plannerLoaded&&!force)return;
+  plannerLoadLocal();
+  plannerLoaded=true;
+  if(cloudReady&&sb){
+    try{
+      const {data,error}=await sb.from('planner_projects').select('*').order('updated_at',{ascending:false});
+      if(error)throw error;
+      plannerCloudAvailable=true;
+      if(Array.isArray(data)){
+        plannerProjects=data.map(plannerDbToLocal);
+        plannerSaveLocal();
+      }
+    }catch(e){
+      plannerCloudAvailable=false;
+      console.warn('Planner cloud:',e);
+    }
+  }
+  if(!plannerCurrent) plannerCurrent=plannerProjects[0]?JSON.parse(JSON.stringify(plannerProjects[0])):plannerBlank();
+}
+function plannerDbToLocal(r){
+  return {
+    id:r.id,name:r.name||'Projeto',clientId:r.client_id||'',sellerId:r.seller_id||'',
+    width:+r.width_m||20,length:+r.length_m||12,grid:+r.grid_m||0.25,status:r.status||'Rascunho',
+    objects:Array.isArray(r.objects)?r.objects:[],createdAt:r.created_at||new Date().toISOString(),
+    updatedAt:r.updated_at||new Date().toISOString()
+  };
+}
+function plannerLocalToDb(p){
+  return {
+    id:p.id,owner_user_id:currentAuth?.id||null,seller_id:p.sellerId||currentProfile?.seller_id||null,
+    client_id:p.clientId||null,name:p.name||'Projeto',width_m:+p.width||20,length_m:+p.length||12,
+    grid_m:+p.grid||0.25,objects:p.objects||[],status:p.status||'Rascunho',updated_at:new Date().toISOString()
+  };
+}
+function plannerClient(){
+  return (state.clients||[]).find(c=>c.id===plannerCurrent?.clientId)||null;
+}
+function plannerSnap(v){
+  const g=Math.max(.05,+plannerCurrent.grid||.25);
+  return Math.round(v/g)*g;
+}
+function plannerProduct(id){return (state.catalog||[]).find(p=>p.id===id)||null}
+function plannerEff(o){
+  const r=((+o.rot||0)%180)!==0;
+  return {w:r?+o.d:+o.w,d:r?+o.w:+o.d};
+}
+function plannerClampObject(o){
+  const e=plannerEff(o);
+  o.x=Math.max(0,Math.min(+plannerCurrent.width-e.w,plannerSnap(+o.x||0)));
+  o.y=Math.max(0,Math.min(+plannerCurrent.length-e.d,plannerSnap(+o.y||0)));
+  return o;
+}
+function plannerTotals(){
+  const objs=plannerCurrent?.objects||[];
+  let total=0,linked=0;
+  for(const o of objs){
+    const p=plannerProduct(o.productId);
+    if(p){linked++;total+=(+p.price||0)*(+o.qty||1)}
+  }
+  return {count:objs.reduce((s,o)=>s+(+o.qty||1),0),objects:objs.length,linked,total,area:(+plannerCurrent?.width||0)*(+plannerCurrent?.length||0)};
+}
+function plannerNew(){
+  if(plannerCurrent?.objects?.length&&!confirm('Criar um novo projeto? Alterações não salvas podem ser perdidas.'))return;
+  plannerCurrent=plannerBlank();plannerSelectedId='';renderPlanner();
+}
+async function plannerSave(){
+  if(!plannerCurrent)return;
+  const name=String(plannerCurrent.name||'').trim();
+  if(!name){toast('Informe o nome do projeto');return}
+  if(!plannerCurrent.id){plannerCurrent.id=uid('plan');plannerCurrent.createdAt=new Date().toISOString()}
+  plannerCurrent.updatedAt=new Date().toISOString();
+  plannerCurrent.sellerId=plannerCurrent.sellerId||currentProfile?.seller_id||'';
+  const ix=plannerProjects.findIndex(p=>p.id===plannerCurrent.id);
+  if(ix>=0)plannerProjects[ix]=JSON.parse(JSON.stringify(plannerCurrent));else plannerProjects.unshift(JSON.parse(JSON.stringify(plannerCurrent)));
+  plannerSaveLocal();
+  if(cloudReady&&sb){
+    try{
+      const {error}=await sb.from('planner_projects').upsert(plannerLocalToDb(plannerCurrent));
+      if(error)throw error;
+      plannerCloudAvailable=true;
+      toast('Projeto salvo no Supabase');
+    }catch(e){
+      plannerCloudAvailable=false;
+      console.warn(e);toast('Projeto salvo neste navegador; sincronização online indisponível');
+    }
+  }else toast('Projeto salvo neste navegador');
+  renderPlanner();
+}
+function plannerLoad(id){
+  const p=plannerProjects.find(x=>x.id===id);if(!p)return;
+  plannerCurrent=JSON.parse(JSON.stringify(p));plannerSelectedId='';renderPlanner();
+}
+async function plannerDeleteProject(){
+  if(!plannerCurrent?.id){plannerNew();return}
+  if(!confirm(`Excluir o projeto "${plannerCurrent.name}"?`))return;
+  const id=plannerCurrent.id;
+  plannerProjects=plannerProjects.filter(p=>p.id!==id);plannerSaveLocal();
+  if(cloudReady&&sb&&plannerCloudAvailable!==false){
+    try{const {error}=await sb.from('planner_projects').delete().eq('id',id);if(error)throw error}catch(e){console.warn(e)}
+  }
+  plannerCurrent=plannerProjects[0]?JSON.parse(JSON.stringify(plannerProjects[0])):plannerBlank();plannerSelectedId='';renderPlanner();toast('Projeto excluído');
+}
+function plannerAddObject(type,x=null,y=null){
+  if(!plannerCurrent)plannerCurrent=plannerBlank();
+  const t=PLANNER_TYPES[type]||PLANNER_TYPES.wall;
+  const o={id:uid('obj'),type,label:t.short,x:0,y:0,w:t.w,d:t.d,rot:0,qty:1,productId:''};
+  const eff=plannerEff(o);
+  o.x=x==null?plannerSnap((plannerCurrent.width-eff.w)/2):plannerSnap(x);
+  o.y=y==null?plannerSnap((plannerCurrent.length-eff.d)/2):plannerSnap(y);
+  plannerClampObject(o);
+  plannerCurrent.objects.push(o);plannerSelectedId=o.id;plannerTouch();renderPlanner();
+}
+function plannerDuplicate(){
+  const o=plannerSelected();if(!o)return;
+  const n=JSON.parse(JSON.stringify(o));n.id=uid('obj');n.x=plannerSnap(+o.x+(+plannerCurrent.grid||.25)*2);n.y=plannerSnap(+o.y+(+plannerCurrent.grid||.25)*2);
+  plannerClampObject(n);plannerCurrent.objects.push(n);plannerSelectedId=n.id;plannerTouch();renderPlanner();
+}
+function plannerRotate(){
+  const o=plannerSelected();if(!o)return;o.rot=((+o.rot||0)+90)%360;plannerClampObject(o);plannerTouch();renderPlanner();
+}
+function plannerRemove(){
+  if(!plannerSelectedId)return;plannerCurrent.objects=plannerCurrent.objects.filter(o=>o.id!==plannerSelectedId);plannerSelectedId='';plannerTouch();renderPlanner();
+}
+function plannerSelected(){return plannerCurrent?.objects?.find(o=>o.id===plannerSelectedId)||null}
+function plannerTouch(){if(plannerCurrent)plannerCurrent.updatedAt=new Date().toISOString()}
+function plannerSetProject(key,val){
+  if(!plannerCurrent)return;
+  if(['width','length','grid'].includes(key))val=Math.max(key==='grid'?.05:.5,+val||0);
+  plannerCurrent[key]=val;
+  if(key==='width'||key==='length'||key==='grid')for(const o of plannerCurrent.objects)plannerClampObject(o);
+  plannerTouch();clearTimeout(plannerRenderTimer);plannerRenderTimer=setTimeout(renderPlanner,40);
+}
+function plannerSetObject(key,val){
+  const o=plannerSelected();if(!o)return;
+  if(['x','y','w','d','qty'].includes(key))val=Math.max(key==='qty'?1:.05,+val||0);
+  o[key]=val;if(['x','y','w','d'].includes(key))plannerClampObject(o);plannerTouch();renderPlanner();
+}
+function plannerSelect(id){plannerSelectedId=id;renderPlanner()}
+function plannerPaletteDrag(e,type){plannerPaletteType=type;try{e.dataTransfer.setData('text/plain',type);e.dataTransfer.effectAllowed='copy'}catch{}}
+function plannerDrop(e){
+  e.preventDefault();const floor=e.currentTarget,rect=floor.getBoundingClientRect();
+  const type=(e.dataTransfer?.getData('text/plain')||plannerPaletteType||'wall');
+  const t=PLANNER_TYPES[type]||PLANNER_TYPES.wall;
+  const mx=(e.clientX-rect.left)/rect.width*plannerCurrent.width;
+  const my=(e.clientY-rect.top)/rect.height*plannerCurrent.length;
+  plannerAddObject(type,mx-t.w/2,my-t.d/2);
+}
+function plannerStartDrag(e,id){
+  if(e.button!==undefined&&e.button!==0)return;
+  const o=plannerCurrent.objects.find(x=>x.id===id);if(!o)return;
+  plannerSelectedId=id;
+  const floor=$('#plannerFloor');if(!floor)return;
+  const rect=floor.getBoundingClientRect();
+  plannerDrag={id,startX:e.clientX,startY:e.clientY,ox:+o.x||0,oy:+o.y||0,rect};
+  try{e.currentTarget.setPointerCapture(e.pointerId)}catch{}
+  e.preventDefault();
+}
+function plannerMoveDrag(e){
+  if(!plannerDrag||!plannerCurrent)return;
+  const o=plannerCurrent.objects.find(x=>x.id===plannerDrag.id);if(!o)return;
+  const dx=(e.clientX-plannerDrag.startX)/plannerDrag.rect.width*plannerCurrent.width;
+  const dy=(e.clientY-plannerDrag.startY)/plannerDrag.rect.height*plannerCurrent.length;
+  o.x=plannerSnap(plannerDrag.ox+dx);o.y=plannerSnap(plannerDrag.oy+dy);plannerClampObject(o);plannerTouch();
+  plannerRenderFloorOnly();
+}
+function plannerEndDrag(){if(plannerDrag){plannerDrag=null;renderPlanner()}}
+document.addEventListener('pointermove',plannerMoveDrag,{passive:false});
+document.addEventListener('pointerup',plannerEndDrag);
+function plannerFloorSize(){
+  const w=Math.max(1,+plannerCurrent.width||20),l=Math.max(1,+plannerCurrent.length||12);
+  const maxW=920,maxH=660,ratio=w/l;
+  let pxW=maxW,pxH=maxW/ratio;
+  if(pxH>maxH){pxH=maxH;pxW=maxH*ratio}
+  pxW=Math.max(300,pxW);pxH=Math.max(260,pxH);
+  return {w:pxW,h:pxH};
+}
+function plannerObjectHtml(o,i){
+  const e=plannerEff(o),p=plannerProduct(o.productId);
+  const left=(+o.x/plannerCurrent.width*100),top=(+o.y/plannerCurrent.length*100),w=(e.w/plannerCurrent.width*100),h=(e.d/plannerCurrent.length*100);
+  const t=PLANNER_TYPES[o.type]||PLANNER_TYPES.wall;
+  return `<div class="planner-object ${t.css} ${plannerSelectedId===o.id?'selected':''}" data-id="${o.id}"
+    style="left:${left}%;top:${top}%;width:${Math.max(w,.8)}%;height:${Math.max(h,1.2)}%"
+    onpointerdown="plannerStartDrag(event,'${o.id}')" onclick="plannerSelect('${o.id}')">
+    <span class="obj-index">${i+1}</span><div class="obj-label">${escapeHtml(o.label||t.short)}</div>${p?`<span class="obj-price">${money((+p.price||0)*(+o.qty||1))}</span>`:''}
+  </div>`;
+}
+function plannerRenderFloorOnly(){
+  const floor=$('#plannerFloor');if(!floor)return;
+  const empty=plannerCurrent.objects.length? '':`<div class="planner-empty-canvas">Arraste um item da biblioteca para a planta<br>ou toque em um item para adicionar.</div>`;
+  floor.innerHTML=`<span class="planner-floor-dimension top">${nfmt(plannerCurrent.width)} m</span><span class="planner-floor-dimension left">${nfmt(plannerCurrent.length)} m</span>${empty}${plannerCurrent.objects.map(plannerObjectHtml).join('')}`;
+}
+function plannerProductPicker(){
+  const o=plannerSelected();if(!o)return;
+  $('#modalRoot').innerHTML=`<div class="modal-back open"><div class="modal planner-modal-wide">
+    <div class="modal-head"><div><h3>Vincular produto do catálogo</h3><div class="hint">${escapeHtml(o.label||'Elemento do projeto')}</div></div><button class="btn icon" onclick="closeModal()">×</button></div>
+    <div class="modal-body"><div class="planner-modal-search"><input id="plannerProductSearch" placeholder="Buscar código, descrição, linha..." oninput="plannerRenderProductPicker()"><button class="btn" onclick="plannerUnlinkProduct()">Remover vínculo</button></div><div id="plannerProductResults"></div></div>
+  </div></div>`;plannerRenderProductPicker();
+}
+function plannerRenderProductPicker(){
+  const root=$('#plannerProductResults');if(!root)return;
+  const term=normalize($('#plannerProductSearch')?.value||'');
+  const list=(state.catalog||[]).filter(p=>!term||normalize([p.code,p.name,p.manufacturer,p.category,p.line,p.color].join(' ')).includes(term)).slice(0,60);
+  root.innerHTML=`<div class="planner-products-mini">${list.map(p=>`<div class="planner-product-row">
+    <img src="${typeof v251CatalogImage==='function'?v251CatalogImage(p):productImage(p)}" onerror="this.src='${placeholderSvg('Produto')}'">
+    <div><b>${escapeHtml(p.name)}</b><small>${escapeHtml(p.code||'Sem código')} • ${escapeHtml(makerLabel(p.manufacturer))} • ${money(p.price)}</small></div>
+    <button class="btn sm green" onclick="plannerLinkProduct('${p.id}')">Vincular</button>
+  </div>`).join('')||'<div class="empty">Nenhum produto encontrado.</div>'}</div>`;
+}
+function plannerLinkProduct(pid){
+  const o=plannerSelected(),p=plannerProduct(pid);if(!o||!p)return;o.productId=pid;
+  if(!o.label||Object.values(PLANNER_TYPES).some(t=>t.short===o.label))o.label=p.name.slice(0,34);
+  plannerTouch();closeModal();renderPlanner();toast('Produto vinculado ao elemento');
+}
+function plannerUnlinkProduct(){const o=plannerSelected();if(!o)return;o.productId='';plannerTouch();closeModal();renderPlanner();toast('Vínculo removido')}
+function plannerGenerateQuote(){
+  const objs=plannerCurrent?.objects||[];
+  const linked=objs.filter(o=>o.productId&&plannerProduct(o.productId));
+  if(!linked.length){toast('Vincule pelo menos um elemento a um produto do catálogo');return}
+  const grouped={};for(const o of linked){const k=o.productId;(grouped[k]??={qty:0}).qty+=(+o.qty||1)}
+  newQuote();
+  currentQuote.items=[];
+  for(const [pid,g] of Object.entries(grouped)){
+    const p=plannerProduct(pid);if(!p)continue;
+    currentQuote.items.push({id:uid('item'),productId:p.id,description:p.name,manufacturer:p.manufacturer||'',category:p.category||'',color:p.color||'',qty:g.qty,cost:+p.cost||0,markup:+p.markup||0,price:+p.price||0,image:p.image||''});
+  }
+  const c=plannerClient();if(c){currentQuote.clientId=c.id;currentQuote.client=JSON.parse(JSON.stringify(c))}
+  currentQuote.notes=`Projeto Planner: ${plannerCurrent.name}${plannerCurrent.id?' • '+plannerCurrent.id:''}\nÁrea planejada: ${nfmt(plannerCurrent.width)} m × ${nfmt(plannerCurrent.length)} m`;
+  renderQuote();showView('quote');toast(`${currentQuote.items.length} item(ns) enviados ao orçamento`);
+}
+function plannerSelectedPanel(){
+  const o=plannerSelected();if(!o)return `<div class="planner-selected-empty">Selecione um elemento na planta para editar dimensões, girar, duplicar ou vincular um produto.</div>`;
+  const p=plannerProduct(o.productId),t=PLANNER_TYPES[o.type]||PLANNER_TYPES.wall;
+  return `<div class="planner-form">
+    <div class="full"><label>Identificação</label><input value="${escapeHtml(o.label||t.short)}" onchange="plannerSetObject('label',this.value)"></div>
+    <div><label>Largura (m)</label><input type="number" step="0.05" min="0.05" value="${+o.w}" onchange="plannerSetObject('w',this.value)"></div>
+    <div><label>Profundidade (m)</label><input type="number" step="0.05" min="0.05" value="${+o.d}" onchange="plannerSetObject('d',this.value)"></div>
+    <div><label>Posição X (m)</label><input type="number" step="${plannerCurrent.grid}" min="0" value="${+o.x}" onchange="plannerSetObject('x',this.value)"></div>
+    <div><label>Posição Y (m)</label><input type="number" step="${plannerCurrent.grid}" min="0" value="${+o.y}" onchange="plannerSetObject('y',this.value)"></div>
+    <div><label>Quantidade</label><input type="number" step="1" min="1" value="${+o.qty||1}" onchange="plannerSetObject('qty',this.value)"></div>
+    <div><label>Rotação</label><input value="${(+o.rot||0)}°" disabled></div>
+  </div>
+  ${p?`<div class="planner-link-pill">✓ ${escapeHtml(p.code||'')} • ${escapeHtml(p.name)}</div>`:`<div class="planner-hint">Ainda sem produto vinculado. O objeto participa do layout, mas não entra no valor do projeto nem no orçamento.</div>`}
+  <div class="planner-actions-grid">
+    <button class="btn" onclick="plannerRotate()">↻ Girar 90°</button><button class="btn" onclick="plannerDuplicate()">⧉ Duplicar</button>
+    <button class="btn primary" onclick="plannerProductPicker()">▦ Vincular produto</button><button class="btn danger" onclick="plannerRemove()">Excluir</button>
+  </div>`;
+}
+function plannerProjectsHtml(){
+  return plannerProjects.slice(0,15).map(p=>{
+    const c=(state.clients||[]).find(x=>x.id===p.clientId);return `<div class="planner-project-card ${plannerCurrent?.id===p.id?'active':''}" onclick="plannerLoad('${p.id}')">
+      <b>${escapeHtml(p.name)}</b><small>${escapeHtml(c?.name||'Sem cliente')} • ${nfmt(p.width)} × ${nfmt(p.length)} m • ${(p.objects||[]).length} objeto(s)</small>
+    </div>`;
+  }).join('')||'<div class="planner-selected-empty">Nenhum projeto salvo ainda.</div>';
+}
+function renderPlanner(){
+  const root=$('#view-planner');if(!root)return;
+  if(!plannerLoaded){root.innerHTML='<div class="panel"><div class="empty">Carregando Planner...</div></div>';plannerEnsureLoaded().then(renderPlanner);return}
+  if(!plannerCurrent)plannerCurrent=plannerBlank();
+  const totals=plannerTotals(),size=plannerFloorSize(),gxp=(plannerCurrent.grid/plannerCurrent.width*100),gyp=(plannerCurrent.grid/plannerCurrent.length*100);
+  const clientOptions=(state.clients||[]).slice().sort((a,b)=>String(a.name).localeCompare(String(b.name),'pt-BR')).map(c=>`<option value="${c.id}" ${plannerCurrent.clientId===c.id?'selected':''}>${escapeHtml(c.name)}</option>`).join('');
+  root.innerHTML=`<div class="view-head"><div><h1>Inovar Store Planner 2D</h1><p>Monte a loja visualmente, vincule produtos do catálogo e transforme o layout em orçamento.</p></div><div class="row-actions"><span class="planner-status">${plannerCloudAvailable===true?'● sincronizado':plannerCloudAvailable===false?'● local':'● pronto'}</span><button class="btn" onclick="plannerNew()">＋ Novo projeto</button><button class="btn green" onclick="plannerSave()">✓ Salvar projeto</button></div></div>
+    <div class="planner-toolbar">
+      <div class="field-mini"><label>Projeto</label><input style="width:150px" value="${escapeHtml(plannerCurrent.name)}" onchange="plannerSetProject('name',this.value)"></div>
+      <div class="field-mini"><label>Cliente</label><select onchange="plannerSetProject('clientId',this.value)"><option value="">Sem cliente</option>${clientOptions}</select></div>
+      <div class="field-mini"><label>Largura</label><input type="number" min="2" step=".5" value="${plannerCurrent.width}" onchange="plannerSetProject('width',this.value)"><span>m</span></div>
+      <div class="field-mini"><label>Comprimento</label><input type="number" min="2" step=".5" value="${plannerCurrent.length}" onchange="plannerSetProject('length',this.value)"><span>m</span></div>
+      <div class="field-mini"><label>Grade</label><select onchange="plannerSetProject('grid',this.value)"><option value=".1" ${plannerCurrent.grid==.1?'selected':''}>10 cm</option><option value=".25" ${plannerCurrent.grid==.25?'selected':''}>25 cm</option><option value=".5" ${plannerCurrent.grid==.5?'selected':''}>50 cm</option><option value="1" ${plannerCurrent.grid==1?'selected':''}>1 m</option></select></div>
+    </div>
+    <div class="planner-shell">
+      <div class="planner-panel">
+        <div class="planner-panel-head"><h3>Biblioteca</h3><span class="hint">arraste ou toque</span></div>
+        <div class="planner-panel-body">
+          <div class="planner-palette">
+            ${Object.entries(PLANNER_TYPES).map(([k,t])=>`<div class="planner-palette-item" draggable="true" ondragstart="plannerPaletteDrag(event,'${k}')" onclick="plannerAddObject('${k}')"><div class="planner-palette-icon">${t.icon}</div><div><b>${t.label}</b><small>${nfmt(t.w)} × ${nfmt(t.d)} m</small></div><span class="add">＋</span></div>`).join('')}
+          </div>
+          <div class="planner-hint">Dica: clique em um elemento para adicioná-lo no centro ou arraste-o para uma posição específica.</div>
+          <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+          <div class="planner-panel-head" style="padding:0 0 9px;border:0"><h3>Projetos salvos</h3></div>
+          <div class="planner-project-list">${plannerProjectsHtml()}</div>
+          ${plannerCurrent.id?'<button class="btn danger" style="width:100%;margin-top:9px" onclick="plannerDeleteProject()">Excluir projeto</button>':''}
+        </div>
+      </div>
+      <div class="planner-stage-panel">
+        <div class="planner-stage-top"><div><b style="font-size:12px">${escapeHtml(plannerCurrent.name)}</b><div class="hint">${escapeHtml(plannerClient()?.name||'Sem cliente')} • área ${nfmt(totals.area)} m²</div></div><div class="row-actions"><button class="btn" onclick="plannerSelectedId='';renderPlanner()">Desmarcar</button><button class="btn green" onclick="plannerGenerateQuote()">Gerar orçamento</button></div></div>
+        <div class="planner-stage-wrap">
+          <div id="plannerFloor" class="planner-floor" data-size="${nfmt(plannerCurrent.width)} × ${nfmt(plannerCurrent.length)} m" ondragover="event.preventDefault()" ondrop="plannerDrop(event)"
+            style="width:${size.w}px;height:${size.h}px;--gx:${Math.max(.5,gxp)}%;--gy:${Math.max(.5,gyp)}%">
+            <span class="planner-floor-dimension top">${nfmt(plannerCurrent.width)} m</span><span class="planner-floor-dimension left">${nfmt(plannerCurrent.length)} m</span>
+            ${plannerCurrent.objects.length?'':`<div class="planner-empty-canvas">Arraste um item da biblioteca para a planta<br>ou toque em um item para adicionar.</div>`}
+            ${plannerCurrent.objects.map(plannerObjectHtml).join('')}
+          </div>
+        </div>
+      </div>
+      <div class="planner-right">
+        <div class="planner-panel">
+          <div class="planner-panel-head"><h3>Resumo do projeto</h3></div>
+          <div class="planner-panel-body">
+            <div class="planner-kpis">
+              <div class="planner-kpi"><small>Área</small><strong>${nfmt(totals.area)} m²</strong></div>
+              <div class="planner-kpi"><small>Equipamentos</small><strong>${totals.count}</strong></div>
+              <div class="planner-kpi"><small>Vinculados</small><strong>${totals.linked}/${totals.objects}</strong></div>
+              <div class="planner-kpi"><small>Estimativa</small><strong>${money(totals.total)}</strong></div>
+            </div>
+            <div class="planner-hint">O valor considera apenas objetos vinculados a produtos do catálogo. Quantidades são agrupadas ao gerar o orçamento.</div>
+          </div>
+        </div>
+        <div class="planner-panel" style="margin-top:14px">
+          <div class="planner-panel-head"><h3>Elemento selecionado</h3>${plannerSelectedId?'<span class="planner-status">selecionado</span>':''}</div>
+          <div class="planner-panel-body">${plannerSelectedPanel()}</div>
+        </div>
+      </div>
+    </div>`;
+}
+const v26RenderAllBase=renderAll;
+renderAll=function(){v26RenderAllBase();renderPlanner()};
+const v26ShowViewBase=showView;
+showView=function(v){
+  const r=v26ShowViewBase(v);
+  if(v==='planner'){
+    $('#topTitle').textContent='Planner 2D';
+    plannerEnsureLoaded().then(renderPlanner);
+  }
+  return r;
+};
 
 
 bootstrapV2();
