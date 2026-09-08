@@ -1,17 +1,12 @@
-# Inovar Gôndolas — v2.5 Catálogo Visual
+# Inovar Gôndolas — v2.5.1
 
-Atualização do catálogo para uma experiência mais visual e dinâmica.
+Refinamento visual do catálogo:
+- remove imagens genéricas incorretas de produtos sem foto;
+- usa placeholder neutro quando não existe foto cadastrada;
+- origem da tabela simplificada;
+- títulos alinhados em até 3 linhas;
+- preço destacado como “Preço de venda”;
+- botão “Detalhes” mais claro;
+- selo de ausência de foto mais discreto.
 
-## Novidades
-- visualização em Cards ou Lista;
-- cards maiores e responsivos;
-- fotos com destaque;
-- modal completo de detalhes do produto;
-- filtros por fabricante e categoria mantidos;
-- chips rápidos de categoria;
-- ação rápida para adicionar ao orçamento;
-- botão de edição exibido somente para administrador no modo online;
-- compatível com celular, tablet e desktop;
-- sem alteração de banco de dados nesta versão.
-
-Hospedagem principal: Cloudflare Pages.
+Não exige alteração no Supabase.
