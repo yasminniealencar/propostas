@@ -23,3 +23,7 @@ E trocar `publicBaseUrl` em `config.js` para:
 
 ## Segurança
 Nunca publicar uma chave `sb_secret_...` ou Service Role neste repositório.
+
+
+## v2.2
+Correção da paginação do Supabase: o catálogo agora carrega todos os registros (não apenas os primeiros 1.000). A mesma paginação foi aplicada a vendedores, clientes, orçamentos, itens e entregas.

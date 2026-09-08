@@ -553,17 +553,36 @@ async function enterApp(){
 async function v2Logout(){try{if(cloudReady)await sb.auth.signOut()}catch{}currentAuth=null;currentProfile=null;$('#userMenu')?.classList.remove('open');showLogin()}
 async function cloudGetProfile(uidv){const {data,error}=await sb.from('profiles').select('*').eq('id',uidv).single();if(error)throw error;return data}
 
+/* v2.2: paginação Supabase para carregar mais de 1000 registros */
+async function cloudFetchAll(table,orders=[]){
+ const all=[],pageSize=1000;
+ for(let from=0;;from+=pageSize){
+  let q=sb.from(table).select('*');
+  for(const col of orders)q=q.order(col);
+  const {data,error}=await q.range(from,from+pageSize-1);
+  if(error)throw error;
+  all.push(...(data||[]));
+  if(!data||data.length<pageSize)break;
+ }
+ return all;
+}
 async function cloudLoadState(){
- const [pRes,sRes,cRes,qRes,iRes,dRes,setRes]=await Promise.all([
-  sb.from('products').select('*').order('manufacturer').order('name'),sb.from('seller_profiles').select('*').order('name'),sb.from('clients').select('*').order('name'),sb.from('quotes').select('*').order('created_at'),sb.from('quote_items').select('*').order('position'),sb.from('deliveries').select('*').order('created_at'),sb.from('app_settings').select('*').eq('id','main').maybeSingle()
+ const [pData,sData,cData,qData,iData,dData,setRes]=await Promise.all([
+  cloudFetchAll('products',['manufacturer','name']),
+  cloudFetchAll('seller_profiles',['name']),
+  cloudFetchAll('clients',['name']),
+  cloudFetchAll('quotes',['created_at']),
+  cloudFetchAll('quote_items',['position']),
+  cloudFetchAll('deliveries',['created_at']),
+  sb.from('app_settings').select('*').eq('id','main').maybeSingle()
  ]);
- for(const r of [pRes,sRes,cRes,qRes,iRes,dRes,setRes])if(r.error)throw r.error;
- if(pRes.data?.length)state.catalog=pRes.data.map(dbProductToLocal);
- if(sRes.data?.length){state.sellerProfiles=sRes.data.map(dbSellerToLocal);syncSellerNames()}
- if(cRes.data)state.clients=cRes.data.map(x=>({id:x.id,name:x.name||'',phone:x.phone||'',document:x.document||'',address:x.address||'',cep:x.cep||'',city:x.city||'',uf:x.uf||''}));
- const itemsBy={};for(const i of iRes.data||[])(itemsBy[i.quote_id]??=[]).push(dbItemToLocal(i));
- state.quotes=(qRes.data||[]).map(q=>({id:q.id,number:q.number,date:q.quote_date,seller:q.seller||'',sellerId:q.seller_id||'',clientId:q.client_id||'',client:q.client_snapshot||{},title:q.title||'PROPOSTA COMERCIAL',status:q.status||'Rascunho',items:itemsBy[q.id]||[],discount:+q.discount||0,freight:+q.freight||0,payment:q.payment||'',validity:q.validity||'',delivery:q.delivery||'',notes:q.notes||'',createdAt:q.created_at||new Date().toISOString(),publicToken:q.public_token||'',publicEnabled:q.public_enabled===true}));
- if(dRes.data)state.deliveries=dRes.data.map(x=>x.data).filter(Boolean);
+ if(setRes.error)throw setRes.error;
+ state.catalog=(pData||[]).map(dbProductToLocal);
+ if(sData?.length){state.sellerProfiles=sData.map(dbSellerToLocal);syncSellerNames()}
+ state.clients=(cData||[]).map(x=>({id:x.id,name:x.name||'',phone:x.phone||'',document:x.document||'',address:x.address||'',cep:x.cep||'',city:x.city||'',uf:x.uf||''}));
+ const itemsBy={};for(const i of iData||[])(itemsBy[i.quote_id]??=[]).push(dbItemToLocal(i));
+ state.quotes=(qData||[]).map(q=>({id:q.id,number:q.number,date:q.quote_date,seller:q.seller||'',sellerId:q.seller_id||'',clientId:q.client_id||'',client:q.client_snapshot||{},title:q.title||'PROPOSTA COMERCIAL',status:q.status||'Rascunho',items:itemsBy[q.id]||[],discount:+q.discount||0,freight:+q.freight||0,payment:q.payment||'',validity:q.validity||'',delivery:q.delivery||'',notes:q.notes||'',createdAt:q.created_at||new Date().toISOString(),publicToken:q.public_token||'',publicEnabled:q.public_enabled===true}));
+ state.deliveries=(dData||[]).map(x=>x.data).filter(Boolean);
  if(setRes.data){state.company={...state.company,...(setRes.data.company||{})};state.theme=setRes.data.theme||state.theme}
  const maxNum=Math.max(1001,...state.quotes.map(q=>+(String(q.number||'').match(/(\d+)$/)?.[1]||0)));state.nextQuote=Math.max(state.nextQuote||1002,maxNum+1);applyTheme();renderAll();
 }
