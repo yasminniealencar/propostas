@@ -27,3 +27,9 @@ Nunca publicar uma chave `sb_secret_...` ou Service Role neste repositório.
 
 ## v2.2
 Correção da paginação do Supabase: o catálogo agora carrega todos os registros (não apenas os primeiros 1.000). A mesma paginação foi aplicada a vendedores, clientes, orçamentos, itens e entregas.
+
+
+## v2.3 — Setembro/2026
+- Catálogo S.A. atualizado pela tabela Motta de setembro/2026.
+- 536 itens S.A. preservados com os mesmos IDs.
+- Fonte exibida no catálogo alterada de abril/2026 para setembro/2026.
