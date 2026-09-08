@@ -1,12 +1,17 @@
-# Inovar Gôndolas — Propostas v2.4
+# Inovar Gôndolas — v2.5 Catálogo Visual
 
-## Rastreamento de propostas
-- primeira e última abertura
-- total de acessos
-- visitantes únicos por navegador
-- status automático Enviado → Visualizado
-- histórico de até 50 acessos na interface
-- atualização automática a cada 30 s no painel e na lista de orçamentos
-- botão para copiar link público
+Atualização do catálogo para uma experiência mais visual e dinâmica.
 
-Antes do deploy, execute `supabase_tracking_v2_4.sql` no projeto Supabase.
+## Novidades
+- visualização em Cards ou Lista;
+- cards maiores e responsivos;
+- fotos com destaque;
+- modal completo de detalhes do produto;
+- filtros por fabricante e categoria mantidos;
+- chips rápidos de categoria;
+- ação rápida para adicionar ao orçamento;
+- botão de edição exibido somente para administrador no modo online;
+- compatível com celular, tablet e desktop;
+- sem alteração de banco de dados nesta versão.
+
+Hospedagem principal: Cloudflare Pages.
