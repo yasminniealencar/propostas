@@ -10,3 +10,10 @@
 - Nota de entrega convertida para Recibo de Entrega e Recebimento.
 - Para criação de usuários, configure no Cloudflare Pages o segredo SUPABASE_SECRET_KEY.
 Nunca coloque a Secret Key no GitHub ou config.js.
+
+
+## v2.6.1.1 — Hotfix de inicialização
+- corrige a inicialização automática do Supabase;
+- aguarda `config.js` e `supabase-js` estarem disponíveis antes do login;
+- faz tentativas automáticas em caso de atraso momentâneo;
+- elimina a necessidade de executar `bootstrapV2()` manualmente no Console.

@@ -1363,7 +1363,47 @@ printDelivery=function(id){const d=state.deliveries.find(x=>x.id===id);if(!d)ret
 quoteTable=function(list,compact=false){return `<table class="table"><thead><tr><th>Número</th><th>Cliente</th><th>Data</th><th>Status</th><th>Interação</th><th>Total</th><th>Ações</th></tr></thead><tbody>${list.map(q=>`<tr><td><b>${q.number}</b></td><td>${escapeHtml(q.client?.name||'')}</td><td>${formatDate(q.date)}</td><td><span class="status ${q.status}">${q.status}</span></td><td>${typeof v24TrackingCell==='function'?v24TrackingCell(q):'—'}</td><td class="money">${money(quoteTotals(q).total)}</td><td><div class="row-actions"><button class="btn sm" onclick="editQuote('${q.id}')">Editar</button>${!compact?`<button class="btn sm" onclick="printQuote('${q.id}')">PDF</button><button class="btn sm" onclick="cloneQuote(state.quotes.find(q=>q.id==='${q.id}'))">Duplicar</button><button class="btn sm" onclick="createDelivery('${q.id}')">Recibo</button><button class="btn sm danger" onclick="deleteQuote('${q.id}')">Excluir</button>`:''}</div></td></tr>`).join('')||'<tr><td colspan="7" style="text-align:center;padding:30px">Nenhum orçamento.</td></tr>'}</tbody></table>`};
 
 
-bootstrapV2();
+
+/* ===== v2.6.1.1 • inicialização robusta ===== */
+let inovarBootRunning=false;
+let inovarBootDone=false;
+
+async function startInovarApp(attempt=0){
+  if(inovarBootRunning || inovarBootDone) return;
+
+  const cfgOk = !!(window.INOVAR_CONFIG?.supabaseUrl && window.INOVAR_CONFIG?.supabaseAnonKey);
+  const supaOk = !!window.supabase?.createClient;
+
+  if(!cfgOk || !supaOk){
+    if(attempt < 24){
+      setTimeout(()=>startInovarApp(attempt+1), 250);
+      return;
+    }
+    console.error('Falha na inicialização:', {cfgOk, supaOk});
+    showLogin();
+    setAuthError('loginError','Não foi possível iniciar a conexão com o Supabase. Atualize a página.');
+    return;
+  }
+
+  inovarBootRunning=true;
+  try{
+    await bootstrapV2();
+    inovarBootDone=true;
+  }catch(e){
+    console.error('Erro no bootstrap do sistema:', e);
+    if(attempt < 4){
+      inovarBootRunning=false;
+      setTimeout(()=>startInovarApp(attempt+1), 500);
+      return;
+    }
+    showLogin();
+    setAuthError('loginError','Falha temporária ao iniciar o sistema. Atualize a página.');
+  }finally{
+    inovarBootRunning=false;
+  }
+}
+
+startInovarApp();
 
 </script>
 </body></html>
