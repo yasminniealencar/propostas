@@ -67,3 +67,26 @@ Nova etapa do roadmap.
 - integração com o rastreamento de propostas;
 - acesso rápido ao orçamento e histórico de visualizações;
 - vendedores continuam vendo apenas os próprios dados conforme RLS.
+
+
+## v2.8 — Kits por tipo de loja
+Nova etapa do roadmap.
+
+### Gestão
+- ADM e Gerente podem criar, editar, duplicar, ativar/inativar e excluir kits;
+- Vendedor pode visualizar e usar kits ativos;
+- cada kit possui Nome, Tipo de Loja, Descrição e composição de produtos;
+- quantidade padrão por produto;
+- busca por produto no catálogo.
+
+### Uso comercial
+- visualização da composição;
+- vendedor não vê preço fora do orçamento;
+- ADM/Gerente vê estimativa do kit;
+- seleção obrigatória de cliente completo;
+- geração de orçamento em um clique;
+- preço comercial é obtido pela política vigente no momento da geração;
+- observação do orçamento registra o kit e o tipo de loja utilizados.
+
+### Banco
+Execute `inovar_v2_8_kits_tipo_loja.sql` antes de usar os kits online.
