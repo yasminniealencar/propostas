@@ -41,3 +41,29 @@ A rota administrativa é `functions/api/manage-user.js`.
 Ela exige sessão válida de ADM/Dono e usa `SUPABASE_SECRET_KEY` somente no Cloudflare.
 Gerentes continuam podendo criar vendedores, mas não redefinir/excluir logins existentes.
 O sistema bloqueia a exclusão do próprio login que está em uso.
+
+
+## v2.7 — Kanban Comercial
+Nova etapa do roadmap.
+
+### Funil visual
+- Rascunho
+- Enviado
+- Visualizado
+- Em negociação
+- Aprovado
+- Perdido (status interno Reprovado)
+- Entregue
+
+### Recursos
+- arrastar cartões entre etapas no desktop;
+- seletor de etapa para tablet/celular;
+- sincronização da etapa com Supabase sem reatribuir o dono do orçamento;
+- filtros por vendedor, período e busca;
+- total financeiro por coluna;
+- pipeline aberto;
+- leads quentes por número de visualizações;
+- alerta para propostas abertas há 7 dias ou mais;
+- integração com o rastreamento de propostas;
+- acesso rápido ao orçamento e histórico de visualizações;
+- vendedores continuam vendo apenas os próprios dados conforme RLS.

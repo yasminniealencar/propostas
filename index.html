@@ -392,6 +392,59 @@ body.role-seller .items-head,body.role-seller .item-row{grid-template-columns:78
 }
 </style>
 
+
+<style id="v27-kanban-css">
+/* ===== v2.7 • Kanban Comercial ===== */
+.kanban-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.kanban-toolbar .searchbox{flex:1;min-width:230px}
+.kanban-toolbar select{min-width:155px}
+.kanban-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.kanban-kpi{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:13px;box-shadow:var(--shadow)}
+.kanban-kpi small{display:block;color:var(--muted);font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
+.kanban-kpi strong{display:block;font-size:20px;margin-top:5px}
+.kanban-kpi span{display:block;color:var(--muted);font-size:8px;margin-top:3px}
+.kanban-board{display:flex;gap:11px;overflow-x:auto;padding:2px 2px 14px;scroll-snap-type:x proximity}
+.kanban-col{width:285px;min-width:285px;border:1px solid var(--line);background:rgba(80,100,125,.035);border-radius:15px;display:flex;flex-direction:column;max-height:calc(100vh - 250px);scroll-snap-align:start}
+.kanban-col.drag-over{outline:2px solid var(--green);outline-offset:1px;background:rgba(145,201,0,.07)}
+.kanban-col-head{padding:11px 11px 9px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--card);border-radius:15px 15px 0 0;z-index:2}
+.kanban-col-title{display:flex;align-items:center;justify-content:space-between;gap:7px}
+.kanban-col-title b{font-size:10px;text-transform:uppercase;letter-spacing:.035em}
+.kanban-count{display:inline-flex;min-width:25px;height:25px;align-items:center;justify-content:center;border-radius:999px;background:var(--soft);font-size:9px;font-weight:950}
+.kanban-col-total{font-size:8px;color:var(--muted);margin-top:3px}
+.kanban-cards{padding:8px;overflow-y:auto;min-height:130px}
+.kanban-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px;box-shadow:0 2px 8px rgba(20,35,55,.05);cursor:grab;transition:.14s transform,.14s box-shadow,.14s border-color}
+.kanban-card:hover{transform:translateY(-1px);box-shadow:0 5px 15px rgba(20,35,55,.09);border-color:rgba(145,201,0,.38)}
+.kanban-card:active{cursor:grabbing}
+.kanban-card.hot{border-left:4px solid #e67e22}
+.kanban-card.overdue{box-shadow:inset 0 0 0 1px rgba(190,45,45,.22)}
+.kanban-card-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.kanban-card-number{font-size:8px;font-weight:900;color:var(--muted)}
+.kanban-card-client{font-size:11px;font-weight:950;line-height:1.25;margin-top:3px}
+.kanban-card-value{font-size:13px;font-weight:950;white-space:nowrap}
+.kanban-card-meta{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.kanban-chip{display:inline-flex;align-items:center;padding:3px 6px;border-radius:999px;background:var(--soft);font-size:7px;font-weight:850;color:var(--muted)}
+.kanban-chip.hot{background:#fff0dc;color:#a65300}
+.kanban-chip.warn{background:#fdebea;color:#a53636}
+.kanban-card-seller{font-size:8px;color:var(--muted);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kanban-card-foot{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:9px;padding-top:8px;border-top:1px solid var(--line)}
+.kanban-card-foot select{font-size:8px;padding:5px 6px;min-width:0;max-width:145px}
+.kanban-empty{padding:18px 8px;text-align:center;color:var(--muted);font-size:9px;border:1px dashed var(--line);border-radius:10px}
+.kanban-stage-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px}
+.dot-draft{background:#8793a3}.dot-sent{background:#4b7fc4}.dot-viewed{background:#e8ae36}.dot-neg{background:#8e62c9}.dot-approved{background:#33a06f}.dot-rejected{background:#d65a5a}.dot-delivered{background:#7ca318}
+.status.Em.negociação,.status.Em-negociação{background:#efe7fb;color:#6b42a5}
+.kanban-help{font-size:8px;color:var(--muted);margin-top:4px}
+@media(max-width:980px){
+ .kanban-kpis{grid-template-columns:repeat(2,1fr)}
+ .kanban-col{width:265px;min-width:265px;max-height:none}
+}
+@media(max-width:540px){
+ .kanban-kpis{grid-template-columns:1fr 1fr}
+ .kanban-kpi{padding:10px}.kanban-kpi strong{font-size:16px}
+ .kanban-col{width:84vw;min-width:84vw}
+ .kanban-toolbar .searchbox{min-width:100%}
+}
+</style>
+
 </head>
 <body>
 <div id="authGate" class="auth-gate">
@@ -446,6 +499,7 @@ body.role-seller .items-head,body.role-seller .item-row{grid-template-columns:78
     <button data-view="dashboard" class="active"><span class="ico">⌂</span>Visão geral</button>
     <button data-view="quote"><span class="ico">＋</span>Novo orçamento</button>
     <button data-view="quotes"><span class="ico">▤</span>Orçamentos</button>
+    <button data-view="kanban"><span class="ico">▥</span>Kanban comercial</button>
     <button data-view="catalog"><span class="ico">▦</span>Catálogo</button>
     <button data-view="planner"><span class="ico">▧</span>Planner 2D</button>
     <button data-view="clients"><span class="ico">♙</span>Clientes</button>
@@ -462,7 +516,8 @@ body.role-seller .items-head,body.role-seller .item-row{grid-template-columns:78
     <section class="view" id="view-quote"></section>
     <section class="view" id="view-quotes"></section>
     <section class="view" id="view-catalog"></section>
-    <section class="view" id="view-planner"></section>
+    <section class="view" id="view-kanban"></section>
+  <section class="view" id="view-planner"></section>
     <section class="view" id="view-clients"></section>
     <section class="view" id="view-sellers"></section>
     <section class="view" id="view-deliveries"></section>
@@ -1604,6 +1659,205 @@ async function v262DeleteLogin(userId,sellerId,name){
     closeModal();await cloudLoadState();renderAll();toast('Login excluído; histórico preservado');
   }catch(e){alert('Não foi possível excluir o login: '+e.message)}
 }
+
+
+
+/* ===== v2.7 • Kanban Comercial ===== */
+const KANBAN_STAGES=[
+  {key:'Rascunho',label:'Rascunho',dot:'draft'},
+  {key:'Enviado',label:'Enviado',dot:'sent'},
+  {key:'Visualizado',label:'Visualizado',dot:'viewed'},
+  {key:'Em negociação',label:'Em negociação',dot:'neg'},
+  {key:'Aprovado',label:'Aprovado',dot:'approved'},
+  {key:'Reprovado',label:'Perdido',dot:'rejected'},
+  {key:'Entregue',label:'Entregue',dot:'delivered'}
+];
+
+let kanbanSearch='';
+let kanbanSeller='';
+let kanbanPeriod='all';
+let kanbanDraggingId='';
+
+function kanbanStage(status){
+  return KANBAN_STAGES.find(s=>s.key===status)||KANBAN_STAGES[0];
+}
+function kanbanDate(q){
+  const v=q.createdAt||q.date;
+  const d=new Date(v);
+  return Number.isNaN(d.getTime())?new Date():d;
+}
+function kanbanDays(q){
+  const d=kanbanDate(q);
+  return Math.max(0,Math.floor((Date.now()-d.getTime())/86400000));
+}
+function kanbanInPeriod(q){
+  if(kanbanPeriod==='all')return true;
+  const d=kanbanDate(q),now=new Date();
+  if(kanbanPeriod==='month')return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth();
+  if(kanbanPeriod==='30')return (Date.now()-d.getTime())<=30*86400000;
+  if(kanbanPeriod==='7')return (Date.now()-d.getTime())<=7*86400000;
+  return true;
+}
+function kanbanFiltered(){
+  const t=normalize(kanbanSearch);
+  return (state.quotes||[]).filter(q=>{
+    if(kanbanSeller&&q.seller!==kanbanSeller)return false;
+    if(!kanbanInPeriod(q))return false;
+    if(!t)return true;
+    return normalize([q.number,q.client?.name,q.client?.phone,q.client?.document,q.seller,q.status].join(' ')).includes(t);
+  });
+}
+function kanbanActive(q){
+  return !['Aprovado','Reprovado','Entregue'].includes(q.status);
+}
+function kanbanSelectOptions(status){
+  return KANBAN_STAGES.map(s=>`<option value="${escapeHtml(s.key)}" ${s.key===status?'selected':''}>${escapeHtml(s.label)}</option>`).join('');
+}
+function kanbanTracking(q){
+  const views=+q.viewCount||0;
+  if(views>=3)return `<span class="kanban-chip hot">🔥 ${views} acessos</span>`;
+  if(views>0)return `<span class="kanban-chip">👁 ${views} acesso${views===1?'':'s'}</span>`;
+  return '';
+}
+function kanbanAgeChip(q){
+  const days=kanbanDays(q);
+  if(!kanbanActive(q))return `<span class="kanban-chip">${days}d</span>`;
+  if(days>=7)return `<span class="kanban-chip warn">⚠ ${days} dias</span>`;
+  return `<span class="kanban-chip">${days===0?'hoje':days+'d'}</span>`;
+}
+function kanbanCard(q){
+  const t=quoteTotals(q),views=+q.viewCount||0,days=kanbanDays(q);
+  const hot=views>=3?' hot':'',over=kanbanActive(q)&&days>=7?' overdue':'';
+  return `<article class="kanban-card${hot}${over}" draggable="true"
+    ondragstart="kanbanDragStart(event,'${q.id}')"
+    ondragend="kanbanDragEnd(event)">
+    <div class="kanban-card-top">
+      <div><div class="kanban-card-number">${escapeHtml(q.number||'')}</div><div class="kanban-card-client">${escapeHtml(q.client?.name||'Cliente não informado')}</div></div>
+      <div class="kanban-card-value">${money(t.total)}</div>
+    </div>
+    <div class="kanban-card-meta">${kanbanTracking(q)}${kanbanAgeChip(q)}${q.publicEnabled?'<span class="kanban-chip">🔗 link ativo</span>':''}</div>
+    <div class="kanban-card-seller">Vendedor: <b>${escapeHtml(q.seller||'—')}</b>${q.lastViewedAt?` • último acesso ${v24DateTime(q.lastViewedAt)}`:''}</div>
+    <div class="kanban-card-foot">
+      <select aria-label="Mover etapa" onchange="kanbanSetStatus('${q.id}',this.value)">${kanbanSelectOptions(q.status)}</select>
+      <div class="row-actions">
+        ${q.viewCount?`<button class="btn icon sm" title="Histórico de acessos" onclick="openViewHistory('${q.id}')">👁</button>`:''}
+        <button class="btn sm" onclick="editQuote('${q.id}')">Abrir</button>
+      </div>
+    </div>
+  </article>`;
+}
+function renderKanban(){
+  const root=$('#view-kanban');if(!root)return;
+  const all=kanbanFiltered();
+  const active=all.filter(kanbanActive);
+  const pipeline=active.reduce((s,q)=>s+quoteTotals(q).total,0);
+  const hot=active.filter(q=>(+q.viewCount||0)>=3).length;
+  const waiting=active.filter(q=>kanbanDays(q)>=7).length;
+  const won=all.filter(q=>q.status==='Aprovado'||q.status==='Entregue');
+  const conversion=all.length?won.length/all.length*100:0;
+  const sellers=(typeof allSellerNames==='function'?allSellerNames():[...new Set((state.quotes||[]).map(q=>q.seller).filter(Boolean))]).sort((a,b)=>a.localeCompare(b,'pt-BR'));
+
+  root.innerHTML=`<div class="view-head"><div><h1>Kanban comercial</h1><p>Acompanhe cada proposta do primeiro orçamento até o fechamento.</p><div class="kanban-help">Arraste os cartões entre as colunas no computador ou altere a etapa pelo seletor no celular/tablet.</div></div><button class="btn green" onclick="newQuote()">＋ Novo orçamento</button></div>
+  <div class="kanban-kpis">
+    <div class="kanban-kpi"><small>Pipeline aberto</small><strong>${money(pipeline)}</strong><span>${active.length} proposta(s) em andamento</span></div>
+    <div class="kanban-kpi"><small>Leads quentes</small><strong>${hot}</strong><span>3 ou mais acessos à proposta</span></div>
+    <div class="kanban-kpi"><small>Aguardando ação</small><strong>${waiting}</strong><span>7+ dias sem fechamento</span></div>
+    <div class="kanban-kpi"><small>Conversão</small><strong>${nfmt(conversion)}%</strong><span>${won.length} ganha(s) no filtro</span></div>
+  </div>
+  <div class="kanban-toolbar">
+    <div class="searchbox"><input value="${escapeHtml(kanbanSearch)}" placeholder="Buscar cliente, orçamento, CPF/CNPJ, telefone..." oninput="kanbanSearch=this.value;renderKanban()"></div>
+    <select onchange="kanbanSeller=this.value;renderKanban()"><option value="">Todos os vendedores</option>${sellers.map(s=>`<option value="${escapeHtml(s)}" ${kanbanSeller===s?'selected':''}>${escapeHtml(s)}</option>`).join('')}</select>
+    <select onchange="kanbanPeriod=this.value;renderKanban()">
+      <option value="all" ${kanbanPeriod==='all'?'selected':''}>Todo o período</option>
+      <option value="month" ${kanbanPeriod==='month'?'selected':''}>Este mês</option>
+      <option value="30" ${kanbanPeriod==='30'?'selected':''}>Últimos 30 dias</option>
+      <option value="7" ${kanbanPeriod==='7'?'selected':''}>Últimos 7 dias</option>
+    </select>
+    <button class="btn" onclick="kanbanSearch='';kanbanSeller='';kanbanPeriod='all';renderKanban()">Limpar</button>
+  </div>
+  <div class="kanban-board">
+    ${KANBAN_STAGES.map(stage=>{
+      const list=all.filter(q=>q.status===stage.key).sort((a,b)=>kanbanDate(b)-kanbanDate(a));
+      const total=list.reduce((s,q)=>s+quoteTotals(q).total,0);
+      return `<section class="kanban-col" data-stage="${escapeHtml(stage.key)}"
+        ondragover="kanbanDragOver(event)"
+        ondragleave="kanbanDragLeave(event)"
+        ondrop="kanbanDrop(event,'${escapeHtml(stage.key)}')">
+        <div class="kanban-col-head"><div class="kanban-col-title"><b><span class="kanban-stage-dot dot-${stage.dot}"></span>${escapeHtml(stage.label)}</b><span class="kanban-count">${list.length}</span></div><div class="kanban-col-total">${money(total)}</div></div>
+        <div class="kanban-cards">${list.map(kanbanCard).join('')||'<div class="kanban-empty">Nenhuma proposta nesta etapa.</div>'}</div>
+      </section>`;
+    }).join('')}
+  </div>`;
+}
+function kanbanDragStart(ev,id){
+  kanbanDraggingId=id;
+  try{ev.dataTransfer.setData('text/plain',id);ev.dataTransfer.effectAllowed='move'}catch{}
+}
+function kanbanDragEnd(){
+  kanbanDraggingId='';
+  $$('.kanban-col').forEach(c=>c.classList.remove('drag-over'));
+}
+function kanbanDragOver(ev){
+  ev.preventDefault();
+  ev.currentTarget?.classList.add('drag-over');
+  try{ev.dataTransfer.dropEffect='move'}catch{}
+}
+function kanbanDragLeave(ev){
+  if(ev.currentTarget&&!ev.currentTarget.contains(ev.relatedTarget))ev.currentTarget.classList.remove('drag-over');
+}
+async function kanbanDrop(ev,status){
+  ev.preventDefault();ev.currentTarget?.classList.remove('drag-over');
+  let id=kanbanDraggingId;
+  try{id=ev.dataTransfer.getData('text/plain')||id}catch{}
+  if(id)await kanbanSetStatus(id,status);
+}
+async function kanbanSetStatus(id,status){
+  const q=(state.quotes||[]).find(x=>x.id===id);if(!q||q.status===status)return;
+  const old=q.status;q.status=status;
+  if(currentQuote?.id===id)currentQuote.status=status;
+  try{
+    await save();
+    if(cloudReady){
+      const {error}=await sb.from('quotes').update({status}).eq('id',id);
+      if(error)throw error;
+    }
+    renderKanban();renderQuotes();renderDashboard();
+    toast(`Movido para ${kanbanStage(status).label}`);
+  }catch(e){
+    q.status=old;if(currentQuote?.id===id)currentQuote.status=old;
+    await save();renderKanban();
+    alert('Não foi possível alterar a etapa: '+e.message);
+  }
+}
+
+/* Adiciona "Em negociação" ao seletor de status do orçamento sem alterar o restante. */
+const v27RenderQuoteBase=renderQuote;
+renderQuote=function(){
+  v27RenderQuoteBase();
+  if(!currentQuote)return;
+  const labels=[...$('#view-quote').querySelectorAll('.field label')];
+  const lab=labels.find(l=>l.textContent.trim().replace('*','').trim()==='Status');
+  const sel=lab?.closest('.field')?.querySelector('select');
+  if(sel&&!Array.from(sel.options).some(o=>o.value==='Em negociação')){
+    const opt=document.createElement('option');opt.value='Em negociação';opt.textContent='Em negociação';
+    const approved=Array.from(sel.options).find(o=>o.value==='Aprovado');
+    if(approved)sel.insertBefore(opt,approved);else sel.appendChild(opt);
+    sel.value=currentQuote.status;
+  }
+};
+
+/* Integra o Kanban ao ciclo normal de renderização e navegação. */
+const v27RenderAllBase=renderAll;
+renderAll=function(){v27RenderAllBase();renderKanban()};
+const v27ShowViewBase=showView;
+showView=function(v){
+  const r=v27ShowViewBase(v);
+  if(v==='kanban'){
+    $('#topTitle').textContent='Kanban comercial';
+    renderKanban();
+  }
+  return r;
+};
 
 
 /* ===== v2.6.1.2 • runtime fix + inicialização robusta ===== */
