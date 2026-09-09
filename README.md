@@ -17,3 +17,9 @@ Nunca coloque a Secret Key no GitHub ou config.js.
 - aguarda `config.js` e `supabase-js` estarem disponíveis antes do login;
 - faz tentativas automáticas em caso de atraso momentâneo;
 - elimina a necessidade de executar `bootstrapV2()` manualmente no Console.
+
+
+## v2.6.1.2 — correção definitiva do carregamento
+Foi corrigido um erro de JavaScript que interrompia a execução antes do `bootstrapV2()`.
+O problema estava em duas funções visuais do catálogo que eram referenciadas antes de existirem.
+Agora a inicialização ocorre automaticamente sem precisar abrir o Console.
