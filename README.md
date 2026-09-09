@@ -1,19 +1,12 @@
-# Inovar Gôndolas — v2.6 Planner 2D
+# v2.6.1 — Regras comerciais, acessos e recibos
 
-## Novo módulo: Inovar Store Planner 2D
-- planta configurável por largura e comprimento;
-- grade de 10 cm, 25 cm, 50 cm ou 1 m;
-- biblioteca com gôndola de parede, gôndola central, ponta e checkout;
-- arrastar e soltar no desktop;
-- toque para adicionar em tablet/celular;
-- reposicionamento por arraste;
-- rotação de 90°;
-- duplicação e exclusão;
-- edição de largura, profundidade, posição e quantidade;
-- vínculo de cada elemento com um produto real do catálogo;
-- total estimado do projeto;
-- seleção de cliente;
-- geração automática de orçamento agrupando produtos iguais;
-- salvamento local com sincronização Supabase quando a tabela planner_projects está disponível.
-
-Hospedagem principal: Cloudflare Pages.
+- Markup padrão: ESTANTE 60%, GANCHO 50%, ARMÁRIO/ROUPEIRO/ARQUIVO 55%, demais 48%.
+- Vendedor não recebe custo/markup do backend e não altera preço individual.
+- Vendedor não vê valor no catálogo; preço aparece no orçamento.
+- Nome/Razão Social, CPF/CNPJ e Endereço obrigatórios.
+- Perfis: Dono/ADM, Administrador, Gerente e Vendedor.
+- Minailde/Yasmin = Gerente; Saimon = Administrador; Marilene = Dono/ADM quando existir.
+- Gerente pode criar vendedores; ADM/Dono pode criar qualquer perfil.
+- Nota de entrega convertida para Recibo de Entrega e Recebimento.
+- Para criação de usuários, configure no Cloudflare Pages o segredo SUPABASE_SECRET_KEY.
+Nunca coloque a Secret Key no GitHub ou config.js.
