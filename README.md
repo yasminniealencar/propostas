@@ -23,3 +23,21 @@ Nunca coloque a Secret Key no GitHub ou config.js.
 Foi corrigido um erro de JavaScript que interrompia a execução antes do `bootstrapV2()`.
 O problema estava em duas funções visuais do catálogo que eram referenciadas antes de existirem.
 Agora a inicialização ocorre automaticamente sem precisar abrir o Console.
+
+
+## v2.6.2 — Gestão total de usuários
+ADM e Dono passam a controlar logins diretamente pelo aplicativo:
+- criar login;
+- editar nome, usuário e perfil;
+- editar telefone, e-mail comercial, comissão e meta;
+- ativar/inativar usuário;
+- marcar troca obrigatória de senha;
+- redefinir senha sem conhecer a anterior;
+- excluir login;
+- preservar histórico de orçamentos ao excluir o acesso.
+
+### Segurança
+A rota administrativa é `functions/api/manage-user.js`.
+Ela exige sessão válida de ADM/Dono e usa `SUPABASE_SECRET_KEY` somente no Cloudflare.
+Gerentes continuam podendo criar vendedores, mas não redefinir/excluir logins existentes.
+O sistema bloqueia a exclusão do próprio login que está em uso.

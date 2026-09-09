@@ -371,6 +371,27 @@ body.role-seller .items-head,body.role-seller .item-row{grid-template-columns:78
 @media(max-width:540px){body.role-seller .item-row{grid-template-columns:58px 1fr!important}body.role-seller .item-row .seller-quote-price,body.role-seller .item-row .item-total,body.role-seller .item-row .remove{grid-column:2!important}}
 </style>
 
+
+<style id="v262-user-admin-css">
+.user-admin-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px}
+.user-admin-grid .c12{grid-column:span 12}.user-admin-grid .c8{grid-column:span 8}.user-admin-grid .c6{grid-column:span 6}.user-admin-grid .c4{grid-column:span 4}.user-admin-grid .c3{grid-column:span 3}
+.admin-zone{border:1px solid rgba(20,75,130,.18);background:rgba(20,75,130,.045);border-radius:14px;padding:13px;margin-top:12px}
+.admin-zone h4{margin:0 0 6px;font-size:11px}.admin-zone p{margin:0;color:var(--muted);font-size:9px;line-height:1.5}
+.admin-danger{border-color:rgba(192,35,35,.22);background:rgba(192,35,35,.04)}
+.admin-user-note{font-size:8px;line-height:1.45;color:var(--muted);margin-top:5px}
+.login-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 7px;border-radius:999px;font-size:8px;font-weight:900;border:1px solid var(--line)}
+.login-pill.on{color:#276400;background:rgba(145,201,0,.11);border-color:rgba(145,201,0,.3)}
+.login-pill.off{color:var(--muted);background:var(--soft)}
+.manage-actions{display:flex;gap:5px;flex-wrap:wrap}
+.password-box{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.password-inline{display:flex;align-items:center;gap:7px;font-size:9px;color:var(--muted);margin-top:8px}
+.password-inline input{width:auto}
+@media(max-width:760px){
+ .user-admin-grid .c8,.user-admin-grid .c6,.user-admin-grid .c4,.user-admin-grid .c3{grid-column:span 12}
+ .password-box{grid-template-columns:1fr}
+}
+</style>
+
 </head>
 <body>
 <div id="authGate" class="auth-gate">
@@ -1385,6 +1406,204 @@ function v261BuildReceipt(d){const c=state.company,t=quoteTotals(d),cl=d.client|
 printDelivery=function(id){const d=state.deliveries.find(x=>x.id===id);if(!d)return;if(!v261ValidateClient(d.client,'imprimir o recibo'))return;v261BuildReceipt(d);window.print()};
 quoteTable=function(list,compact=false){return `<table class="table"><thead><tr><th>Número</th><th>Cliente</th><th>Data</th><th>Status</th><th>Interação</th><th>Total</th><th>Ações</th></tr></thead><tbody>${list.map(q=>`<tr><td><b>${q.number}</b></td><td>${escapeHtml(q.client?.name||'')}</td><td>${formatDate(q.date)}</td><td><span class="status ${q.status}">${q.status}</span></td><td>${typeof v24TrackingCell==='function'?v24TrackingCell(q):'—'}</td><td class="money">${money(quoteTotals(q).total)}</td><td><div class="row-actions"><button class="btn sm" onclick="editQuote('${q.id}')">Editar</button>${!compact?`<button class="btn sm" onclick="printQuote('${q.id}')">PDF</button><button class="btn sm" onclick="cloneQuote(state.quotes.find(q=>q.id==='${q.id}'))">Duplicar</button><button class="btn sm" onclick="createDelivery('${q.id}')">Recibo</button><button class="btn sm danger" onclick="deleteQuote('${q.id}')">Excluir</button>`:''}</div></td></tr>`).join('')||'<tr><td colspan="7" style="text-align:center;padding:30px">Nenhum orçamento.</td></tr>'}</tbody></table>`};
 
+
+
+
+/* ===== v2.6.2 • gestão total de usuários pelo ADM ===== */
+function canAdminUsers(){return ['owner','admin'].includes(v261Role())}
+
+async function v262AdminApi(payload){
+  if(!cloudReady) throw new Error('A gestão de logins exige o modo online.');
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session?.access_token) throw new Error('Sessão expirada. Entre novamente.');
+  const res=await fetch('/api/manage-user',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`},
+    body:JSON.stringify(payload)
+  });
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok) throw new Error(data.error||`Falha administrativa (${res.status})`);
+  return data;
+}
+
+const v262RenderSellersPrevious=renderSellers;
+renderSellers=function(){
+  if(!canManageTeam()){showView('dashboard');return}
+  const profiles=(state.sellerProfiles||[]).slice().sort((a,b)=>(b.active-a.active)||a.name.localeCompare(b.name,'pt-BR'));
+  const active=profiles.filter(p=>p.active).length;
+  const revenue=(state.quotes||[]).filter(q=>q.status==='Aprovado'||q.status==='Entregue').reduce((s,q)=>s+quoteTotals(q).total,0);
+
+  $('#view-sellers').innerHTML=`<div class="view-head">
+    <div><h1>Equipe e acessos</h1><p>${canAdminUsers()?'Controle total de logins, perfis, senhas e acessos.':'Gerencie a equipe comercial e crie vendedores.'}</p></div>
+    <div class="row-actions">
+      <button class="btn" onclick="openSellerModal()">＋ Cadastro comercial</button>
+      <button class="btn green" onclick="openSystemUserModal()">＋ Novo login</button>
+    </div>
+  </div>
+  <div class="seller-kpis">
+    <div class="seller-kpi"><small>Equipe ativa</small><strong>${active}</strong></div>
+    <div class="seller-kpi"><small>Cadastros</small><strong>${profiles.length}</strong></div>
+    <div class="seller-kpi"><small>Com login</small><strong>${profiles.filter(p=>p.userId).length}</strong></div>
+    <div class="seller-kpi"><small>Faturamento histórico</small><strong>${money(revenue)}</strong></div>
+  </div>
+  <div class="panel seller-table"><div class="panel-head">
+    <h3>Usuários e equipe comercial</h3>
+    <span class="hint">${canAdminUsers()?'ADM/Dono pode alterar usuário, perfil, senha, status e excluir logins.':'Gerente pode criar e manter vendedores.'}</span>
+  </div><div class="table-wrap"><table class="table">
+   <thead><tr><th>Nome</th><th>Perfil</th><th>Login</th><th>Contato</th><th>Status</th><th>Comissão</th><th>Meta</th><th>Propostas</th><th>Ações</th></tr></thead>
+   <tbody>${profiles.map(p=>{
+      const qs=(state.quotes||[]).filter(q=>normalize(q.seller)===normalize(p.name));
+      const locked=isManager()&&(p.role||'seller')!=='seller';
+      const canFull=canAdminUsers()&&!!p.userId;
+      return `<tr>
+        <td><b>${escapeHtml(p.name)}</b><small style="display:block;color:var(--muted);margin-top:3px">${p.userId?'Vinculado ao Supabase Auth':'Sem login vinculado'}</small></td>
+        <td><span class="role-badge ${escapeHtml(p.role||'seller')}">${escapeHtml(roleLabel(p.role||'seller'))}</span></td>
+        <td><span class="login-pill ${p.userId?'on':'off'}">${p.userId?'● Login ativo':'○ Sem login'}</span></td>
+        <td class="seller-contact">${escapeHtml(p.phone||'—')}<small>${escapeHtml(p.email||'')}</small></td>
+        <td><span class="seller-status ${p.active?'active':'inactive'}"><i class="seller-dot"></i>${p.active?'Ativo':'Inativo'}</span></td>
+        <td>${nfmt(p.commission||0)}%</td><td>${p.goal?money(p.goal):'—'}</td><td>${qs.length}</td>
+        <td><div class="manage-actions">
+          ${canFull?`<button class="btn sm green" onclick="openAdminUserModal('${p.id}','${p.userId}')">⚙ Gerenciar login</button>`:''}
+          ${!p.userId&&!locked?`<button class="btn sm green" onclick="openSystemUserModal('${p.id}')">＋ Criar login</button>`:''}
+          ${!canFull&&!locked?`<button class="btn sm" onclick="openSellerModal('${p.id}')">Editar cadastro</button>`:''}
+          ${!p.userId&&!locked?`<button class="btn sm" onclick="toggleSeller('${p.id}')">${p.active?'Inativar':'Ativar'}</button>`:''}
+          ${!p.userId&&!locked?`<button class="btn sm danger" onclick="deleteSeller('${p.id}')">Excluir cadastro</button>`:''}
+        </div></td>
+      </tr>`
+   }).join('')||'<tr><td colspan="9">Nenhum integrante cadastrado.</td></tr>'}</tbody></table></div></div>`;
+};
+
+openSystemUserModal=function(prefillSellerId=''){
+  if(!canManageTeam()){toast('Acesso restrito à gestão');return}
+  const existing=prefillSellerId?(state.sellerProfiles||[]).find(x=>x.id===prefillSellerId):null;
+  const opts=isManager()
+    ?'<option value="seller">Vendedor</option>'
+    :'<option value="seller">Vendedor</option><option value="manager">Gerente</option><option value="admin">Administrador</option><option value="owner">Dono / ADM</option>';
+  $('#modalRoot').innerHTML=`<div class="modal-back open"><div class="modal"><div class="modal-head">
+    <div><h3>${existing?'Criar login para '+escapeHtml(existing.name):'Novo login'}</h3><div class="hint">A senha inicial pode ser alterada pelo ADM a qualquer momento.</div></div>
+    <button class="btn icon" onclick="closeModal()">×</button></div>
+    <div class="modal-body"><div class="user-admin-grid">
+      <div class="field c6"><label>Nome completo <span class="required-star">*</span></label><input id="newUserName" value="${escapeHtml(existing?.name||'')}"></div>
+      <div class="field c6"><label>Usuário <span class="required-star">*</span></label><input id="newUsername" placeholder="ex.: marilene" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9._-]/g,'')"></div>
+      <div class="field c4"><label>Perfil</label><select id="newUserRole">${opts}</select></div>
+      <div class="field c4"><label>Telefone</label><input id="newUserPhone" value="${escapeHtml(existing?.phone||'')}"></div>
+      <div class="field c4"><label>E-mail de contato</label><input id="newUserContactEmail" type="email" value="${escapeHtml(existing?.email||'')}"></div>
+      <div class="field c6"><label>Senha inicial <span class="required-star">*</span></label><input id="newUserPassword" type="password" minlength="8"></div>
+      <div class="field c6"><label>Confirmar senha <span class="required-star">*</span></label><input id="newUserPassword2" type="password" minlength="8"></div>
+      <div class="field c6"><label>Comissão (%)</label><input id="newUserCommission" type="number" step="0.1" min="0" value="${existing?.commission||0}"></div>
+      <div class="field c6"><label>Meta mensal (R$)</label><input id="newUserGoal" type="number" step="0.01" min="0" value="${existing?.goal||0}"></div>
+      <div class="field c12"><div class="user-create-info"><b>Senha:</b> não é salva no aplicativo. A criação passa pela função protegida do Cloudflare usando a chave secreta do Supabase.</div></div>
+    </div></div>
+    <div class="modal-foot"><button class="btn" onclick="closeModal()">Cancelar</button><button class="btn green" id="createUserBtn" onclick="createSystemUser('${prefillSellerId}')">✓ Criar login</button></div>
+  </div></div>`;
+};
+
+createSystemUser=async function(prefillSellerId=''){
+  const fullName=$('#newUserName').value.trim(),username=$('#newUsername').value.trim().toLowerCase(),role=$('#newUserRole').value;
+  const phone=$('#newUserPhone').value.trim(),contactEmail=$('#newUserContactEmail').value.trim();
+  const password=$('#newUserPassword').value,p2=$('#newUserPassword2').value;
+  const commission=+$('#newUserCommission').value||0,goal=+$('#newUserGoal').value||0;
+  if(!fullName||username.length<3){toast('Informe nome e usuário');return}
+  if(password.length<8){toast('A senha deve ter pelo menos 8 caracteres');return}
+  if(password!==p2){toast('As senhas não coincidem');return}
+  if(isManager()&&role!=='seller'){toast('Gerente pode criar apenas vendedor');return}
+  const btn=$('#createUserBtn');btn.disabled=true;btn.textContent='Criando...';
+  try{
+    await v262AdminApi({action:'create',fullName,username,role,phone,contactEmail,password,commission,goal,sellerId:prefillSellerId||null});
+    closeModal();await cloudLoadState();renderAll();toast(`Login de ${fullName} criado`);
+  }catch(e){alert('Não foi possível criar o login: '+e.message)}
+  finally{if(btn){btn.disabled=false;btn.textContent='✓ Criar login'}}
+};
+
+async function openAdminUserModal(sellerId,userId){
+  if(!canAdminUsers()){toast('Somente ADM/Dono pode administrar logins');return}
+  $('#modalRoot').innerHTML=`<div class="modal-back open"><div class="modal"><div class="modal-body"><div class="empty">Carregando dados do usuário...</div></div></div></div>`;
+  try{
+    const data=await v262AdminApi({action:'get',userId});
+    const u=data.user||{}, s=data.seller||{};
+    const self=userId===currentAuth?.id;
+    const opts=['seller','manager','admin','owner'].map(r=>`<option value="${r}" ${u.role===r?'selected':''}>${escapeHtml(roleLabel(r))}</option>`).join('');
+    $('#modalRoot').innerHTML=`<div class="modal-back open"><div class="modal"><div class="modal-head">
+      <div><h3>Gerenciar login</h3><div class="hint">${escapeHtml(u.username||'')} • ${escapeHtml(u.email||'')}</div></div>
+      <button class="btn icon" onclick="closeModal()">×</button></div>
+      <div class="modal-body">
+       <div class="user-admin-grid">
+        <div class="field c6"><label>Nome completo</label><input id="admFullName" value="${escapeHtml(u.fullName||s.name||'')}"></div>
+        <div class="field c6"><label>Usuário</label><input id="admUsername" value="${escapeHtml(u.username||'')}" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9._-]/g,'')"><div class="admin-user-note">Alterar o usuário também altera o e-mail técnico usado no login.</div></div>
+        <div class="field c4"><label>Perfil de acesso</label><select id="admRole" ${self?'':''}>${opts}</select></div>
+        <div class="field c4"><label>Telefone</label><input id="admPhone" value="${escapeHtml(s.phone||'')}"></div>
+        <div class="field c4"><label>E-mail de contato</label><input id="admContactEmail" type="email" value="${escapeHtml(s.email||'')}"></div>
+        <div class="field c3"><label>Comissão (%)</label><input id="admCommission" type="number" min="0" step="0.1" value="${s.commission||0}"></div>
+        <div class="field c3"><label>Meta mensal (R$)</label><input id="admGoal" type="number" min="0" step="0.01" value="${s.goal||0}"></div>
+        <div class="field c3"><label>Status</label><select id="admActive"><option value="true" ${u.active!==false?'selected':''}>Ativo</option><option value="false" ${u.active===false?'selected':''}>Inativo</option></select></div>
+        <div class="field c3"><label>Troca obrigatória</label><select id="admMustChange"><option value="false" ${u.mustChange!==true?'selected':''}>Não</option><option value="true" ${u.mustChange===true?'selected':''}>Sim</option></select></div>
+       </div>
+
+       <div class="admin-zone"><h4>Redefinir senha</h4><p>Você não precisa saber a senha atual do usuário. Defina uma nova senha diretamente pelo painel administrativo.</p>
+        <div class="password-box">
+          <div class="field"><label>Nova senha</label><input id="admPassword" type="password" minlength="8"></div>
+          <div class="field"><label>Confirmar nova senha</label><input id="admPassword2" type="password" minlength="8"></div>
+        </div>
+        <label class="password-inline"><input id="admForceChange" type="checkbox" checked> Obrigar o usuário a trocar essa senha no próximo acesso</label>
+        <div style="margin-top:9px"><button class="btn" onclick="v262SetPassword('${userId}')">🔑 Redefinir senha</button></div>
+       </div>
+
+       <div class="admin-zone admin-danger"><h4>Excluir login</h4>
+        <p>${self?'Seu próprio login não pode ser excluído enquanto você estiver usando-o.':'Remove o acesso ao sistema, mas preserva o cadastro comercial e o histórico de orçamentos.'}</p>
+        ${self?'':`<div style="margin-top:9px"><button class="btn danger" onclick="v262DeleteLogin('${userId}','${sellerId}','${escapeHtml((u.fullName||s.name||u.username||'usuário').replace(/'/g,"&#39;"))}')">Excluir login definitivamente</button></div>`}
+       </div>
+      </div>
+      <div class="modal-foot"><button class="btn" onclick="closeModal()">Fechar</button><button class="btn green" id="admSaveBtn" onclick="v262SaveManagedUser('${userId}','${sellerId}')">✓ Salvar alterações</button></div>
+    </div></div>`;
+  }catch(e){closeModal();alert('Falha ao carregar o usuário: '+e.message)}
+}
+
+async function v262SaveManagedUser(userId,sellerId){
+  const btn=$('#admSaveBtn');btn.disabled=true;btn.textContent='Salvando...';
+  try{
+    const payload={
+      action:'update',userId,sellerId,
+      fullName:$('#admFullName').value.trim(),
+      username:$('#admUsername').value.trim().toLowerCase(),
+      role:$('#admRole').value,
+      phone:$('#admPhone').value.trim(),
+      contactEmail:$('#admContactEmail').value.trim(),
+      commission:+$('#admCommission').value||0,
+      goal:+$('#admGoal').value||0,
+      active:$('#admActive').value==='true',
+      mustChange:$('#admMustChange').value==='true'
+    };
+    if(!payload.fullName||payload.username.length<3)throw new Error('Nome e usuário são obrigatórios.');
+    await v262AdminApi(payload);
+    if(userId===currentAuth?.id){
+      currentProfile=await cloudGetProfile(currentAuth.id);
+      updateSessionUi();
+    }
+    closeModal();await cloudLoadState();renderAll();toast('Usuário atualizado');
+  }catch(e){alert('Não foi possível salvar: '+e.message)}
+  finally{if(btn){btn.disabled=false;btn.textContent='✓ Salvar alterações'}}
+}
+
+async function v262SetPassword(userId){
+  const p=$('#admPassword').value,p2=$('#admPassword2').value;
+  if(p.length<8){toast('A nova senha deve ter pelo menos 8 caracteres');return}
+  if(p!==p2){toast('As senhas não coincidem');return}
+  if(!confirm('Redefinir a senha deste usuário agora?'))return;
+  try{
+    await v262AdminApi({action:'set_password',userId,password:p,forceChange:$('#admForceChange').checked});
+    $('#admPassword').value='';$('#admPassword2').value='';
+    toast('Senha redefinida com sucesso');
+  }catch(e){alert('Não foi possível redefinir a senha: '+e.message)}
+}
+
+async function v262DeleteLogin(userId,sellerId,name){
+  if(userId===currentAuth?.id){toast('Você não pode excluir o próprio login em uso');return}
+  if(!confirm(`Excluir definitivamente o login de ${name}?\n\nO histórico de vendas será preservado.`))return;
+  try{
+    await v262AdminApi({action:'delete',userId,sellerId});
+    closeModal();await cloudLoadState();renderAll();toast('Login excluído; histórico preservado');
+  }catch(e){alert('Não foi possível excluir o login: '+e.message)}
+}
 
 
 /* ===== v2.6.1.2 • runtime fix + inicialização robusta ===== */
