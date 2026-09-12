@@ -2574,6 +2574,183 @@ showView=function(v){
 };
 
 
+
+/* ===== v2.8.4 • itens de orçamento idempotentes + correção de duplicação ===== */
+function v284NewItemId(){
+  try{return 'item_'+crypto.randomUUID()}catch{return uid('item')+'_'+Math.random().toString(36).slice(2,10)}
+}
+
+/* Ao duplicar um orçamento, os itens precisam receber IDs novos.
+   O orçamento duplicado não pode reutilizar as PKs dos itens do orçamento original. */
+cloneQuote=function(q){
+  const c=JSON.parse(JSON.stringify(q));
+  c.id=null;
+  c.number=`ORC-${new Date().getFullYear()}-${String(state.nextQuote).padStart(4,'0')}`;
+  c.date=today();
+  c.status='Rascunho';
+  c.createdAt=new Date().toISOString();
+  c.publicToken='';
+  c.publicEnabled=false;
+  c.firstViewedAt=null;
+  c.lastViewedAt=null;
+  c.viewCount=0;
+  c.uniqueViewCount=0;
+  c.items=(c.items||[]).map(i=>({...i,id:v284NewItemId()}));
+  currentQuote=c;
+  showView('quote');
+};
+
+/* Corrige itens já existentes em backups/rascunhos antigos. */
+async function v284RepairQuoteItemIds(q,cloudQuoteExists){
+  if(!q?.items?.length)return;
+
+  const seen=new Set();
+  for(const item of q.items){
+    if(!item.id || seen.has(item.id)){
+      item.id=v284NewItemId();
+    }
+    seen.add(item.id);
+  }
+
+  /* Se o orçamento ainda não existe na nuvem, todos os IDs dos itens passam
+     a ser novos. Isso evita colisão com itens copiados de outro orçamento. */
+  if(!cloudQuoteExists){
+    q.items=q.items.map(i=>({...i,id:v284NewItemId()}));
+    return;
+  }
+
+  /* Para orçamento já existente, verifica se algum ID pertence a OUTRO orçamento. */
+  const ids=[...new Set(q.items.map(i=>i.id).filter(Boolean))];
+  const foreign=new Set();
+
+  for(let n=0;n<ids.length;n+=100){
+    const chunk=ids.slice(n,n+100);
+    const {data,error}=await sb
+      .from('quote_items_app_view')
+      .select('id,quote_id')
+      .in('id',chunk);
+    if(error)throw error;
+
+    for(const row of data||[]){
+      if(row.quote_id!==q.id)foreign.add(row.id);
+    }
+  }
+
+  if(foreign.size){
+    q.items=q.items.map(i=>foreign.has(i.id)?{...i,id:v284NewItemId()}:i);
+  }
+}
+
+/* Substitui a estratégia antiga "DELETE tudo + INSERT tudo".
+   Agora o salvamento é idempotente:
+   1. garante cliente;
+   2. normaliza produto;
+   3. repara IDs dos itens;
+   4. UPSERT dos itens atuais;
+   5. remove apenas itens antigos que deixaram de existir no orçamento.
+   Repetir Salvar não gera duplicate key. */
+cloudSaveQuote=async function(q){
+  if(!cloudReady||!q)return;
+
+  if(q.clientId && typeof v281EnsureClientExistsForQuote==='function'){
+    await v281EnsureClientExistsForQuote(q);
+  }
+
+  if(typeof v282NormalizeQuoteProductIds==='function'){
+    await v282NormalizeQuoteProductIds(q);
+  }
+
+  const {data:cloudQuote,error:cloudQuoteError}=await sb
+    .from('quotes')
+    .select('id')
+    .eq('id',q.id)
+    .maybeSingle();
+
+  if(cloudQuoteError)throw cloudQuoteError;
+  const cloudQuoteExists=!!cloudQuote?.id;
+
+  await v284RepairQuoteItemIds(q,cloudQuoteExists);
+
+  const sp=sellerProfileByName(q.seller);
+  q.sellerId=q.sellerId||sp?.id||currentProfile?.seller_id||'';
+
+  const row={
+    id:q.id,
+    number:q.number,
+    quote_date:q.date,
+    seller:q.seller||null,
+    seller_id:q.sellerId||null,
+    owner_user_id:currentAuth.id,
+    client_id:q.clientId||null,
+    client_snapshot:q.client||{},
+    title:q.title,
+    status:q.status,
+    discount:+q.discount||0,
+    freight:+q.freight||0,
+    payment:q.payment||null,
+    validity:q.validity||null,
+    delivery:q.delivery||null,
+    notes:q.notes||null,
+    created_at:q.createdAt||new Date().toISOString(),
+    public_enabled:q.publicEnabled===true,
+    public_token:q.publicToken||null
+  };
+
+  let {error}=await sb.from('quotes').upsert(row);
+  if(error)throw error;
+
+  /* Descobre os itens que já pertencem a este orçamento. */
+  const {data:existing,error:existingError}=await sb
+    .from('quote_items_app_view')
+    .select('id,quote_id')
+    .eq('quote_id',q.id);
+
+  if(existingError)throw existingError;
+  const oldIds=new Set((existing||[]).map(x=>x.id));
+
+  const items=(q.items||[]).map((i,pos)=>({
+    id:i.id||v284NewItemId(),
+    quote_id:q.id,
+    product_id:i.productId||null,
+    description:i.description,
+    manufacturer:i.manufacturer||null,
+    category:i.category||null,
+    color:i.color||null,
+    qty:+i.qty||0,
+    cost:+i.cost||0,
+    markup:+i.markup||0,
+    price:+i.price||0,
+    image:i.image||null,
+    position:pos
+  }));
+
+  /* Garante que o ID criado aqui também volte para o objeto local. */
+  items.forEach((rowItem,pos)=>{
+    if(q.items?.[pos])q.items[pos].id=rowItem.id;
+  });
+
+  if(items.length){
+    ({error}=await sb.from('quote_items').upsert(items,{onConflict:'id'}));
+    if(error)throw error;
+  }
+
+  const currentIds=new Set(items.map(i=>i.id));
+  const obsolete=[...oldIds].filter(id=>!currentIds.has(id));
+
+  for(let n=0;n<obsolete.length;n+=100){
+    const chunk=obsolete.slice(n,n+100);
+    ({error}=await sb.from('quote_items').delete().eq('quote_id',q.id).in('id',chunk));
+    if(error)throw error;
+  }
+
+  /* Atualiza a cópia local com os IDs reparados, sem perder dados. */
+  const ix=(state.quotes||[]).findIndex(x=>x.id===q.id);
+  if(ix>=0)state.quotes[ix]=JSON.parse(JSON.stringify(q));
+  if(currentQuote?.id===q.id)currentQuote=JSON.parse(JSON.stringify(q));
+  await save();
+};
+
+
 /* ===== v2.6.1.2 • runtime fix + inicialização robusta ===== */
 let inovarBootRunning=false;
 let inovarBootDone=false;
