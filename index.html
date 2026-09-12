@@ -2127,6 +2127,55 @@ showView=function(v){
 };
 
 
+
+/* ===== v2.8.1 • correção de vínculo Cliente → Orçamento ===== */
+async function v281EnsureClientExistsForQuote(q){
+  if(!cloudReady || !q?.clientId) return;
+
+  const {data:existing,error:checkError}=await sb
+    .from('clients')
+    .select('id')
+    .eq('id',q.clientId)
+    .maybeSingle();
+
+  if(checkError) throw checkError;
+  if(existing?.id) return;
+
+  const cached=(state.clients||[]).find(c=>c.id===q.clientId);
+  const c=cached || {
+    id:q.clientId,
+    name:q.client?.name||'',
+    phone:q.client?.phone||'',
+    document:q.client?.document||'',
+    address:q.client?.address||'',
+    cep:q.client?.cep||'',
+    city:q.client?.city||'',
+    uf:q.client?.uf||''
+  };
+
+  if(typeof v261ValidateClient==='function' && !v261ValidateClient(c,'sincronizar o cliente')) {
+    throw new Error('O cliente precisa de Nome, CPF/CNPJ e Endereço antes de salvar o orçamento.');
+  }
+
+  await cloudSaveClient(c);
+
+  const {data:created,error:verifyError}=await sb
+    .from('clients')
+    .select('id')
+    .eq('id',q.clientId)
+    .maybeSingle();
+
+  if(verifyError) throw verifyError;
+  if(!created?.id) throw new Error('O cliente não foi sincronizado com o Supabase.');
+}
+
+const v281CloudSaveQuoteBase=cloudSaveQuote;
+cloudSaveQuote=async function(q){
+  if(q?.clientId) await v281EnsureClientExistsForQuote(q);
+  return await v281CloudSaveQuoteBase(q);
+};
+
+
 /* ===== v2.6.1.2 • runtime fix + inicialização robusta ===== */
 let inovarBootRunning=false;
 let inovarBootDone=false;
