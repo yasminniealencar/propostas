@@ -2751,6 +2751,65 @@ cloudSaveQuote=async function(q){
 };
 
 
+
+/* ===== v2.8.5 • compartilhamento sem regravar quote_items ===== */
+ensurePublicShare=async function(q){
+  if(!cloudReady) throw new Error('O link público ficará disponível quando o Supabase estiver conectado.');
+  if(!q?.id) throw new Error('Salve o orçamento antes de compartilhar.');
+
+  if(!q.publicToken) q.publicToken=crypto.randomUUID();
+  q.publicEnabled=true;
+
+  const nextStatus=q.status==='Rascunho'?'Enviado':q.status;
+
+  /* IMPORTANTE:
+     gerar/copiar link NÃO salva novamente os itens do orçamento.
+     Atualiza somente o cabeçalho da proposta, evitando qualquer acesso a quote_items. */
+  const {data,error}=await sb
+    .from('quotes')
+    .update({
+      public_token:q.publicToken,
+      public_enabled:true,
+      status:nextStatus
+    })
+    .eq('id',q.id)
+    .select('id,status')
+    .maybeSingle();
+
+  if(error) throw error;
+
+  if(!data?.id){
+    throw new Error(
+      'Este orçamento ainda não está sincronizado com o Supabase. '+
+      'Clique em "Salvar orçamento" primeiro e, depois, tente compartilhar novamente.'
+    );
+  }
+
+  q.status=data.status||nextStatus;
+
+  const ix=(state.quotes||[]).findIndex(x=>x.id===q.id);
+  if(ix>=0){
+    state.quotes[ix].publicToken=q.publicToken;
+    state.quotes[ix].publicEnabled=true;
+    state.quotes[ix].status=q.status;
+  }
+
+  if(currentQuote?.id===q.id){
+    currentQuote.publicToken=q.publicToken;
+    currentQuote.publicEnabled=true;
+    currentQuote.status=q.status;
+  }
+
+  await save();
+
+  if(currentView==='quote') renderQuote();
+  if(currentView==='quotes') renderQuotes();
+  if(currentView==='kanban' && typeof renderKanban==='function') renderKanban();
+
+  return `${V2CFG.publicBaseUrl.replace(/\/$/,'')}/?p=${encodeURIComponent(q.publicToken)}`;
+};
+
+
 /* ===== v2.6.1.2 • runtime fix + inicialização robusta ===== */
 let inovarBootRunning=false;
 let inovarBootDone=false;
