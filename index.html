@@ -489,6 +489,39 @@ body.role-seller .items-head,body.role-seller .item-row{grid-template-columns:78
 }
 </style>
 
+
+<style id="v283-backup-css">
+/* ===== v2.8.3 • proteção de dados ===== */
+body.role-seller .nav button[data-view="backups"],
+body.role-manager .nav button[data-view="backups"]{display:none!important}
+.safety-banner{border:1px solid rgba(224,151,21,.32);background:rgba(255,184,48,.10);border-radius:13px;padding:11px 13px;margin:0 0 12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.safety-banner b{font-size:10px}.safety-banner p{font-size:8px;color:var(--muted);margin:3px 0 0;line-height:1.45}
+.backup-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.backup-kpi{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:13px;box-shadow:var(--shadow)}
+.backup-kpi small{display:block;color:var(--muted);font-size:8px;font-weight:900;text-transform:uppercase}
+.backup-kpi strong{display:block;font-size:20px;margin-top:5px}
+.backup-safe-panel{border:1px solid rgba(145,201,0,.28);background:rgba(145,201,0,.06);border-radius:14px;padding:13px;margin-bottom:12px}
+.backup-safe-panel h3{margin:0 0 5px}.backup-safe-panel p{margin:0;font-size:9px;color:var(--muted);line-height:1.5}
+.backup-list{display:flex;flex-direction:column;gap:8px}
+.backup-row{display:grid;grid-template-columns:minmax(180px,1.2fr) repeat(4,minmax(70px,.45fr)) minmax(240px,1fr);gap:9px;align-items:center;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px}
+.backup-row .title b{display:block;font-size:10px}.backup-row .title small{display:block;font-size:8px;color:var(--muted);margin-top:2px}
+.backup-row .metric small{display:block;font-size:7px;color:var(--muted);text-transform:uppercase;font-weight:900}.backup-row .metric b{font-size:11px}
+.backup-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.pending-badge{display:inline-flex;padding:3px 7px;border-radius:999px;background:#fff0dc;color:#9b5409;border:1px solid #efcf9d;font-size:8px;font-weight:900}
+.sync-report{font-size:9px;color:var(--muted);line-height:1.5}
+@media(max-width:1000px){
+ .backup-kpis{grid-template-columns:repeat(2,1fr)}
+ .backup-row{grid-template-columns:1fr 1fr 1fr}
+ .backup-row .title{grid-column:1/-1}
+ .backup-actions{grid-column:1/-1;justify-content:flex-start}
+}
+@media(max-width:600px){
+ .backup-kpis{grid-template-columns:1fr 1fr}
+ .safety-banner{align-items:flex-start;flex-direction:column}
+ .backup-row{grid-template-columns:1fr 1fr}
+}
+</style>
+
 </head>
 <body>
 <div id="authGate" class="auth-gate">
@@ -550,6 +583,7 @@ body.role-seller .items-head,body.role-seller .item-row{grid-template-columns:78
     <button data-view="clients"><span class="ico">♙</span>Clientes</button>
     <button data-view="sellers"><span class="ico">◎</span>Vendedores</button>
     <button data-view="deliveries"><span class="ico">▣</span>Recibos de entrega</button>
+    <button data-view="backups"><span class="ico">◫</span>Segurança de dados</button>
     <button data-view="settings"><span class="ico">⚙</span>Configurações</button>
   </div>
   <div class="sidebar-bottom"><button id="backupQuick">⇩ Exportar backup JSON</button></div>
@@ -567,7 +601,8 @@ body.role-seller .items-head,body.role-seller .item-row{grid-template-columns:78
     <section class="view" id="view-clients"></section>
     <section class="view" id="view-sellers"></section>
     <section class="view" id="view-deliveries"></section>
-    <section class="view" id="view-settings"></section>
+    <section class="view" id="view-backups"></section>
+  <section class="view" id="view-settings"></section>
   </div>
 </main>
 </div>
@@ -2173,6 +2208,369 @@ const v281CloudSaveQuoteBase=cloudSaveQuote;
 cloudSaveQuote=async function(q){
   if(q?.clientId) await v281EnsureClientExistsForQuote(q);
   return await v281CloudSaveQuoteBase(q);
+};
+
+
+
+/* ===== v2.8.2 • correção de vínculo Produto → Item do orçamento ===== */
+async function v282FindCanonicalProduct(item){
+  if(!cloudReady) return null;
+
+  // 1) tenta pelo código, que é o identificador comercial mais seguro disponível no item local
+  const code=String(item?.code||'').trim();
+  if(code){
+    const {data,error}=await sb.from('products_app_view')
+      .select('id,code,name,manufacturer')
+      .eq('code',code)
+      .limit(2);
+    if(error) throw error;
+    if(data?.length===1) return data[0];
+  }
+
+  // 2) fallback pelo nome exato; usa fabricante para desempatar quando possível
+  const name=String(item?.description||'').trim();
+  if(name){
+    let q=sb.from('products_app_view')
+      .select('id,code,name,manufacturer')
+      .eq('name',name)
+      .limit(5);
+    const {data,error}=await q;
+    if(error) throw error;
+    if(data?.length===1) return data[0];
+    if(data?.length>1){
+      const maker=normalize(item?.manufacturer||'');
+      const sameMaker=data.find(p=>normalize(p.manufacturer||'')===maker);
+      if(sameMaker) return sameMaker;
+    }
+  }
+  return null;
+}
+
+async function v282NormalizeQuoteProductIds(q){
+  if(!cloudReady || !q?.items?.length) return;
+
+  const ids=[...new Set(q.items.map(i=>i.productId).filter(Boolean))];
+  let valid=new Set();
+
+  if(ids.length){
+    // consulta em blocos para não estourar URL em propostas grandes
+    for(let n=0;n<ids.length;n+=100){
+      const chunk=ids.slice(n,n+100);
+      const {data,error}=await sb.from('products_app_view').select('id').in('id',chunk);
+      if(error) throw error;
+      for(const r of data||[]) valid.add(r.id);
+    }
+  }
+
+  const unresolved=[];
+  for(const item of q.items){
+    if(!item.productId || valid.has(item.productId)) continue;
+
+    const canonical=await v282FindCanonicalProduct(item);
+    if(canonical?.id){
+      item.productId=canonical.id;
+      valid.add(canonical.id);
+      continue;
+    }
+
+    // ADM/Gerente preserva o item como item livre quando o produto legado saiu do catálogo.
+    // Vendedor não pode usar item livre por regra comercial.
+    if(typeof isSellerOnly==='function' && isSellerOnly()){
+      unresolved.push(item.description||item.code||'Produto');
+    }else{
+      item.productId='';
+    }
+  }
+
+  if(unresolved.length){
+    throw new Error(
+      'Alguns itens do orçamento apontam para produtos antigos que não existem mais no catálogo: '+
+      unresolved.slice(0,4).join(', ')+
+      (unresolved.length>4?'...':'')+
+      '. Remova esses itens e adicione-os novamente pelo catálogo.'
+    );
+  }
+}
+
+/* Normaliza os IDs antes de qualquer gravação de orçamento no Supabase. */
+const v282CloudSaveQuoteBase=cloudSaveQuote;
+cloudSaveQuote=async function(q){
+  await v282NormalizeQuoteProductIds(q);
+  return await v282CloudSaveQuoteBase(q);
+};
+
+/* Salva também metadados do produto dentro do JSON do kit para permitir reparo futuro. */
+const v282AddProductToKitEditorBase=addProductToKitEditor;
+addProductToKitEditor=function(productId){
+  const p=kitProduct(productId);
+  const existing=kitEditorItems.find(x=>x.productId===productId);
+  if(existing){
+    existing.qty=(+existing.qty||1)+1;
+    if(p){existing.code=p.code||existing.code||'';existing.name=p.name||existing.name||'';existing.manufacturer=p.manufacturer||existing.manufacturer||''}
+  }else{
+    kitEditorItems.push({
+      productId,
+      qty:1,
+      code:p?.code||'',
+      name:p?.name||'',
+      manufacturer:p?.manufacturer||''
+    });
+  }
+  renderKitEditorItems();
+  toast('Produto adicionado ao kit');
+};
+
+const v282SaveKitEditorBase=saveKitEditor;
+saveKitEditor=async function(id=''){
+  // Antes de salvar, completa os metadados dos itens atuais.
+  kitEditorItems=kitEditorItems.map(i=>{
+    const p=kitProduct(i.productId);
+    return {
+      ...i,
+      productId:i.productId,
+      qty:Math.max(1,+i.qty||1),
+      code:i.code||p?.code||'',
+      name:i.name||p?.name||'',
+      manufacturer:i.manufacturer||p?.manufacturer||''
+    };
+  });
+  return await v282SaveKitEditorBase(id);
+};
+
+
+
+/* ===== v2.8.3 • proteção contra perda de dados e backups de segurança ===== */
+const V283_BACKUP_KEY='inovar_safety_backups_v283';
+const V283_MAX_BACKUPS=12;
+let v283PendingQuoteIds=new Set();
+let v283LastMergeReport=null;
+
+function v283Clone(v){return JSON.parse(JSON.stringify(v))}
+function v283BackupList(){try{return JSON.parse(localStorage.getItem(V283_BACKUP_KEY)||'[]')||[]}catch{return[]}}
+function v283SaveBackupList(list){try{localStorage.setItem(V283_BACKUP_KEY,JSON.stringify((list||[]).slice(0,V283_MAX_BACKUPS)))}catch(e){console.warn('Backup local:',e)}}
+function v283Counts(s){return {quotes:(s?.quotes||[]).length,clients:(s?.clients||[]).length,deliveries:(s?.deliveries||[]).length,items:(s?.quotes||[]).reduce((n,q)=>n+(q.items||[]).length,0)}}
+function v283BusinessSnapshot(reason='Backup automático'){
+  const payload={
+    version:'2.8.3',
+    createdAt:new Date().toISOString(),
+    reason,
+    user:currentProfile?.username||currentProfile?.full_name||'',
+    state:{
+      version:state?.version,
+      nextQuote:state?.nextQuote,
+      theme:state?.theme,
+      company:v283Clone(state?.company||{}),
+      sellers:v283Clone(state?.sellers||[]),
+      sellerProfiles:v283Clone(state?.sellerProfiles||[]),
+      clients:v283Clone(state?.clients||[]),
+      quotes:v283Clone(state?.quotes||[]),
+      deliveries:v283Clone(state?.deliveries||[])
+    },
+    planner:(()=>{try{return JSON.parse(localStorage.getItem('inovar_planner_v26')||'[]')}catch{return[]}})(),
+    kits:(()=>{try{return JSON.parse(localStorage.getItem('inovar_sales_kits_v28')||'[]')}catch{return[]}})()
+  };
+  payload.counts=v283Counts(payload.state);
+  return payload;
+}
+function v283CreateSafetyBackup(reason='Backup automático'){
+  if(!state)return null;
+  const snap=v283BusinessSnapshot(reason);
+  const list=v283BackupList();
+  const last=list[0];
+  const same=last && JSON.stringify(last.state?.quotes||[])===JSON.stringify(snap.state.quotes||[])
+                  && JSON.stringify(last.state?.clients||[])===JSON.stringify(snap.state.clients||[]);
+  if(same && reason.startsWith('Antes de sincronizar')) return last;
+  list.unshift(snap);v283SaveBackupList(list);return snap
+}
+function v283DownloadObject(obj,filename){
+  const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)
+}
+function v283DownloadBackup(index){
+  const b=v283BackupList()[index];if(!b)return;
+  const stamp=(b.createdAt||'backup').replace(/[:.]/g,'-');
+  v283DownloadObject(b,`Inovar_backup_seguranca_${stamp}.json`)
+}
+function v283DeleteBackup(index){
+  const list=v283BackupList();if(!list[index])return;
+  if(!confirm('Excluir somente esta cópia de segurança local? Os dados atuais do sistema não serão alterados.'))return;
+  list.splice(index,1);v283SaveBackupList(list);renderBackups()
+}
+function v283MergeById(current,incoming){
+  const map=new Map((current||[]).map(x=>[x.id,x]));
+  let added=0;
+  for(const x of incoming||[]){if(x?.id&&!map.has(x.id)){map.set(x.id,v283Clone(x));added++}}
+  return {list:[...map.values()],added}
+}
+async function v283RecoverMissingFromBackup(index){
+  if(!canAdminUsers()){toast('Somente ADM/Dono pode recuperar backups');return}
+  const b=v283BackupList()[index];if(!b)return;
+  const before=v283CreateSafetyBackup('Antes de recuperar dados de um backup');
+  const qm=v283MergeById(state.quotes,b.state?.quotes);
+  const cm=v283MergeById(state.clients,b.state?.clients);
+  const dm=v283MergeById(state.deliveries,b.state?.deliveries);
+  state.quotes=qm.list;state.clients=cm.list;state.deliveries=dm.list;
+  for(const q of b.state?.quotes||[]){if(q?.id && !(localSnapshotBeforeCloud?.quotes||[]).some(x=>x.id===q.id)) v283PendingQuoteIds.add(q.id)}
+  const mx=Math.max(1001,...state.quotes.map(q=>+(String(q.number||'').match(/(\d+)$/)?.[1]||0)));
+  state.nextQuote=Math.max(+state.nextQuote||1002,mx+1);
+  await save();renderAll();renderBackups();
+  toast(`Recuperação segura: ${qm.added} orçamento(s), ${cm.added} cliente(s) e ${dm.added} recibo(s) adicionados`);
+}
+function v283MergeCloudWithLocal(localBefore,cloudAfter){
+  const localQuotes=localBefore?.quotes||[],cloudQuotes=cloudAfter?.quotes||[];
+  const cloudQuoteIds=new Set(cloudQuotes.map(q=>q.id));
+  const localOnlyQuotes=localQuotes.filter(q=>q?.id&&!cloudQuoteIds.has(q.id)).map(q=>({...v283Clone(q),_syncState:'local_only'}));
+
+  const localClients=localBefore?.clients||[],cloudClients=cloudAfter?.clients||[];
+  const cloudClientIds=new Set(cloudClients.map(c=>c.id));
+  const localOnlyClients=localClients.filter(c=>c?.id&&!cloudClientIds.has(c.id)).map(v283Clone);
+
+  const localDeliveries=localBefore?.deliveries||[],cloudDeliveries=cloudAfter?.deliveries||[];
+  const cloudDeliveryIds=new Set(cloudDeliveries.map(d=>d.id));
+  const localOnlyDeliveries=localDeliveries.filter(d=>d?.id&&!cloudDeliveryIds.has(d.id)).map(v283Clone);
+
+  v283PendingQuoteIds=new Set(localOnlyQuotes.map(q=>q.id));
+  const merged={...cloudAfter};
+  merged.quotes=[...cloudQuotes,...localOnlyQuotes];
+  merged.clients=[...cloudClients,...localOnlyClients];
+  merged.deliveries=[...cloudDeliveries,...localOnlyDeliveries];
+  const mx=Math.max(1001,...merged.quotes.map(q=>+(String(q.number||'').match(/(\d+)$/)?.[1]||0)));
+  merged.nextQuote=Math.max(+cloudAfter?.nextQuote||1002,+localBefore?.nextQuote||1002,mx+1);
+
+  v283LastMergeReport={
+    localQuotes:localQuotes.length,cloudQuotes:cloudQuotes.length,preservedQuotes:localOnlyQuotes.length,
+    localClients:localClients.length,cloudClients:cloudClients.length,preservedClients:localOnlyClients.length,
+    localDeliveries:localDeliveries.length,cloudDeliveries:cloudDeliveries.length,preservedDeliveries:localOnlyDeliveries.length
+  };
+  return merged;
+}
+
+/* A nuvem continua sendo a fonte principal, mas registros que só existem no navegador NÃO são descartados. */
+const v283CloudLoadStateBase=cloudLoadState;
+cloudLoadState=async function(){
+  const localBefore=v283Clone(state);
+  v283CreateSafetyBackup('Antes de sincronizar com Supabase');
+  await v283CloudLoadStateBase();
+  const cloudAfter=v283Clone(state);
+  state=v283MergeCloudWithLocal(localBefore,cloudAfter);
+  await save();
+  applyTheme();renderAll();
+};
+
+/* Backup obrigatório antes do login carregar a nuvem. */
+const v283EnterAppBase=enterApp;
+enterApp=async function(){
+  await ensureLocalLoaded();
+  v283CreateSafetyBackup('Antes de sincronizar com Supabase');
+  return await v283EnterAppBase();
+};
+
+function v283PendingQuotes(){
+  return (state.quotes||[]).filter(q=>v283PendingQuoteIds.has(q.id)||q._syncState==='local_only')
+}
+async function v283SyncPendingQuotes(){
+  if(!cloudReady){toast('Supabase não está conectado');return}
+  if(!canAdminUsers()){toast('Somente ADM/Dono pode sincronizar dados recuperados');return}
+  const pending=v283PendingQuotes();
+  if(!pending.length){toast('Não há orçamentos pendentes');return}
+  if(!confirm(`Sincronizar ${pending.length} orçamento(s) preservado(s) com o Supabase?\n\nNenhum orçamento existente será apagado.`))return;
+  v283CreateSafetyBackup('Antes de sincronizar orçamentos pendentes');
+  let ok=0;const fails=[];
+  for(const q of pending){
+    try{
+      await cloudSaveQuote(q);
+      delete q._syncState;v283PendingQuoteIds.delete(q.id);ok++;
+    }catch(e){fails.push(`${q.number||q.id}: ${e.message}`)}
+  }
+  await save();renderAll();
+  if(fails.length){
+    alert(`${ok} orçamento(s) sincronizado(s).\n\n${fails.length} não puderam ser enviados:\n\n${fails.slice(0,8).join('\n')}`);
+  }else toast(`${ok} orçamento(s) sincronizado(s) com segurança`);
+}
+
+/* Importação agora MESCLA. Não substitui silenciosamente a base atual. */
+importBackup=function(input){
+  const f=input.files?.[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=async()=>{
+    try{
+      const obj=JSON.parse(r.result);
+      const src=obj.state?.quotes?obj.state:obj;
+      if(!src?.quotes||!src?.clients)throw new Error('Formato de backup inválido');
+      if(!confirm('Importar em modo seguro?\n\nOs dados atuais serão preservados. Apenas registros ausentes serão acrescentados.'))return;
+      v283CreateSafetyBackup('Antes de importar backup JSON');
+      const qm=v283MergeById(state.quotes,src.quotes);
+      const cm=v283MergeById(state.clients,src.clients);
+      const dm=v283MergeById(state.deliveries,src.deliveries||[]);
+      state.quotes=qm.list;state.clients=cm.list;state.deliveries=dm.list;
+      for(const q of src.quotes||[])if(q?.id)v283PendingQuoteIds.add(q.id);
+      const mx=Math.max(1001,...state.quotes.map(q=>+(String(q.number||'').match(/(\d+)$/)?.[1]||0)));
+      state.nextQuote=Math.max(+state.nextQuote||1002,mx+1);
+      await save();currentQuote=null;renderAll();
+      toast(`Backup mesclado: +${qm.added} orçamento(s), +${cm.added} cliente(s)`);
+    }catch(e){alert('Não foi possível importar o backup: '+e.message)}
+  };
+  r.readAsText(f)
+};
+
+/* Também protege contra o botão de restauração dos dados iniciais. */
+const v283ResetBase=resetApp;
+resetApp=async function(){
+  v283CreateSafetyBackup('Antes de restaurar dados iniciais');
+  return await v283ResetBase();
+};
+
+function v283SafetyBannerHtml(){
+  const n=v283PendingQuotes().length;
+  if(!n)return '';
+  return `<div class="safety-banner"><div><b>🛡️ ${n} orçamento(s) preservado(s) deste navegador</b><p>Eles não existiam no Supabase no momento do carregamento e foram mantidos para evitar perda de dados.</p></div><div class="row-actions"><button class="btn" onclick="showView('backups')">Revisar</button>${canAdminUsers()?'<button class="btn green" onclick="v283SyncPendingQuotes()">Sincronizar pendentes</button>':''}</div></div>`
+}
+const v283RenderQuotesBase=renderQuotes;
+renderQuotes=function(){
+  v283RenderQuotesBase();
+  const root=$('#view-quotes');if(!root)return;
+  const banner=v283SafetyBannerHtml();
+  if(banner){
+    const vh=root.querySelector('.view-head');
+    if(vh)vh.insertAdjacentHTML('afterend',banner);else root.insertAdjacentHTML('afterbegin',banner)
+  }
+};
+
+function renderBackups(){
+  const root=$('#view-backups');if(!root)return;
+  if(!canAdminUsers()){root.innerHTML='<div class="empty">Acesso restrito ao ADM/Dono.</div>';return}
+  const list=v283BackupList(),now=v283Counts(state),pending=v283PendingQuotes().length;
+  root.innerHTML=`<div class="view-head"><div><h1>Segurança de dados</h1><p>Backups automáticos e recuperação sem substituir registros existentes.</p></div><div class="row-actions"><button class="btn" onclick="v283DownloadObject(v283BusinessSnapshot('Backup manual'),'Inovar_backup_manual_'+new Date().toISOString().slice(0,10)+'.json')">⇩ Backup manual</button><button class="btn green" onclick="v283CreateSafetyBackup('Backup manual interno');renderBackups();toast('Cópia de segurança criada')">＋ Criar cópia interna</button></div></div>
+  <div class="backup-kpis">
+    <div class="backup-kpi"><small>Orçamentos atuais</small><strong>${now.quotes}</strong></div>
+    <div class="backup-kpi"><small>Clientes atuais</small><strong>${now.clients}</strong></div>
+    <div class="backup-kpi"><small>Itens em propostas</small><strong>${now.items}</strong></div>
+    <div class="backup-kpi"><small>Pendentes de nuvem</small><strong>${pending}</strong></div>
+  </div>
+  <div class="backup-safe-panel"><h3>🛡️ Modo de preservação ativo</h3><p>Ao entrar no sistema, uma cópia local é criada antes da leitura do Supabase. Se existirem orçamentos somente neste computador, eles permanecem visíveis e são marcados como pendentes. Importar um JSON agora apenas acrescenta registros ausentes — não substitui toda a base.</p>${v283LastMergeReport?`<p style="margin-top:7px"><b>Última sincronização:</b> ${v283LastMergeReport.cloudQuotes} orçamento(s) vieram da nuvem e ${v283LastMergeReport.preservedQuotes} registro(s) local(is) foram preservados.</p>`:''}</div>
+  ${pending?`<div class="safety-banner"><div><b>${pending} orçamento(s) aguardando sincronização</b><p>Revise e depois envie-os ao Supabase sem apagar o que já existe.</p></div><button class="btn green" onclick="v283SyncPendingQuotes()">Sincronizar pendentes</button></div>`:''}
+  <div class="panel"><div class="panel-head"><h3>Cópias de segurança locais</h3><span class="hint">Mantemos até ${V283_MAX_BACKUPS} snapshots automáticos neste navegador.</span></div>
+   <div class="backup-list">${list.map((b,i)=>`<div class="backup-row">
+    <div class="title"><b>${escapeHtml(b.reason||'Backup')}</b><small>${v24DateTime(b.createdAt)}${b.user?' • '+escapeHtml(b.user):''}</small></div>
+    <div class="metric"><small>Orçamentos</small><b>${b.counts?.quotes??(b.state?.quotes||[]).length}</b></div>
+    <div class="metric"><small>Clientes</small><b>${b.counts?.clients??(b.state?.clients||[]).length}</b></div>
+    <div class="metric"><small>Itens</small><b>${b.counts?.items??0}</b></div>
+    <div class="metric"><small>Recibos</small><b>${b.counts?.deliveries??0}</b></div>
+    <div class="backup-actions"><button class="btn sm" onclick="v283DownloadBackup(${i})">Baixar JSON</button><button class="btn sm green" onclick="v283RecoverMissingFromBackup(${i})">Recuperar ausentes</button><button class="btn icon sm danger" onclick="v283DeleteBackup(${i})">×</button></div>
+   </div>`).join('')||'<div class="empty">Nenhuma cópia interna criada ainda.</div>'}</div>
+  </div>`;
+}
+
+const v283RenderAllBase=renderAll;
+renderAll=function(){v283RenderAllBase();renderBackups()};
+
+const v283ShowViewBase=showView;
+showView=function(v){
+  if(v==='backups'&&!canAdminUsers()){toast('Acesso restrito ao ADM/Dono');v='dashboard'}
+  const r=v283ShowViewBase(v);
+  if(v==='backups'){$('#topTitle').textContent='Segurança de dados';renderBackups()}
+  return r
 };
 
 
