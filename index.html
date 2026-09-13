@@ -522,6 +522,138 @@ body.role-manager .nav button[data-view="backups"]{display:none!important}
 }
 </style>
 
+
+<style id="v29-design-hardening-css">
+:root{
+  --v29-surface:#fff;--v29-soft:#f7f9fc;--v29-soft2:#eef3f8;
+  --v29-shadow:0 10px 30px rgba(16,44,85,.08);
+  --v29-shadow-lg:0 20px 55px rgba(16,44,85,.13);
+  --v29-focus:0 0 0 4px rgba(147,192,31,.17);
+}
+body.theme-dark{
+  --v29-surface:#152238;--v29-soft:#111d30;--v29-soft2:#1b2c46;
+  --v29-shadow:0 10px 30px rgba(0,0,0,.22);
+  --v29-shadow-lg:0 20px 55px rgba(0,0,0,.33);
+}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(circle at 82% 0%,rgba(147,192,31,.06),transparent 27rem),var(--bg)}
+button,.btn,.nav button,.quick button,.catalog-v25-card,.kanban-card,.kit-card{
+  transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease,background .16s ease,opacity .16s ease;
+}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.btn:focus-visible{
+  outline:none!important;box-shadow:var(--v29-focus)!important;border-color:var(--green)!important;
+}
+.btn:disabled,button:disabled{opacity:.55!important;cursor:wait!important;transform:none!important;box-shadow:none!important}
+.sidebar{
+  background:radial-gradient(circle at 20% 2%,rgba(147,192,31,.17),transparent 13rem),
+  linear-gradient(180deg,#102e58 0%,#0a1c35 72%,#08172c 100%);
+  box-shadow:8px 0 28px rgba(8,25,49,.08);border-right:1px solid rgba(255,255,255,.06)
+}
+.brand{padding-bottom:17px;margin-bottom:7px;border-bottom:1px solid rgba(255,255,255,.08)}
+.brand img{box-shadow:0 8px 24px rgba(0,0,0,.16)}
+.nav{gap:5px}.nav button{position:relative;border:1px solid transparent;padding:11px 13px;color:#d7e4f5}
+.nav button:hover{background:rgba(255,255,255,.075);border-color:rgba(255,255,255,.06)}
+.nav button.active{
+  color:#fff;background:linear-gradient(90deg,rgba(147,192,31,.19),rgba(255,255,255,.085));
+  border-color:rgba(147,192,31,.17);box-shadow:inset 3px 0 0 var(--green)
+}
+.nav button.active .ico{color:#b8df53}
+.topbar{
+  height:70px;background:rgba(255,255,255,.83);border-bottom:1px solid rgba(214,224,236,.86);
+  box-shadow:0 6px 24px rgba(30,55,85,.035)
+}
+body.theme-dark .topbar{background:rgba(14,25,42,.84)}
+.top-title{font-size:17px;letter-spacing:-.015em}
+.v29-sync-chip{
+  display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);
+  background:var(--card);border-radius:999px;padding:7px 10px;font-size:10px;font-weight:850;color:var(--muted);white-space:nowrap
+}
+.v29-sync-dot{width:7px;height:7px;border-radius:50%;background:#91a0b2;box-shadow:0 0 0 3px rgba(145,160,178,.12)}
+.v29-sync-chip.online .v29-sync-dot,.v29-sync-chip.saved .v29-sync-dot{background:#2ba36f;box-shadow:0 0 0 3px rgba(43,163,111,.12)}
+.v29-sync-chip.saving .v29-sync-dot{background:#d39a28;animation:v29pulse 1s infinite}
+.v29-sync-chip.pending .v29-sync-dot,.v29-sync-chip.error .v29-sync-dot{background:#e07831}
+@keyframes v29pulse{50%{opacity:.35}}
+.content{padding:26px 30px 42px}.view-head{margin-bottom:18px}.view-head h1{font-size:26px;letter-spacing:-.035em}
+.view-head p{font-size:13px;line-height:1.5;max-width:760px}
+.panel,.section-card,.summary,.kpi,.seller-kpi,.kanban-kpi,.kit-card,.planner-panel{
+  box-shadow:var(--v29-shadow);border-color:rgba(207,218,231,.88)
+}
+.section-card,.panel,.summary{border-radius:16px}.section-card{padding:19px}
+.section-title{padding-bottom:11px;border-bottom:1px solid rgba(221,229,239,.72);margin-bottom:15px}
+.section-title h3{font-size:14px;letter-spacing:-.01em}
+.section-title .step{width:25px;height:25px;font-size:11px;background:linear-gradient(145deg,var(--navy2),var(--navy));box-shadow:0 4px 12px rgba(16,44,85,.18)}
+.v29-dash-hero{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 22px;margin-bottom:16px;border-radius:18px;color:#fff;
+  background:radial-gradient(circle at 85% 20%,rgba(180,217,75,.34),transparent 16rem),linear-gradient(125deg,#102c55,#183d70 72%);
+  box-shadow:0 18px 45px rgba(16,44,85,.18)
+}
+.v29-dash-hero small{display:block;color:#bcd0e8;font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:9px}
+.v29-dash-hero h2{margin:5px 0 4px;font-size:23px;letter-spacing:-.03em}
+.v29-dash-hero p{margin:0;color:#d5e2f0;font-size:11px}
+.v29-dash-hero .btn{border-color:rgba(255,255,255,.16);background:#fff;color:#102c55}
+.v29-dash-hero .btn.green{background:var(--green);border-color:var(--green);color:#17320c}
+.grid-kpi{gap:12px}.kpi{padding:17px;box-shadow:var(--v29-shadow);overflow:hidden;position:relative}
+.kpi:after{content:"";position:absolute;right:-22px;bottom:-32px;width:90px;height:90px;border-radius:50%;background:rgba(147,192,31,.055)}
+.kpi strong{font-size:25px;letter-spacing:-.03em}
+.btn{border-radius:10px;padding:9px 13px;min-height:38px;box-shadow:0 1px 0 rgba(16,44,85,.02);font-size:12px}
+.btn:hover{box-shadow:0 8px 20px rgba(16,44,85,.10)}.btn.green{box-shadow:0 5px 14px rgba(147,192,31,.20)}
+.btn.green:hover{box-shadow:0 9px 22px rgba(147,192,31,.28)}.btn.primary{box-shadow:0 6px 17px rgba(16,44,85,.16)}
+.field label{font-size:9.5px;letter-spacing:.065em}
+.field input,.field select,.field textarea,.mini-field,.searchbox input{border-color:#d8e1ec;min-height:41px;background:var(--card)}
+.field input:hover,.field select:hover,.field textarea:hover,.mini-field:hover,.searchbox input:hover{border-color:#bccbdd}
+.field input:focus,.field select:focus,.field textarea:focus,.mini-field:focus,.searchbox input:focus{border-color:#8ab51d;box-shadow:var(--v29-focus)}
+.v29-dirty-badge{
+  display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 8px;background:#fff4d9;border:1px solid #edd59a;
+  color:#8c650d;font-size:9px;font-weight:900;margin-left:7px;vertical-align:middle
+}
+.v29-dirty-badge.saved{background:#e9f7ef;border-color:#bfe5cf;color:#217152}
+.item-row{border-radius:13px;padding:9px;border-color:#dce5ef}.item-row:hover{border-color:#b8c8da;box-shadow:0 6px 16px rgba(20,45,75,.055)}
+.item-img{border-radius:9px}.item-name{font-size:12px}
+.summary{top:86px;padding:18px;border-color:#d6e1ec;box-shadow:var(--v29-shadow-lg)}.summary h3{font-size:15px}
+.sum-total{font-size:22px;letter-spacing:-.03em}.profit{border:1px solid #cce9db;background:#f0faf5}
+.summary-actions{display:grid;gap:7px}.tracking-card{border-color:#d7e2ee!important}
+.table th{position:sticky;top:0;z-index:1;background:var(--v29-soft);font-size:9.5px}.table td{font-size:12px}.table tr:last-child td{border-bottom:0}
+.catalog-v25-card{border-radius:16px;box-shadow:0 4px 16px rgba(16,44,85,.05)}
+.catalog-v25-card:hover{transform:translateY(-3px);box-shadow:0 15px 34px rgba(16,44,85,.11);border-color:rgba(147,192,31,.42)}
+.catalog-v25-price-row{border-top:1px solid rgba(221,229,239,.7);padding-top:10px}
+.kanban-board{gap:10px}.kanban-col{background:rgba(236,242,248,.58);border-color:#dbe4ef}
+body.theme-dark .kanban-col{background:rgba(18,31,50,.68)}.kanban-card{border-radius:11px}
+.kanban-card:hover{transform:translateY(-2px);box-shadow:0 9px 22px rgba(20,45,75,.09)}
+.kanban-card-value{color:var(--navy2)}body.theme-dark .kanban-card-value{color:#c9dbf2}
+.planner-stage-wrap{border-radius:14px}.planner-floor{box-shadow:0 13px 35px rgba(16,44,85,.10)}
+.planner-palette-item:hover{border-color:rgba(147,192,31,.55);transform:translateY(-1px)}
+.public-root{background:radial-gradient(circle at 50% -5%,rgba(147,192,31,.10),transparent 30rem),#eef2f6}
+.public-shell{border-radius:20px;box-shadow:0 28px 75px rgba(16,44,85,.15)}
+.public-head{background:radial-gradient(circle at 85% 10%,rgba(147,192,31,.28),transparent 13rem),linear-gradient(125deg,#102c55,#183d70)}
+.public-client{border:1px solid #e4eaf1}.public-item{transition:.15s;border-color:#e3e9f0}
+.public-item:hover{border-color:#c9d6e4;background:#fafcfe}
+.public-total-row.grand{padding:14px 15px;border-radius:12px;background:#102c55;color:#fff}.public-conditions{border:1px solid #e1e8ef}
+#toast{border-radius:12px!important;box-shadow:0 16px 45px rgba(10,30,55,.22)!important;font-weight:800!important}
+.v29-mobile-quote-dock{display:none}.v29-action-loading{pointer-events:none}
+.v29-action-loading:after{content:"";width:13px;height:13px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:v29spin .7s linear infinite;margin-left:5px}
+@keyframes v29spin{to{transform:rotate(360deg)}}
+@media(max-width:850px){
+  .content{padding:14px 12px 92px}.topbar{height:62px;padding:0 12px}.top-title{font-size:15px}
+  .v29-sync-chip{padding:6px 8px}.v29-sync-chip span:last-child{display:none}
+  .v29-dash-hero{padding:17px;align-items:flex-start;flex-direction:column}.v29-dash-hero h2{font-size:20px}
+  .v29-dash-hero .row-actions{width:100%}.v29-dash-hero .btn{flex:1}
+  .view-head{gap:10px;margin-bottom:14px}.view-head h1{font-size:22px}.view-head p{font-size:11px}
+  .section-card{padding:13px;border-radius:14px}.section-title{margin-bottom:12px}
+  .field input,.field select,.field textarea,.mini-field{min-height:45px;font-size:14px}
+  .summary{padding:14px;border-radius:14px}.item-row{padding:8px}
+  .v29-mobile-quote-dock{
+    position:fixed;display:grid;grid-template-columns:1.25fr .85fr .72fr;gap:7px;left:9px;right:9px;
+    bottom:max(9px,env(safe-area-inset-bottom));padding:8px;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);
+    border:1px solid #d9e3ed;border-radius:16px;box-shadow:0 14px 40px rgba(12,35,62,.20);z-index:520
+  }
+  body.theme-dark .v29-mobile-quote-dock{background:rgba(17,30,49,.94)}
+  .v29-mobile-quote-dock .btn{padding:9px 7px;min-width:0;font-size:10px}.v29-mobile-quote-dock .btn strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .public-shell{border-radius:0}.public-body{padding-bottom:30px}
+}
+@media(max-width:540px){.grid-kpi{grid-template-columns:1fr 1fr}.kpi{padding:13px}.kpi strong{font-size:20px}.v29-dash-hero{border-radius:15px}.summary .btn{min-height:44px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+
 </head>
 <body>
 <div id="authGate" class="auth-gate">
@@ -2808,6 +2940,276 @@ ensurePublicShare=async function(q){
 
   return `${V2CFG.publicBaseUrl.replace(/\/$/,'')}/?p=${encodeURIComponent(q.publicToken)}`;
 };
+
+
+
+/* ===== v2.9 • UX hardening + correções preventivas ===== */
+let v29QuoteBusy=false,v29ShareBusy=false,v29DeleteBusy=false,v29QuoteBaseline='';
+let v29SyncMode='online',v29SyncText='Online';
+const V29_DELETED_QUOTES_KEY='inovar_deleted_quote_tombstones_v29';
+
+function v29FriendlyError(err){
+  const m=String(err?.message||err||'Erro inesperado'),x=m.toLowerCase();
+  if(x.includes('quote_items_pkey')||x.includes('duplicate key'))return 'Conflito interno nos itens do orçamento. Atualize a página e tente novamente.';
+  if(x.includes('quote_items_product_id_fkey'))return 'Um produto deste orçamento não existe mais no catálogo atual. Remova e adicione novamente o item indicado.';
+  if(x.includes('quotes_client_id_fkey'))return 'O cliente ainda não está sincronizado. Salve o cadastro do cliente e tente novamente.';
+  if(x.includes('permission denied'))return 'Seu perfil não possui permissão para concluir esta operação.';
+  if(x.includes('quotes_status_check'))return 'O status selecionado não é aceito pelo banco de dados.';
+  if(x.includes('failed to fetch')||x.includes('network')||x.includes('load failed'))return 'Sem conexão com o servidor. Seus dados locais foram preservados.';
+  return m;
+}
+function v29SetSync(mode,text){v29SyncMode=mode||'online';v29SyncText=text||'Online';v29RenderSyncChip()}
+function v29RenderSyncChip(){
+  const host=document.querySelector('.top-actions');if(!host)return;
+  let el=$('#v29SyncChip');
+  if(!el){el=document.createElement('div');el.id='v29SyncChip';host.insertBefore(el,host.firstChild)}
+  el.className=`v29-sync-chip ${v29SyncMode}`;
+  el.innerHTML=`<i class="v29-sync-dot"></i><span>${escapeHtml(v29SyncText)}</span>`;
+}
+function v29QuoteSignature(q){
+  if(!q)return '';
+  return JSON.stringify({
+    id:q.id||'',number:q.number||'',date:q.date||'',seller:q.seller||'',sellerId:q.sellerId||'',clientId:q.clientId||'',client:q.client||{},
+    title:q.title||'',status:q.status||'',items:(q.items||[]).map(i=>({id:i.id||'',productId:i.productId||'',description:i.description||'',qty:+i.qty||0,cost:+i.cost||0,markup:+i.markup||0,price:+i.price||0,color:i.color||''})),
+    discount:+q.discount||0,freight:+q.freight||0,payment:q.payment||'',validity:q.validity||'',delivery:q.delivery||'',notes:q.notes||''
+  });
+}
+function v29SetQuoteBaseline(){v29QuoteBaseline=v29QuoteSignature(currentQuote);v29UpdateDirtyUi()}
+function v29QuoteDirty(){return !!currentQuote&&!!v29QuoteBaseline&&v29QuoteSignature(currentQuote)!==v29QuoteBaseline}
+function v29UpdateDirtyUi(){
+  const head=$('#view-quote .view-head h1');if(!head)return;
+  let badge=$('#v29DirtyBadge');const dirty=v29QuoteDirty();
+  if(!badge){badge=document.createElement('span');badge.id='v29DirtyBadge';head.appendChild(badge)}
+  badge.className='v29-dirty-badge '+(dirty?'':'saved');badge.textContent=dirty?'Alterações não salvas':'Salvo';
+}
+function v29SetButtonsBusy(sel,busy){document.querySelectorAll(sel).forEach(b=>{b.disabled=!!busy;b.classList.toggle('v29-action-loading',!!busy)})}
+function v29NormalizeDocument(v){return String(v||'').replace(/\D/g,'')}
+function v29CleanText(v,max=500){return String(v??'').trim().slice(0,max)}
+function v29Clamp(n,min,max){n=Number(n);if(!Number.isFinite(n))n=min;return Math.min(max,Math.max(min,n))}
+function v29ValidateAndSanitizeQuote(q){
+  if(!q)throw new Error('Nenhum orçamento aberto.');
+  q.client=q.client||{};
+  q.client.name=v29CleanText(q.client.name,160);q.client.phone=v29CleanText(q.client.phone,32);q.client.document=v29CleanText(q.client.document,32);
+  q.client.address=v29CleanText(q.client.address,240);q.client.cep=v29CleanText(q.client.cep,12);q.client.city=v29CleanText(q.client.city,100);q.client.uf=v29CleanText(q.client.uf,2).toUpperCase();
+  q.title=v29CleanText(q.title,180)||'PROPOSTA COMERCIAL';q.payment=v29CleanText(q.payment,180);q.validity=v29CleanText(q.validity,80);q.delivery=v29CleanText(q.delivery,120);q.notes=String(q.notes||'').slice(0,4000);
+  q.discount=v29Clamp(q.discount,0,100);q.freight=v29Clamp(q.freight,0,1e9);
+  if(typeof v261ValidateClient==='function'&&!v261ValidateClient(q.client,'salvar o orçamento'))throw new Error('Preencha os dados obrigatórios do cliente.');
+  if(!(q.items||[]).length)throw new Error('Adicione pelo menos um item ao orçamento.');
+  for(const [idx,i] of q.items.entries()){
+    i.description=v29CleanText(i.description,300);if(!i.description)throw new Error(`O item ${idx+1} está sem descrição.`);
+    i.qty=v29Clamp(i.qty,1,999999);i.price=v29Clamp(i.price,0,1e9);i.cost=v29Clamp(i.cost,0,1e9);i.markup=v29Clamp(i.markup,-99.99,10000);
+  }
+  if(isSellerOnly()){
+    const own=(state.sellerProfiles||[]).find(s=>s.id===currentProfile?.seller_id);
+    if(own){q.seller=own.name;q.sellerId=own.id}
+  }else{
+    const sp=typeof sellerProfileByName==='function'?sellerProfileByName(q.seller):null;q.sellerId=sp?.id||q.sellerId||'';
+  }
+  if(!q.seller)throw new Error('Selecione o vendedor responsável.');
+  return q;
+}
+function v29EnsureLocalQuoteNumber(q){
+  const others=(state.quotes||[]).filter(x=>x.id!==q.id),used=new Set(others.map(x=>x.number));
+  if(!q.number||used.has(q.number)){
+    const year=new Date().getFullYear();let next=Math.max(+state.nextQuote||1002,1002),number;
+    do{number=`ORC-${year}-${String(next++).padStart(4,'0')}`}while(used.has(number));
+    q.number=number;state.nextQuote=Math.max(+state.nextQuote||0,next);
+  }
+}
+function v29UpsertClientLocal(q){
+  const doc=v29NormalizeDocument(q.client?.document);let c=null;
+  if(q.clientId)c=(state.clients||[]).find(x=>x.id===q.clientId)||null;
+  if(!c&&doc)c=(state.clients||[]).find(x=>v29NormalizeDocument(x.document)===doc)||null;
+  if(!c){c={...JSON.parse(JSON.stringify(q.client)),id:uid('cli')};state.clients.push(c)}
+  else Object.assign(c,JSON.parse(JSON.stringify(q.client)));
+  q.clientId=c.id;q.client=JSON.parse(JSON.stringify(c));return c;
+}
+function v29Tombstones(){try{return JSON.parse(localStorage.getItem(V29_DELETED_QUOTES_KEY)||'{}')}catch{return{}}}
+function v29SaveTombstones(v){try{localStorage.setItem(V29_DELETED_QUOTES_KEY,JSON.stringify(v||{}))}catch{}}
+function v29AddTombstone(id){const t=v29Tombstones();t[id]=new Date().toISOString();v29SaveTombstones(t)}
+function v29ClearTombstone(id){const t=v29Tombstones();if(t[id]){delete t[id];v29SaveTombstones(t)}}
+
+const v29MergeCloudLocalBase=v283MergeCloudWithLocal;
+v283MergeCloudWithLocal=function(localBefore,cloudAfter){
+  const tomb=v29Tombstones(),safeLocal={...localBefore,quotes:(localBefore?.quotes||[]).filter(q=>!tomb[q.id])};
+  const merged=v29MergeCloudLocalBase(safeLocal,cloudAfter);
+  for(const q of cloudAfter?.quotes||[])v29ClearTombstone(q.id);
+  return merged;
+};
+
+v283RecoverMissingFromBackup=async function(index){
+  if(!canAdminUsers()){toast('Somente ADM/Dono pode recuperar backups');return}
+  const b=v283BackupList()[index];if(!b)return;
+  v283CreateSafetyBackup('Antes de recuperar dados de um backup');
+  const beforeIds=new Set((state.quotes||[]).map(q=>q.id));
+  const qm=v283MergeById(state.quotes,b.state?.quotes),cm=v283MergeById(state.clients,b.state?.clients),dm=v283MergeById(state.deliveries,b.state?.deliveries);
+  state.quotes=qm.list;state.clients=cm.list;state.deliveries=dm.list;
+  for(const q of b.state?.quotes||[])if(q?.id&&!beforeIds.has(q.id)){v283PendingQuoteIds.add(q.id);v29ClearTombstone(q.id)}
+  const mx=Math.max(1001,...state.quotes.map(q=>+(String(q.number||'').match(/(\d+)$/)?.[1]||0)));state.nextQuote=Math.max(+state.nextQuote||1002,mx+1);
+  await save();renderAll();renderBackups();toast(`Recuperação segura: +${qm.added} orçamento(s), +${cm.added} cliente(s), +${dm.added} recibo(s)`);
+};
+
+function v29CompactBackupImage(src){src=String(src||'');if(src.startsWith('data:image/')&&src.length>120000)return '';return src.slice(0,220000)}
+const v29BusinessSnapshotBase=v283BusinessSnapshot;
+v283BusinessSnapshot=function(reason='Backup automático'){
+  const snap=v29BusinessSnapshotBase(reason);
+  if(snap?.state?.company){
+    if(String(snap.state.company.logo||'').startsWith('data:image/')&&String(snap.state.company.logo).length>120000)snap.state.company.logo='';
+    if(String(snap.state.company.pixQr||'').startsWith('data:image/')&&String(snap.state.company.pixQr).length>120000)snap.state.company.pixQr='';
+  }
+  for(const q of snap?.state?.quotes||[])for(const i of q.items||[])i.image=v29CompactBackupImage(i.image);
+  return snap;
+};
+v283SaveBackupList=function(list){
+  let work=(list||[]).slice(0,12);
+  try{localStorage.setItem(V283_BACKUP_KEY,JSON.stringify(work));return}
+  catch(e){work=work.slice(0,5);try{localStorage.setItem(V283_BACKUP_KEY,JSON.stringify(work))}catch(e2){console.warn(e2);v29SetSync('error','Backup local cheio')}}
+};
+
+function v29SafeImage(src,fallback=''){
+  src=String(src||'').trim();if(!src)return fallback;
+  if(/^data:image\/(?:png|jpeg|jpg|webp|gif);base64,/i.test(src))return src;
+  if(/^https?:\/\//i.test(src)||src.startsWith('./')||src.startsWith('/')||src.startsWith('blob:'))return src.replace(/["'<>]/g,'');
+  return fallback;
+}
+const v29ProductImageBase=productImage;
+productImage=function(p){return v29SafeImage(v29ProductImageBase(p),placeholderSvg(p?.name||'Produto'))};
+const v29PublicProposalBase=renderPublicProposal;
+renderPublicProposal=function(data){const safe=JSON.parse(JSON.stringify(data||{}));for(const i of safe.items||[])i.image=v29SafeImage(i.image,'');return v29PublicProposalBase(safe)};
+
+readModalImage=async function(inp){
+  const f=inp.files?.[0];if(!f)return;
+  if(!/^image\/(png|jpeg|webp)$/i.test(f.type)){toast('Use imagem PNG, JPG ou WebP');inp.value='';return}
+  if(f.size>8*1024*1024){toast('Imagem muito grande. Limite: 8 MB');inp.value='';return}
+  try{
+    const data=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f)});
+    const img=await new Promise((res,rej)=>{const x=new Image();x.onload=()=>res(x);x.onerror=rej;x.src=data});
+    const max=1400,scale=Math.min(1,max/Math.max(img.width,img.height)),canvas=document.createElement('canvas');
+    canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+    modalImage=canvas.toDataURL('image/webp',.82);
+    $('#imgUploader').innerHTML=`<img src="${modalImage}"><input type="file" accept="image/png,image/jpeg,image/webp" onchange="readModalImage(this)">`;toast('Imagem otimizada');
+  }catch(e){toast('Não foi possível processar a imagem')}
+};
+
+saveCurrentQuote=async function(){
+  if(v29QuoteBusy){toast('O orçamento já está sendo salvo');return}
+  v29QuoteBusy=true;v29SetButtonsBusy('[onclick="saveCurrentQuote()"]',true);v29SetSync('saving','Salvando');
+  try{
+    const q=v29ValidateAndSanitizeQuote(currentQuote);if(typeof v283CreateSafetyBackup==='function')v283CreateSafetyBackup('Antes de salvar orçamento');
+    const c=v29UpsertClientLocal(q);if(!q.id)q.id=uid('q');v29EnsureLocalQuoteNumber(q);
+    const ix=(state.quotes||[]).findIndex(x=>x.id===q.id);if(ix>=0)state.quotes[ix]=JSON.parse(JSON.stringify(q));else state.quotes.push(JSON.parse(JSON.stringify(q)));
+    await save();
+    if(cloudReady){
+      await cloudSaveClient(c);await cloudSaveQuote(q);delete q._syncState;v283PendingQuoteIds?.delete?.(q.id);
+      const idx=state.quotes.findIndex(x=>x.id===q.id);if(idx>=0){delete state.quotes[idx]._syncState;state.quotes[idx]=JSON.parse(JSON.stringify(q))}
+      await save();v29SetSync('saved','Sincronizado');toast('Orçamento salvo e sincronizado');
+    }else{
+      q._syncState='local_only';v283PendingQuoteIds?.add?.(q.id);v29SetSync('pending','Salvo localmente');toast('Salvo localmente; sincronização pendente');
+    }
+    v29SetQuoteBaseline();renderAll();
+  }catch(e){console.error(e);v29SetSync('error','Falha ao sincronizar');alert(v29FriendlyError(e))}
+  finally{v29QuoteBusy=false;v29SetButtonsBusy('[onclick="saveCurrentQuote()"]',false)}
+};
+
+deleteQuote=async function(id){
+  if(v29DeleteBusy)return;const q=(state.quotes||[]).find(x=>x.id===id);if(!q)return;
+  if(!confirm(`Excluir ${q.number} — ${q.client?.name||'sem cliente'}?\n\nUma cópia de segurança será criada antes da exclusão.`))return;
+  v29DeleteBusy=true;
+  try{
+    v283CreateSafetyBackup('Antes de excluir orçamento');
+    if(cloudReady&&q._syncState!=='local_only'){const {error}=await sb.from('quotes').delete().eq('id',id);if(error)throw error}
+    else if(!cloudReady&&q._syncState!=='local_only')throw new Error('Conecte-se ao servidor para excluir um orçamento já sincronizado com segurança.');
+    v29AddTombstone(id);state.quotes=state.quotes.filter(x=>x.id!==id);if(currentQuote?.id===id)currentQuote=null;await save();renderAll();toast('Orçamento excluído com segurança');
+  }catch(e){alert(v29FriendlyError(e))}finally{v29DeleteBusy=false}
+};
+
+const v29EnsureShareBase=ensurePublicShare;
+ensurePublicShare=async function(q){
+  if(q?._syncState==='local_only')throw new Error('Sincronize este orçamento antes de gerar o link público.');
+  const link=await v29EnsureShareBase(q);v29SetQuoteBaseline();return link
+};
+shareWhatsAppCurrent=async function(){
+  if(v29ShareBusy||!currentQuote)return;if(!v261ValidateClient(currentQuote.client,'compartilhar a proposta'))return;
+  const phone=String(currentQuote.client.phone||'').replace(/\D/g,'');if(phone.length<10){toast('Informe um telefone válido com DDD');return}
+  v29ShareBusy=true;v29SetButtonsBusy('[onclick="shareWhatsAppCurrent()"]',true);v29SetSync('saving','Gerando link');
+  try{
+    if(!currentQuote.id){await saveCurrentQuote();if(!currentQuote.id||currentQuote._syncState==='local_only')return}
+    const link=await ensurePublicShare(currentQuote),t=quoteTotals(currentQuote),msg=`Olá, ${currentQuote.client.name}! Segue nossa proposta comercial ${currentQuote.number}, no valor de ${money(t.total)}.\n\nVisualizar proposta: ${link}\n\nInovar Gôndolas.`;
+    const target=phone.startsWith('55')?phone:`55${phone}`;window.open(`https://wa.me/${target}?text=${encodeURIComponent(msg)}`,'_blank','noopener');v29SetSync('saved','Link pronto');
+  }catch(e){v29SetSync('error','Falha no link');alert(v29FriendlyError(e))}
+  finally{v29ShareBusy=false;v29SetButtonsBusy('[onclick="shareWhatsAppCurrent()"]',false)}
+};
+copyPublicLinkCurrent=async function(){
+  if(v29ShareBusy||!currentQuote)return;if(!v261ValidateClient(currentQuote.client,'copiar o link'))return;
+  v29ShareBusy=true;v29SetButtonsBusy('[onclick="copyPublicLinkCurrent()"]',true);v29SetSync('saving','Gerando link');
+  try{
+    if(!currentQuote.id){await saveCurrentQuote();if(!currentQuote.id||currentQuote._syncState==='local_only')return}
+    const link=await ensurePublicShare(currentQuote);try{await navigator.clipboard.writeText(link);toast('Link público copiado')}catch{prompt('Copie o link da proposta:',link)}
+    v29SetSync('saved','Link pronto');
+  }catch(e){v29SetSync('error','Falha no link');alert(v29FriendlyError(e))}
+  finally{v29ShareBusy=false;v29SetButtonsBusy('[onclick="copyPublicLinkCurrent()"]',false)}
+};
+
+const v29SetItemBase=setItem;
+setItem=function(idx,key,val,recalc=false,manualPrice=false){
+  if(key==='qty')val=v29Clamp(val,1,999999);if(key==='cost'||key==='price')val=v29Clamp(val,0,1e9);if(key==='markup')val=v29Clamp(val,-99.99,10000);
+  const r=v29SetItemBase(idx,key,val,recalc,manualPrice);v29UpdateDirtyUi();return r
+};
+
+chooseClientByName=function(v){
+  const matches=(state.clients||[]).filter(x=>normalize(x.name)===normalize(v));
+  if(matches.length===1){currentQuote.clientId=matches[0].id;currentQuote.client=JSON.parse(JSON.stringify(matches[0]));renderQuote();return}
+  if(matches.length>1){currentQuote.clientId='';currentQuote.client.name=v;toast('Há mais de um cliente com esse nome. Confirme CPF/CNPJ antes de salvar.')}
+};
+
+const v29ShowViewBase=showView;
+showView=function(v){
+  if(currentView==='quote'&&v!=='quote'&&v29QuoteDirty()){if(!confirm('Existem alterações não salvas neste orçamento. Deseja sair mesmo assim?'))return}
+  return v29ShowViewBase(v)
+};
+const v29NewQuoteBase=newQuote;
+newQuote=function(){
+  if(currentView==='quote'&&currentQuote&&v29QuoteDirty()){if(!confirm('Descartar as alterações não salvas e iniciar um novo orçamento?'))return}
+  const r=v29NewQuoteBase();setTimeout(v29SetQuoteBaseline,0);return r
+};
+const v29EditQuoteBase=editQuote;
+editQuote=function(id){const r=v29EditQuoteBase(id);setTimeout(v29SetQuoteBaseline,0);return r};
+
+const v29RenderDashboardBase=renderDashboard;
+renderDashboard=function(){
+  v29RenderDashboardBase();const root=$('#view-dashboard');if(!root||root.querySelector('.v29-dash-hero'))return;
+  const name=currentProfile?.full_name||currentProfile?.username||'';
+  root.insertAdjacentHTML('afterbegin',`<div class="v29-dash-hero"><div><small>INOVAR COMERCIAL</small><h2>${name?`Olá, ${escapeHtml(name.split(' ')[0])}`:'Painel comercial'}</h2><p>Acompanhe propostas, clientes e oportunidades em um único lugar.</p></div><div class="row-actions"><button class="btn" onclick="showView('kanban')">Ver Kanban</button><button class="btn green" onclick="newQuote()">＋ Novo orçamento</button></div></div>`);
+};
+const v29RenderQuoteBase=renderQuote;
+renderQuote=function(){
+  v29RenderQuoteBase();if(!currentQuote)return;
+  const sellerField=[...$('#view-quote .field label')].find(l=>l.textContent.trim().replace('*','').trim()==='Vendedor')?.closest('.field'),sellerSelect=sellerField?.querySelector('select');
+  if(isSellerOnly()&&sellerSelect){sellerSelect.disabled=true;sellerSelect.title='Vendedor definido pelo seu perfil'}
+  const client=$('#qClient');if(client)client.maxLength=160;const ta=$('#view-quote textarea');if(ta)ta.maxLength=4000;
+  if(!$('#v29MobileQuoteDock'))$('#view-quote').insertAdjacentHTML('beforeend',`<div class="v29-mobile-quote-dock" id="v29MobileQuoteDock"><button class="btn green" onclick="saveCurrentQuote()">✓ <strong>Salvar</strong></button><button class="btn" onclick="shareWhatsAppCurrent()">◉ <strong>WhatsApp</strong></button><button class="btn" onclick="copyPublicLinkCurrent()">🔗 <strong>Link</strong></button></div>`);
+  v29UpdateDirtyUi();
+};
+const v29RenderAllBase=renderAll;
+renderAll=function(){v29RenderAllBase();v29RenderSyncChip()};
+
+window.addEventListener('beforeunload',e=>{if(v29QuoteDirty()){e.preventDefault();e.returnValue=''}});
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'&&currentView==='quote'){e.preventDefault();saveCurrentQuote()}
+  if(e.key==='Escape'){if($('#modalRoot')?.innerHTML)closeModal();const m2=document.getElementById('modalRoot2');if(m2)m2.remove()}
+});
+document.addEventListener('input',e=>{if(e.target.closest?.('#view-quote'))v29UpdateDirtyUi()});
+document.addEventListener('change',e=>{if(e.target.closest?.('#view-quote'))v29UpdateDirtyUi()});
+
+try{
+  const v29Channel=new BroadcastChannel('inovar_v29');
+  v29Channel.postMessage({type:'hello'});
+  v29Channel.onmessage=(ev)=>{if(ev.data?.type==='quote_saved'&&currentQuote?.id===ev.data.id&&v29QuoteDirty())toast('Este orçamento foi alterado em outra aba. Salve com atenção.')};
+  const v29SaveQuoteBroadcastBase=saveCurrentQuote;
+  saveCurrentQuote=async function(){await v29SaveQuoteBroadcastBase();if(currentQuote?.id&&!v29QuoteDirty())v29Channel.postMessage({type:'quote_saved',id:currentQuote.id})};
+}catch{}
+
+setTimeout(()=>v29SetSync(cloudReady?'online':'offline',cloudReady?'Online':'Modo local'),250);
 
 
 /* ===== v2.6.1.2 • runtime fix + inicialização robusta ===== */

@@ -90,3 +90,107 @@ Nova etapa do roadmap.
 
 ### Banco
 Execute `inovar_v2_8_kits_tipo_loja.sql` antes de usar os kits online.
+
+
+## v2.8.1 — Hotfix Cliente → Orçamento
+Corrige `quotes_client_id_fkey`.
+
+Antes de salvar qualquer orçamento online, o aplicativo verifica se o cliente selecionado
+já existe na tabela `clients`. Se o cadastro estiver apenas no cache/local, ele é sincronizado
+primeiro e somente depois o orçamento é gravado.
+
+Isso corrige o fluxo:
+Kit → selecionar cliente → gerar orçamento → salvar orçamento.
+
+Não requer alteração de banco/SQL.
+
+
+## v2.8.2 — Correção Produto → Item de Orçamento
+Corrige `quote_items_product_id_fkey`.
+
+Antes de gravar os itens, o app valida os `product_id` contra o catálogo do Supabase.
+Se um ID legado não existir mais:
+1. tenta religar pelo código do produto;
+2. tenta religar pelo nome exato + fabricante;
+3. para ADM/Gerente, preserva o item como item livre se não houver correspondência;
+4. para Vendedor, bloqueia com mensagem clara, pois vendedor não pode criar item livre.
+
+Novos kits também passam a guardar código, nome e fabricante dentro do JSON, além do ID,
+para permitir reparo de vínculo no futuro.
+
+
+## v2.8.3 — Proteção de Dados e Backups
+Esta versão corrige o risco de perda visual de orçamentos locais durante o carregamento do Supabase.
+
+### Proteções
+- cria snapshot automático ANTES de carregar a nuvem;
+- mantém até 12 cópias internas no navegador;
+- orçamentos que existem somente localmente não são descartados;
+- registros locais ausentes na nuvem aparecem como pendentes;
+- sincronização de pendentes é explícita e não apaga registros existentes;
+- importação de JSON passa a ser por mesclagem segura, sem substituir toda a base;
+- cria backup antes de importar e antes de restaurar dados iniciais;
+- painel "Segurança de dados" com download e recuperação de registros ausentes.
+
+### Importante
+O Supabase continua sendo a fonte principal dos registros online.
+A camada local atua como proteção contra perda durante migrações, deploys e sincronizações.
+Não requer SQL novo.
+
+
+## v2.8.4 — Correção `quote_items_pkey`
+Corrige o erro:
+`duplicate key value violates unique constraint "quote_items_pkey"`.
+
+### Causa encontrada
+A função de duplicar orçamento copiava também os IDs internos dos itens.
+Como `quote_items.id` é chave primária global no Supabase, salvar a cópia podia tentar
+usar a mesma chave de um item pertencente ao orçamento original.
+
+### Correções
+- orçamento duplicado recebe IDs novos em todos os itens;
+- backups/rascunhos antigos têm IDs reparados automaticamente ao salvar;
+- IDs que pertençam a outro orçamento são substituídos;
+- salvamento de itens passa de `DELETE + INSERT` para estratégia idempotente de `UPSERT`;
+- somente itens removidos da proposta são apagados depois;
+- repetir "Salvar" não deve gerar colisão de chave primária;
+- mantém a camada v2.8.3 de proteção e backups.
+
+Não requer SQL novo.
+
+
+## v2.8.5 — Compartilhamento sem regravar itens
+Corrige o erro `permission denied for table quote_items` ao:
+- Enviar proposta pelo WhatsApp;
+- Copiar link público.
+
+### Causa
+`ensurePublicShare()` chamava `cloudSaveQuote()`, o que regravava todos os itens apenas para
+ativar o link público.
+
+### Correção
+Agora o compartilhamento atualiza somente:
+- `quotes.public_token`;
+- `quotes.public_enabled`;
+- `quotes.status` (Rascunho → Enviado).
+
+A geração do link não acessa mais `quote_items`.
+Não requer SQL novo.
+
+
+## v2.9 — Design Premium + Hardening
+- redesign visual e mobile;
+- indicador de sincronização;
+- barra fixa de ações no orçamento em celular;
+- proteção contra duplo clique e saída sem salvar;
+- validação/sanitização de valores;
+- cliente identificado por ID/CPF-CNPJ;
+- vendedor travado ao próprio perfil;
+- exclusão cloud-first e tombstones;
+- correção de recuperação de backup;
+- snapshots compactos;
+- upload de imagens limitado e otimizado;
+- mensagens de erro amigáveis;
+- alerta de edição em múltiplas abas.
+
+Não requer SQL novo. Mantenha a pasta `functions/` atual no GitHub.
