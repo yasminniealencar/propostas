@@ -655,44 +655,34 @@ body.theme-dark .kanban-col{background:rgba(18,31,50,.68)}.kanban-card{border-ra
 </style>
 
 
-<style id="v291-image-ref-css">
-/* ===== v2.9.1 • imagens provisórias SA ===== */
-body.role-seller .nav button[data-view="image-review"]{display:none!important}
-.imgref-badge{
-  display:inline-flex;align-items:center;gap:5px;padding:4px 7px;border-radius:999px;
-  background:#fff3d9;border:1px solid #edd19b;color:#8d620d;font-size:8px;font-weight:950
+<style id="v293-quote-item-editor-css">
+/* ===== v2.9.3 • edição de produto dentro do orçamento ===== */
+.quote-item-tools{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.quote-item-tools .btn{min-height:28px;padding:4px 8px;font-size:8px}
+.qitem-editor-preview{
+  width:100%;height:180px;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--line);border-radius:12px;background:#f8fafc;overflow:hidden
 }
-.imgref-badge.exact{background:#eaf8ef;border-color:#bfe6cf;color:#216f45}
-.imgreview-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
-.imgreview-kpi{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:13px;box-shadow:var(--v29-shadow)}
-.imgreview-kpi small{display:block;color:var(--muted);font-size:8px;font-weight:900;text-transform:uppercase}
-.imgreview-kpi strong{display:block;font-size:20px;margin-top:4px}
-.imgreview-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.imgreview-toolbar .searchbox{flex:1;min-width:240px}
-.imgreview-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.imgreview-card{border:1px solid var(--line);background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 4px 15px rgba(16,44,85,.05)}
-.imgreview-card:hover{border-color:rgba(147,192,31,.4);box-shadow:0 12px 28px rgba(16,44,85,.09)}
-.imgreview-image{aspect-ratio:1.25/1;background:#f7f9fc;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.imgreview-image img{width:100%;height:100%;object-fit:contain}
-.imgreview-image .imgref-badge{position:absolute;left:8px;top:8px}
-.imgreview-body{padding:11px}
-.imgreview-code{font-size:8px;color:var(--muted);font-weight:900}
-.imgreview-title{font-size:10px;line-height:1.35;font-weight:950;margin:4px 0;min-height:42px}
-.imgreview-meta{font-size:8px;color:var(--muted);line-height:1.4;min-height:33px}
-.imgreview-source{font-size:7px;color:var(--muted);margin-top:6px;border-top:1px solid var(--line);padding-top:6px}
-.imgreview-actions{display:flex;gap:6px;margin-top:8px}
-.imgreview-note{
-  border:1px solid #ecd49f;background:#fff8e9;border-radius:12px;padding:10px 12px;margin-bottom:12px;
-  color:#765817;font-size:9px;line-height:1.5
+.qitem-editor-preview img{max-width:100%;max-height:100%;object-fit:contain}
+.qitem-editor-note{
+  border:1px solid #dbe5ef;background:#f7faff;border-radius:10px;padding:9px 10px;
+  font-size:8px;color:var(--muted);line-height:1.5
 }
-.catalog-v291-ref{
-  position:absolute;right:7px;bottom:7px;z-index:2;padding:3px 6px;border-radius:999px;
-  background:rgba(255,247,225,.94);border:1px solid rgba(224,185,101,.62);color:#80570a;
-  font-size:7px;font-weight:950;backdrop-filter:blur(4px)
+.qitem-picker-list{display:flex;flex-direction:column;gap:7px;max-height:55vh;overflow:auto}
+.qitem-picker-row{
+  display:grid;grid-template-columns:58px minmax(0,1fr) 120px auto;gap:9px;align-items:center;
+  border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--card)
 }
-@media(max-width:1180px){.imgreview-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:850px){.imgreview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.imgreview-kpis{grid-template-columns:1fr 1fr}}
-@media(max-width:520px){.imgreview-grid{grid-template-columns:1fr}.imgreview-title{min-height:0}}
+.qitem-picker-row:hover{border-color:rgba(147,192,31,.45)}
+.qitem-picker-row img{width:54px;height:54px;object-fit:contain;border-radius:8px;background:#fff}
+.qitem-picker-name{font-size:9px;font-weight:900;line-height:1.3}
+.qitem-picker-meta{font-size:7px;color:var(--muted);margin-top:3px}
+.qitem-picker-price{text-align:right;font-size:9px;font-weight:900}
+@media(max-width:650px){
+ .qitem-picker-row{grid-template-columns:48px 1fr auto}
+ .qitem-picker-row img{width:44px;height:44px}
+ .qitem-picker-price{grid-column:2;text-align:left}
+}
 </style>
 
 </head>
@@ -751,7 +741,6 @@ body.role-seller .nav button[data-view="image-review"]{display:none!important}
     <button data-view="quotes"><span class="ico">▤</span>Orçamentos</button>
     <button data-view="kanban"><span class="ico">▥</span>Kanban comercial</button>
     <button data-view="catalog"><span class="ico">▦</span>Catálogo</button>
-    <button data-view="image-review"><span class="ico">▧</span>Revisão de imagens</button>
     <button data-view="kits"><span class="ico">▧</span>Kits por loja</button>
     <button data-view="planner"><span class="ico">▧</span>Planner 2D</button>
     <button data-view="clients"><span class="ico">♙</span>Clientes</button>
@@ -770,7 +759,6 @@ body.role-seller .nav button[data-view="image-review"]{display:none!important}
     <section class="view" id="view-quotes"></section>
     <section class="view" id="view-catalog"></section>
     <section class="view" id="view-kanban"></section>
-  <section class="view" id="view-image-review"></section>
   <section class="view" id="view-kits"></section>
   <section class="view" id="view-planner"></section>
     <section class="view" id="view-clients"></section>
@@ -3256,361 +3244,178 @@ setTimeout(()=>v29SetSync(cloudReady?'online':'offline',cloudReady?'Online':'Mod
 
 
 
-/* ===== v2.9.1 • imagens de referência provisórias SA ===== */
-const V291_IMG = {
-  newplus:'https://carrefourbr.vtexassets.com/arquivos/ids/206982777/image-0.jpg?v=638999256216830000',
-  ponta:'https://images.tcdn.com.br/img/img_prod/994915/ponta_de_gondola_podium_new_plus_1_25m_com_base_e_3_bandejas_637_1_d972bfef2a4ef011256b9f7615ae22db.jpg',
-  gondolaKit:'https://images.tcdn.com.br/img/img_prod/994915/gondola_new_plus_1_70m_kit_1_inicial_1_continuacao_1_ponta_podium_2_30_metros_657_1_8181a91220b967c992473bfecc2bc775.jpg',
-  bandeja:'https://http2.mlstatic.com/D_NQ_NP_951634-MLB79341098645_092024-O-bandeja-sa-new-plus-de-gondola-30-x-91cm-suporte-lateral.webp',
-  gancho:'https://imgs.pontofrio.com.br/1548973571/1xg.jpg',
-  cesto:'https://www.sagrupo.com/wp-content/uploads/2020/01/cesto-600x600.jpg',
-  checkout:'https://simaqcampinas.com.br/site/catalogo/667/intalacoes_lojas_campinas_0006.jpg',
-  farmacia:'https://www.expometal.com.br/arquivos/segmentos/be1b344b836f628911ca6a7aa4887cbc_expositor_fermacias_expomental.jpg',
-  miniPallet:'https://img.olx.com.br/images/19/195323022864782.jpg',
-  portaPallet:'https://static.wixstatic.com/media/577b22_82d2b23ca56b45ddbb820d342f7e7d54~mv2.jpg/v1/fill/w_1000%2Ch_579%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01/577b22_82d2b23ca56b45ddbb820d342f7e7d54~mv2.jpg',
-  moveisAco:'https://www.cadesul.com.br/upload/product/4NVHHYdsBkdu0oP8anYszpqbpdm6n9NCoGDaebv0.jpg',
-  carrinho:'https://imgs.extra.com.br/1576383182/3xg.jpg?imwidth=500'
-};
+/* ===== v2.9.3 • fotos reais + editar item diretamente no orçamento ===== */
 
-const V291_SOURCE = {
-  newplus:'Referência de produto SA Gôndolas / varejo',
-  ponta:'Referência New Plus',
-  gondolaKit:'Referência New Plus',
-  bandeja:'Referência de bandeja New Plus',
-  gancho:'Referência visual de gancho',
-  cesto:'Grupo SA — imagem de cesto',
-  checkout:'Referência visual de frente de loja',
-  farmacia:'Referência visual de exposição para farmácia',
-  miniPallet:'Referência visual de Mini Porta Pallet',
-  portaPallet:'Referência visual de Porta Pallet',
-  moveisAco:'Referência visual de móvel de aço',
-  carrinho:'Referência visual de carrinho 90 L'
-};
+/*
+  Esta versão parte novamente da v2.9:
+  - sem tela "Revisão de imagens";
+  - sem ilustrações geradas;
+  - mantém apenas fotos reais já cadastradas ou referências fotográficas reais da web;
+  - quando não há foto adequada, usa placeholder neutro.
+*/
 
-function v291IsSA(p){
-  const m=normalize(p?.manufacturer||'');
-  return m==='s.a.'||m==='sa'||m.includes('sa gond')||m.includes('s.a');
-}
-function v291ImageRule(p){
-  if(!v291IsSA(p) || p?.image)return null;
-  const text=normalize([p.name,p.category,p.line].join(' '));
+/* A edição é da linha do orçamento. Não altera o cadastro mestre do produto. */
+function v293CanFullyEditItem(){return !isSellerOnly()}
 
-  if(text.includes('carrinho')) return {key:'carrinho',url:V291_IMG.carrinho};
-  if(text.includes('check-out')||text.includes('check out')||text.includes('check stand')||text.includes('checkout')) return {key:'checkout',url:V291_IMG.checkout};
-  if(text.includes('mini porta pallet')||text.includes('mini porta palete')) return {key:'miniPallet',url:V291_IMG.miniPallet};
-  if(text.includes('porta pallet')||text.includes('porta palete')) return {key:'portaPallet',url:V291_IMG.portaPallet};
-  if(text.includes('armario')||text.includes('armário')||text.includes('roupeiro')||text.includes('arquivo')||text.includes('estante')) return {key:'moveisAco',url:V291_IMG.moveisAco};
-  if(text.includes('farmacia')||text.includes('farmácia')||text.includes('rack')||text.includes('expositor')||text.includes('balcao')||text.includes('balcão')) return {key:'farmacia',url:V291_IMG.farmacia};
-  if(text.includes('gancho')) return {key:'gancho',url:V291_IMG.gancho};
-  if(text.includes('cesto')||text.includes('divisoria')||text.includes('divisória')||text.includes('vassoureiro')||text.includes('balancinho')) return {key:'cesto',url:V291_IMG.cesto};
-  if(text.includes('bandeja')||text.includes('slg')||text.includes('aparador')||text.includes('porta etiqueta')||text.includes('regua')||text.includes('régua')||text.includes('painel')||text.includes('coluna')||text.includes('pe para')||text.includes('pé para')) return {key:'bandeja',url:V291_IMG.bandeja};
-  if(text.includes('ponta de gondola')||text.includes('ponta de gôndola')||text.includes('podium')) return {key:'ponta',url:V291_IMG.ponta};
-  if(text.includes('super plus')) return {key:'gondolaKit',url:V291_IMG.gondolaKit};
-  return {key:'newplus',url:V291_IMG.newplus};
-}
-function v291ReferenceImage(p){return v291ImageRule(p)?.url||''}
-function v291ImageSource(p){
-  const r=v291ImageRule(p);return r?V291_SOURCE[r.key]||'Imagem de referência':'';
-}
-function v291IsReference(p){return !!(!p?.image && v291ImageRule(p))}
-
-/* Todos os 536 itens SA sem foto passam a receber imagem relacionada por classe.
-   A foto exata do produto, quando cadastrada no banco, sempre tem prioridade. */
-const v291ProductImageBase=productImage;
-productImage=function(p){
-  if(p?.image)return v291ProductImageBase(p);
-  const ref=v291ReferenceImage(p);
-  return ref||v291ProductImageBase(p);
-};
-if(typeof v251CatalogImage==='function'){
-  v251CatalogImage=function(p){return productImage(p)}
+function v293ItemPhoto(item){
+  if(item?.image) return item.image;
+  const p=(state.catalog||[]).find(x=>x.id===item?.productId);
+  if(p) return productImage(p);
+  return suggestedImage(item?.description||'')||placeholderSvg(item?.description||'Produto');
 }
 
-/* Badge visual para não confundir referência com fotografia exata. */
-function v291MarkReferenceCards(){
-  const cards=$$('#view-catalog .catalog-v25-card');
-  for(const card of cards){
-    if(card.querySelector('.catalog-v291-ref'))continue;
-    const title=card.querySelector('.catalog-v25-title')?.textContent||'';
-    const code=card.querySelector('.catalog-v25-code')?.textContent||'';
-    const p=(state.catalog||[]).find(x=>title.trim()===String(x.name||'').trim() && (!x.code||code.includes(x.code)));
-    if(p&&v291IsReference(p)){
-      const image=card.querySelector('.catalog-v25-image');
-      if(image)image.insertAdjacentHTML('beforeend','<span class="catalog-v291-ref">imagem de referência</span>');
-    }
-  }
-}
-
-/* Área própria para revisão em lotes. */
-let v291ReviewSearch='';
-let v291ReviewCategory='';
-function v291ReviewProducts(){
-  const t=normalize(v291ReviewSearch);
-  return (state.catalog||[]).filter(p=>{
-    if(!v291IsSA(p))return false;
-    if(v291ReviewCategory&&p.category!==v291ReviewCategory)return false;
-    if(t&&!normalize([p.code,p.name,p.category,p.line].join(' ')).includes(t))return false;
-    return true;
-  });
-}
-function renderImageReview(){
-  const root=$('#view-image-review');if(!root)return;
-  if(isSellerOnly()){root.innerHTML='<div class="empty">Acesso restrito à gestão.</div>';return}
-  const all=(state.catalog||[]).filter(v291IsSA);
-  const exact=all.filter(p=>!!p.image).length;
-  const refs=all.filter(v291IsReference).length;
-  const list=v291ReviewProducts();
-  const cats=[...new Set(all.map(p=>p.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));
-
-  root.innerHTML=`<div class="view-head"><div><h1>Revisão de imagens</h1><p>Primeira cobertura visual do catálogo S.A. As imagens abaixo são referências por família até substituirmos pelas fotografias exatas de cada código.</p></div></div>
-  <div class="imgreview-note"><b>Importante:</b> nenhuma imagem provisória substitui o campo de foto real do produto. Assim que cadastrarmos uma foto exata, ela passa a ter prioridade automaticamente.</div>
-  <div class="imgreview-kpis">
-    <div class="imgreview-kpi"><small>Itens S.A.</small><strong>${all.length}</strong></div>
-    <div class="imgreview-kpi"><small>Foto exata cadastrada</small><strong>${exact}</strong></div>
-    <div class="imgreview-kpi"><small>Com referência provisória</small><strong>${refs}</strong></div>
-    <div class="imgreview-kpi"><small>Exibidos no filtro</small><strong>${list.length}</strong></div>
-  </div>
-  <div class="imgreview-toolbar">
-    <div class="searchbox"><input value="${escapeHtml(v291ReviewSearch)}" placeholder="Buscar código ou produto..." oninput="v291ReviewSearch=this.value;renderImageReview()"></div>
-    <select onchange="v291ReviewCategory=this.value;renderImageReview()"><option value="">Todas as categorias</option>${cats.map(c=>`<option value="${escapeHtml(c)}" ${v291ReviewCategory===c?'selected':''}>${escapeHtml(c)}</option>`).join('')}</select>
-    <button class="btn" onclick="v291ReviewSearch='';v291ReviewCategory='';renderImageReview()">Limpar</button>
-  </div>
-  <div class="imgreview-grid">${list.slice(0,300).map(p=>{
-    const ref=v291IsReference(p);
-    return `<article class="imgreview-card">
-      <div class="imgreview-image"><img src="${productImage(p)}" onerror="this.src='${placeholderSvg('Produto')}'"><span class="imgref-badge ${ref?'':'exact'}">${ref?'Referência provisória':'Foto cadastrada'}</span></div>
-      <div class="imgreview-body">
-        <div class="imgreview-code">${escapeHtml(p.code||'Sem código')}</div>
-        <div class="imgreview-title">${escapeHtml(p.name)}</div>
-        <div class="imgreview-meta">${escapeHtml(p.category||'—')}${p.line?' • '+escapeHtml(p.line):''}</div>
-        <div class="imgreview-source">${escapeHtml(ref?v291ImageSource(p):'Imagem cadastrada no produto')}</div>
-        <div class="imgreview-actions"><button class="btn sm" onclick="openProductDetails('${p.id}')">Ver produto</button>${isAdmin()?`<button class="btn sm green" onclick="openProductModal('${p.id}')">Editar</button>`:''}</div>
+function v293RenderQuoteItems(q){
+  if(!q.items.length) return `<div class="empty">Nenhum item ainda. Pesquise no catálogo acima ou adicione um item livre.</div>`;
+  return q.items.map((i,idx)=>{
+    const seller=isSellerOnly();
+    return `<div class="item-row">
+      <img class="item-img" src="${v293ItemPhoto(i)}" onerror="this.src='${placeholderSvg('Produto')}'">
+      <div class="item-name-wrap">
+        <div class="item-name">${escapeHtml(i.description)}</div>
+        <div class="submeta">${i.manufacturer?`<span class="maker-badge ${makerClass(i.manufacturer)}">${escapeHtml(i.manufacturer)}</span>`:''}${escapeHtml(i.code||'')} ${i.category?'• '+escapeHtml(i.category):''} ${i.color?'• '+escapeHtml(i.color):''}</div>
+        ${seller?'':`<span class="internal-tag">CUSTO / MARGEM INTERNOS</span>`}
+        <div class="quote-item-tools">
+          <button class="btn sm" type="button" onclick="openQuoteItemEditor(${idx})">✎ Editar item</button>
+          <button class="btn sm" type="button" onclick="openQuoteItemReplacement(${idx})">⇄ Trocar produto</button>
+        </div>
       </div>
-    </article>`
-  }).join('')}</div>
-  ${list.length>300?`<div class="hint" style="text-align:center;margin-top:12px">Mostrando os primeiros 300 de ${list.length}. Use busca ou categoria para revisar os demais.</div>`:''}`;
+      <input class="mini-field" title="Quantidade" type="number" min="1" step="1" value="${i.qty}" onchange="setItem(${idx},'qty',+this.value)">
+      ${seller
+        ? `<input class="mini-field seller-quote-price" type="text" value="${money(i.price)}" readonly>`
+        : `<input class="mini-field" title="Custo fornecedor" type="number" min="0" step="0.01" value="${i.cost}" onchange="setItem(${idx},'cost',+this.value,true)">
+           <input class="mini-field" title="Acréscimo %" type="number" step="0.1" value="${i.markup}" onchange="setItem(${idx},'markup',+this.value,true)">
+           <input class="mini-field" title="Preço de venda" type="number" min="0" step="0.01" value="${i.price}" onchange="setItem(${idx},'price',+this.value,false,true)">`}
+      <div class="item-total">${money((+i.qty||0)*(+i.price||0))}</div>
+      <button class="btn icon sm danger remove" onclick="removeQuoteItem(${idx})">×</button>
+    </div>`;
+  }).join('');
+}
+renderQuoteItems=v293RenderQuoteItems;
+
+function openQuoteItemEditor(idx){
+  const i=currentQuote?.items?.[idx]; if(!i)return;
+  const full=v293CanFullyEditItem();
+  const photo=v293ItemPhoto(i);
+  $('#modalRoot').innerHTML=`<div class="modal-back open"><div class="modal" style="max-width:900px"><div class="modal-head">
+    <div><h3>Editar item do orçamento</h3><div class="hint">${escapeHtml(currentQuote.number||'')} • alteração somente nesta proposta</div></div>
+    <button class="btn icon" onclick="closeModal()">×</button>
+  </div>
+  <div class="modal-body"><div class="form-grid">
+    <div class="field c4">
+      <label>Foto</label>
+      <div class="qitem-editor-preview"><img id="qitemPhotoPreview" src="${photo}" onerror="this.src='${placeholderSvg('Produto')}'"></div>
+      ${full?`<div class="field" style="margin-top:8px"><label>URL da foto real</label><input id="qiImage" value="${escapeHtml(i.image||'')}" placeholder="Cole aqui uma URL pública da imagem" oninput="document.getElementById('qitemPhotoPreview').src=this.value||'${photo.replace(/'/g,"&#39;")}'"></div>`:''}
+    </div>
+    <div class="c8"><div class="form-grid">
+      <div class="field c12"><label>Descrição do produto</label><input id="qiDesc" value="${escapeHtml(i.description||'')}" ${full?'':'readonly'}></div>
+      <div class="field c4"><label>Código</label><input id="qiCode" value="${escapeHtml(i.code||'')}" ${full?'':'readonly'}></div>
+      <div class="field c4"><label>Fabricante</label><input id="qiMaker" value="${escapeHtml(i.manufacturer||'')}" ${full?'':'readonly'}></div>
+      <div class="field c4"><label>Categoria</label><input id="qiCategory" value="${escapeHtml(i.category||'')}" ${full?'':'readonly'}></div>
+      <div class="field c6"><label>Linha</label><input id="qiLine" value="${escapeHtml(i.line||'')}" ${full?'':'readonly'}></div>
+      <div class="field c6"><label>Cor / acabamento</label><input id="qiColor" value="${escapeHtml(i.color||'')}" ${full?'':'readonly'}></div>
+      <div class="field c4"><label>Quantidade</label><input id="qiQty" type="number" min="1" step="1" value="${+i.qty||1}"></div>
+      ${full?`
+      <div class="field c4"><label>Custo fornecedor</label><input id="qiCost" type="number" min="0" step="0.01" value="${+i.cost||0}" oninput="v293CalcItemEditor()"></div>
+      <div class="field c4"><label>Acréscimo (%)</label><input id="qiMarkup" type="number" step="0.1" value="${+i.markup||0}" oninput="v293CalcItemEditor()"></div>
+      <div class="field c4"><label>Preço de venda</label><input id="qiPrice" type="number" min="0" step="0.01" value="${+i.price||0}"></div>`:
+      `<div class="field c8"><label>Preço no orçamento</label><input value="${money(i.price)}" readonly></div>`}
+      <div class="field c12"><div class="qitem-editor-note">${full
+        ? 'Você pode personalizar descrição, cor, foto e valores apenas nesta proposta. Para alterar o produto em todo o catálogo, use a edição do Catálogo.'
+        : 'Como vendedor, você pode alterar a quantidade ou trocar por outro produto do catálogo. Custos e acréscimos permanecem protegidos.'}</div></div>
+    </div></div>
+  </div></div>
+  <div class="modal-foot">
+    <button class="btn" onclick="closeModal()">Cancelar</button>
+    <button class="btn" onclick="openQuoteItemReplacement(${idx})">⇄ Trocar pelo catálogo</button>
+    <button class="btn green" onclick="saveQuoteItemEditor(${idx})">✓ Aplicar no orçamento</button>
+  </div></div></div>`;
 }
 
-const v291RenderCatalogBase=renderCatalog;
-renderCatalog=function(){v291RenderCatalogBase();setTimeout(v291MarkReferenceCards,0)};
+function v293CalcItemEditor(){
+  if(isSellerOnly())return;
+  const cost=+($('#qiCost')?.value||0), markup=+($('#qiMarkup')?.value||0);
+  const price=$('#qiPrice'); if(price) price.value=(cost*(1+markup/100)).toFixed(2);
+}
 
-const v291RenderAllBase=renderAll;
-renderAll=function(){v291RenderAllBase();renderImageReview();setTimeout(v291MarkReferenceCards,0)};
+function saveQuoteItemEditor(idx){
+  const i=currentQuote?.items?.[idx];if(!i)return;
+  const qty=Math.max(1,+($('#qiQty')?.value||1));
+  i.qty=qty;
+  if(v293CanFullyEditItem()){
+    i.description=String($('#qiDesc')?.value||'').trim().slice(0,300);
+    if(!i.description){toast('Informe a descrição do produto');return}
+    i.code=String($('#qiCode')?.value||'').trim().slice(0,80);
+    i.manufacturer=String($('#qiMaker')?.value||'').trim().slice(0,100);
+    i.category=String($('#qiCategory')?.value||'').trim().slice(0,120);
+    i.line=String($('#qiLine')?.value||'').trim().slice(0,120);
+    i.color=String($('#qiColor')?.value||'').trim().slice(0,120);
+    i.cost=Math.max(0,+($('#qiCost')?.value||0));
+    i.markup=+($('#qiMarkup')?.value||0);
+    i.price=Math.max(0,+($('#qiPrice')?.value||0));
+    i.image=String($('#qiImage')?.value||'').trim().slice(0,1200);
+  }
+  closeModal();renderQuote();toast('Item atualizado no orçamento');
+}
 
-const v291ShowViewBase=showView;
-showView=function(v){
-  if(v==='image-review'&&isSellerOnly()){toast('Acesso restrito à gestão');v='catalog'}
-  const r=v291ShowViewBase(v);
-  if(v==='image-review'){$('#topTitle').textContent='Revisão de imagens';renderImageReview()}
-  return r;
+function openQuoteItemReplacement(idx,term=''){
+  const item=currentQuote?.items?.[idx];if(!item)return;
+  const list=catalogSearch(term).slice(0,100);
+  $('#modalRoot').innerHTML=`<div class="modal-back open"><div class="modal" style="max-width:960px"><div class="modal-head">
+    <div><h3>Trocar produto</h3><div class="hint">A quantidade atual será mantida.</div></div>
+    <button class="btn icon" onclick="closeModal()">×</button>
+  </div>
+  <div class="modal-body">
+    <div class="searchbox" style="margin-bottom:10px"><input id="qitemReplaceSearch" value="${escapeHtml(term)}" placeholder="Código, descrição, fabricante, linha..." onkeydown="if(event.key==='Enter'){event.preventDefault();openQuoteItemReplacement(${idx},this.value)}"></div>
+    <div class="row-actions" style="margin-bottom:10px"><button class="btn" onclick="openQuoteItemReplacement(${idx},document.getElementById('qitemReplaceSearch').value)">Buscar</button></div>
+    <div class="qitem-picker-list">${list.map(p=>`<div class="qitem-picker-row">
+      <img src="${productImage(p)}" onerror="this.src='${placeholderSvg('Produto')}'">
+      <div><div class="qitem-picker-name">${escapeHtml(p.name)}</div><div class="qitem-picker-meta">${escapeHtml(p.code||'Sem código')} • ${escapeHtml(p.manufacturer||'')} • ${escapeHtml(p.category||'')}</div></div>
+      <div class="qitem-picker-price">${isSellerOnly()?'Preço no orçamento':money(p.price||0)}</div>
+      <button class="btn sm green" onclick="replaceQuoteItemWithProduct(${idx},'${p.id}')">Usar</button>
+    </div>`).join('')||'<div class="empty">Nenhum produto encontrado.</div>'}</div>
+  </div>
+  <div class="modal-foot"><button class="btn" onclick="openQuoteItemEditor(${idx})">← Voltar</button></div>
+  </div></div>`;
+}
+
+async function replaceQuoteItemWithProduct(idx,productId){
+  const old=currentQuote?.items?.[idx],p=(state.catalog||[]).find(x=>x.id===productId);
+  if(!old||!p)return;
+  const qty=Math.max(1,+old.qty||1);
+  try{
+    let price=+p.price||0;
+    if(typeof v261SalePriceMap==='function'){
+      const prices=await v261SalePriceMap([productId]);price=+prices[productId]||price;
+    }
+    currentQuote.items[idx]={
+      ...old,
+      productId:p.id,
+      code:p.code||'',
+      description:p.name,
+      manufacturer:p.manufacturer||'',
+      category:p.category||'',
+      line:p.line||'',
+      source:p.source||'',
+      color:p.color||'',
+      qty,
+      cost:isSellerOnly()?0:(+p.cost||0),
+      markup:isSellerOnly()?0:(+p.markup||0),
+      price,
+      image:p.image||productImage(p)
+    };
+    closeModal();renderQuote();toast('Produto substituído no orçamento');
+  }catch(e){alert('Não foi possível trocar o produto: '+v29FriendlyError(e))}
+}
+
+/* Garante que as linhas sempre exibam o editor após qualquer renderização posterior. */
+const v293RenderQuoteBase=renderQuote;
+renderQuote=function(){
+  v293RenderQuoteBase();
+  if(currentQuote){
+    const target=$('#quoteItems');
+    if(target) target.innerHTML=v293RenderQuoteItems(currentQuote);
+  }
 };
-
-
-
-/* ===== v2.9.2 • catálogo S.A. em itens isolados ===== */
-function v292Xml(s){return String(s??'').replace(/[&<>"]+/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]||m))}
-function v292SvgUri(svg){return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg)}
-function v292IsSA(p){return normalize(p?.manufacturer||'')==='s.a.' || normalize(p?.manufacturer||'')==='sa'}
-function v292ColorMode(p){const x=normalize([p?.name,p?.color,p?.notes].join(' '));return /preta|preto|grafite|preto\/preto/.test(x)?'black':'white'}
-function v292First(pattern,text){const m=String(text||'').match(pattern);return m?m[1]:''}
-function v292ExtractHeightText(name){
-  const x=String(name||'');
-  let m=x.match(/Alt\.\s*([0-9],[0-9]|[0-9]+)\s*m/i); if(m) return m[1]+' m';
-  m=x.match(/(\d{4})MM\s+ALTURA/i); if(m) return (Number(m[1])/1000).toFixed(2).replace('.',',')+' m';
-  return '';
-}
-function v292ExtractCapacity(name){ const m=String(name||'').match(/(\d+)\s*KG/i); return m?m[1]+' kg':'' }
-function v292Tone(mode){return mode==='black'?{main:'#222831',edge:'#111827',shelf:'#2f3b4a',accent:'#93c01f',light:'#eef2f7',ink:'#102c55'}:{main:'#fdfefe',edge:'#aeb9c6',shelf:'#ffffff',accent:'#163f73',light:'#eef4fb',ink:'#102c55'}}
-function v292Wrap(kind,title,sub,art,badge){
-  return v292SvgUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520">
-    <defs>
-      <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fbfdff"/><stop offset="1" stop-color="#eef3f8"/></linearGradient>
-      <filter id="s" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#102c55" flood-opacity=".12"/></filter>
-      <style>
-        .h{font:800 15px Arial,sans-serif;fill:#fff;letter-spacing:1px}.k{font:900 27px Arial,sans-serif;fill:#102c55}.s{font:700 15px Arial,sans-serif;fill:#5e6f83}.m{font:900 13px Arial,sans-serif;fill:#5e6f83}.t{font:800 11px Arial,sans-serif;fill:#6e7f92}.i{font:900 12px Arial,sans-serif;fill:#163f73}
-      </style>
-    </defs>
-    <rect width="720" height="520" rx="28" fill="url(#bg)"/>
-    <rect x="18" y="18" width="684" height="484" rx="24" fill="#ffffff" stroke="#d8e0ea"/>
-    <rect x="30" y="28" width="180" height="34" rx="17" fill="#163f73"/>
-    <text x="120" y="50" text-anchor="middle" class="h">${v292Xml(badge||kind||'ITEM')}</text>
-    <g filter="url(#s)" transform="translate(0,6)">${art}</g>
-    <text x="38" y="422" class="k">${v292Xml(title)}</text>
-    <text x="38" y="452" class="s">${v292Xml(sub||'Item isolado do catálogo S.A.')}</text>
-    <text x="38" y="482" class="t">Catálogo S.A. • ilustração isolada para revisão visual</text>
-  </svg>`)
-}
-function v292Upright(x,y,h,c){let holes='';for(let i=0;i<10;i++){holes+=`<circle cx="${x+10}" cy="${y+18+i*(h-36)/9}" r="2.5" fill="${c.edge}" opacity=".55"/>`}return `<rect x="${x}" y="${y}" width="20" height="${h}" rx="4" fill="${c.main}" stroke="${c.edge}"/>${holes}`}
-function v292Shelf(x,y,w,d,c){return `<g><rect x="${x}" y="${y}" width="${w}" height="${d}" rx="4" fill="${c.main}" stroke="${c.edge}"/><rect x="${x+8}" y="${y+d}" width="${w-16}" height="8" rx="2" fill="${c.accent}" opacity=".9"/></g>`}
-function v292GondolaIllustration(p){
-  const x=normalize(p?.name||''); const mode=v292ColorMode(p); const c=v292Tone(mode); const height=v292ExtractHeightText(p?.name); const line=(p?.line||p?.category||'Gôndola').toUpperCase();
-  const isCenter=x.includes('centro'); const isWall=x.includes('parede'); const isPonta=x.includes('ponta'); const isPodium=x.includes('podium'); const isCanto=x.includes('canto'); const isCont=x.includes('continuacao'); const isInitial=x.includes('inicial');
-  let art=''; let title='';
-  if(isCanto){
-    art=`${v292Upright(180,110,210,c)}${v292Upright(310,110,210,c)}${v292Upright(440,110,210,c)}
-    ${v292Shelf(200,150,115,16,c)}${v292Shelf(200,198,115,16,c)}${v292Shelf(200,246,115,16,c)}
-    ${v292Shelf(330,150,115,16,c)}${v292Shelf(330,198,115,16,c)}${v292Shelf(330,246,115,16,c)}
-    <rect x="194" y="278" width="248" height="24" rx="6" fill="${c.main}" stroke="${c.edge}"/>`;
-    title='CANTO DE GÔNDOLA';
-  } else if(isPonta||isPodium){
-    const w=isPodium?210:170; const sx=250;
-    art=`${v292Upright(sx,95,230,c)}${v292Upright(sx+w,95,230,c)}
-    ${v292Shelf(sx+18,135,w-36,18,c)}${v292Shelf(sx+18,185,w-36,18,c)}${v292Shelf(sx+18,235,w-36,18,c)}${v292Shelf(sx+18,285,w-36,18,c)}
-    <rect x="${sx+6}" y="312" width="${w-12}" height="26" rx="6" fill="${c.main}" stroke="${c.edge}"/>${isPodium?`<rect x="${sx+24}" y="72" width="${w-48}" height="18" rx="8" fill="#dbe5ef" stroke="#c4d0dc"/>`:''}`;
-    title=isPodium?'PONTA PODIUM':'PONTA DE GÔNDOLA';
-  } else if(isCenter){
-    art=`${v292Upright(178,90,245,c)}${v292Upright(330,90,245,c)}${v292Upright(482,90,245,c)}
-    ${v292Shelf(188,128,132,16,c)}${v292Shelf(188,176,132,16,c)}${v292Shelf(188,224,132,16,c)}${v292Shelf(188,272,132,16,c)}
-    ${v292Shelf(340,128,132,16,c)}${v292Shelf(340,176,132,16,c)}${v292Shelf(340,224,132,16,c)}${v292Shelf(340,272,132,16,c)}
-    <rect x="190" y="302" width="280" height="28" rx="6" fill="${c.main}" stroke="${c.edge}"/>`;
-    title=`CENTRO ${isCont?'CONT.':'INICIAL'}`;
-  } else {
-    art=`${v292Upright(220,92,245,c)}${v292Upright(470,92,245,c)}
-    ${v292Shelf(242,126,206,16,c)}${v292Shelf(242,174,206,16,c)}${v292Shelf(242,222,206,16,c)}${v292Shelf(242,270,206,16,c)}
-    <rect x="242" y="302" width="206" height="28" rx="6" fill="${c.main}" stroke="${c.edge}"/>`;
-    title=`PAREDE ${isCont?'CONT.':'INICIAL'}`;
-  }
-  if(mode==='black') title+=' • PRETA';
-  return v292Wrap(line,title,height||'Montagem representativa por tipo / altura.',art,line)
-}
-function v292RackIllustration(p){
-  const x=normalize(p?.name||''); const c=v292Tone(v292ColorMode(p)); const height=v292ExtractHeightText(p?.name)||v292First(/(\d{4}x\d+)/i,p?.name);
-  let art='',title='RACK';
-  if(x.includes('checkout')||x.includes('check out')||x.includes('check stand')){
-    art=`<rect x="180" y="170" width="320" height="120" rx="18" fill="#f5f7fb" stroke="#cad6e3"/>
-    <rect x="206" y="192" width="160" height="78" rx="10" fill="#ffffff" stroke="#cbd7e4"/>
-    <rect x="376" y="202" width="96" height="58" rx="10" fill="#eaf1fb" stroke="#b8c8da"/>
-    <rect x="180" y="152" width="170" height="18" rx="9" fill="#163f73"/><rect x="446" y="152" width="54" height="18" rx="9" fill="#93c01f"/>`;
-    title='CHECK-OUT';
-  } else if(x.includes('balcao')){
-    const top=x.includes('madeira')?'#b98043':'#c9d4de';
-    const glass=x.includes('vidro');
-    art=`<rect x="170" y="170" width="360" height="124" rx="16" fill="#ffffff" stroke="#c8d4e0"/>
-    <rect x="170" y="156" width="360" height="18" rx="9" fill="${top}"/>
-    ${glass?`<rect x="215" y="110" width="130" height="58" rx="10" fill="#eef6ff" stroke="#b6c9dd" opacity=".86"/><rect x="357" y="110" width="130" height="58" rx="10" fill="#eef6ff" stroke="#b6c9dd" opacity=".86"/>`:''}
-    <rect x="214" y="198" width="118" height="62" rx="8" fill="#f7fafc" stroke="#d3dde7"/><rect x="367" y="198" width="118" height="62" rx="8" fill="#f7fafc" stroke="#d3dde7"/>`;
-    title=x.includes('canto')?'BALCÃO CANTO':x.includes('caixa')?'BALCÃO CAIXA':'BALCÃO VITRINE';
-  } else if(x.includes('quadro coluna')){
-    art=`<rect x="270" y="96" width="24" height="228" rx="5" fill="#cfd7df" stroke="#a1aeba"/><rect x="426" y="96" width="24" height="228" rx="5" fill="#cfd7df" stroke="#a1aeba"/>
-    <rect x="294" y="132" width="132" height="16" rx="3" fill="#163f73"/><rect x="294" y="194" width="132" height="16" rx="3" fill="#163f73"/><rect x="294" y="256" width="132" height="16" rx="3" fill="#163f73"/>`;
-    title='QUADRO COLUNA RACK';
-  } else {
-    art=`<rect x="220" y="96" width="24" height="228" rx="5" fill="#cfd7df" stroke="#a1aeba"/><rect x="476" y="96" width="24" height="228" rx="5" fill="#cfd7df" stroke="#a1aeba"/>
-    <rect x="244" y="132" width="232" height="16" rx="3" fill="#163f73"/><rect x="244" y="194" width="232" height="16" rx="3" fill="#163f73"/><rect x="244" y="256" width="232" height="16" rx="3" fill="#163f73"/>`;
-    title=x.includes('continuacao')?'RACK CONTINUAÇÃO':'RACK INICIAL'; if(x.includes('preto')) title+=' • PRETO';
-  }
-  return v292Wrap('RACK / BALCÃO',title,height||'Representação isolada da família.',art,p?.category||'RACK')
-}
-function v292MiniPalletIllustration(p){
-  const x=normalize(p?.name||''); const c={upr:'#9aa8b6',edge:'#7d8d9b',beam:'#ef7f1a',deck:'#dfe7ef'}; let art='', title='MINI PORTA PALLET', sub='';
-  if(x.includes('lateral')){
-    art=`<rect x="320" y="90" width="18" height="245" rx="4" fill="${c.upr}" stroke="${c.edge}"/><rect x="382" y="90" width="18" height="245" rx="4" fill="${c.upr}" stroke="${c.edge}"/>
-    <line x1="338" y1="110" x2="382" y2="164" stroke="${c.edge}" stroke-width="8"/><line x1="338" y1="216" x2="382" y2="164" stroke="${c.edge}" stroke-width="8"/><line x1="338" y1="272" x2="382" y2="324" stroke="${c.edge}" stroke-width="8"/>`;
-    title='LATERAL MPP'; sub=v292First(/(\d+x\d+mm)/i,p?.name)||'Estrutura lateral isolada';
-  } else if(x.includes('longarina') || x.includes('par de longarina')){
-    art=`<rect x="180" y="178" width="360" height="26" rx="6" fill="${c.beam}" stroke="#d86f11"/><rect x="190" y="240" width="340" height="24" rx="6" fill="${c.beam}" opacity=".92" stroke="#d86f11"/>`;
-    title='PAR DE LONGARINA'; sub=v292ExtractCapacity(p?.name)||'Componente de travamento / apoio';
-  } else if(x.includes('nivel completo')||x.includes('plano metalico')){
-    art=`<rect x="194" y="118" width="330" height="190" rx="12" fill="#f7fafc" stroke="#c8d4df"/><g>${[0,1,2,3,4].map(i=>`<rect x="214" y="${140+i*30}" width="290" height="18" rx="4" fill="#d9e3ec" stroke="#b9c8d6"/>`).join('')}</g>`;
-    title='NÍVEL COMPLETO'; sub='Plano metálico para MPP';
-  } else if(x.includes('reforco') || x.includes('reforço')){
-    art=`<rect x="205" y="210" width="310" height="20" rx="6" fill="#b9c7d5" stroke="#93a4b4"/><rect x="205" y="248" width="310" height="20" rx="6" fill="#b9c7d5" stroke="#93a4b4"/>`;
-    title='REFORÇO PARA MDF'; sub='Componente isolado';
-  } else {
-    art=`<rect x="218" y="96" width="18" height="240" rx="4" fill="${c.upr}" stroke="${c.edge}"/><rect x="482" y="96" width="18" height="240" rx="4" fill="${c.upr}" stroke="${c.edge}"/>
-    <rect x="236" y="130" width="246" height="20" rx="4" fill="${c.beam}"/><rect x="236" y="194" width="246" height="20" rx="4" fill="${c.beam}"/><rect x="236" y="258" width="246" height="20" rx="4" fill="${c.beam}"/>
-    <rect x="248" y="150" width="222" height="12" rx="3" fill="${c.deck}"/><rect x="248" y="214" width="222" height="12" rx="3" fill="${c.deck}"/><rect x="248" y="278" width="222" height="12" rx="3" fill="${c.deck}"/>`;
-    title=x.includes('slim')?'MINI PORTA PALLET SLIM':'MINI PORTA PALLET'; sub=v292ExtractCapacity(p?.name)||'Inicial / continuação conforme composição';
-  }
-  return v292Wrap('ARMAZENAGEM',title,sub,art,p?.category||'MPP')
-}
-function v292PortaPalletIllustration(p){
-  const x=normalize(p?.name||''); const c={upr:'#8d97a1',edge:'#77808a',beam:'#ef7f1a',floor:'#e8eef4'}; let art='',title='PORTA PALLET',sub='';
-  if(x.includes('longarina') || x.includes('tb-cad/')){ art=`<rect x="160" y="168" width="400" height="28" rx="6" fill="${c.beam}" stroke="#cf6b10"/><rect x="182" y="232" width="356" height="26" rx="6" fill="${c.beam}" opacity=".94" stroke="#cf6b10"/>`; title='LONGARINA'; sub=v292ExtractCapacity(p?.name)||'Componente isolado'; }
-  else if(x.includes('montante')||x.includes('ppx')){ art=`<rect x="310" y="86" width="22" height="260" rx="4" fill="${c.upr}" stroke="${c.edge}"/><rect x="388" y="86" width="22" height="260" rx="4" fill="${c.upr}" stroke="${c.edge}"/><line x1="332" y1="106" x2="388" y2="170" stroke="${c.edge}" stroke-width="8"/><line x1="332" y1="234" x2="388" y2="170" stroke="${c.edge}" stroke-width="8"/><line x1="332" y1="286" x2="388" y2="340" stroke="${c.edge}" stroke-width="8"/>`; title='MONTANTE'; sub='Estrutura lateral isolada'; }
-  else { art=`<rect x="198" y="96" width="20" height="240" rx="4" fill="${c.upr}" stroke="${c.edge}"/><rect x="502" y="96" width="20" height="240" rx="4" fill="${c.upr}" stroke="${c.edge}"/>
-    <rect x="218" y="132" width="284" height="20" rx="4" fill="${c.beam}"/><rect x="218" y="204" width="284" height="20" rx="4" fill="${c.beam}"/><rect x="218" y="276" width="284" height="20" rx="4" fill="${c.beam}"/>`; title='PORTA PALLET'; sub='Estrutura representativa'; }
-  return v292Wrap('ARMAZENAGEM',title,sub,art,'PORTA PALLET')
-}
-function v292FurnitureIllustration(p){
-  const x=normalize(p?.name||''); const dark=/preto/.test(x); const body=dark?'#2d333c':'#f7fafc'; const edge=dark?'#121821':'#bcc8d5';
-  let art='',title='MÓVEL DE AÇO',sub='';
-  if(x.includes('roupeiro')){ art=`<rect x="238" y="90" width="244" height="250" rx="10" fill="${body}" stroke="${edge}"/><line x1="360" y1="90" x2="360" y2="340" stroke="${edge}"/><g>${[0,1,2,3].map(r=>`<line x1="238" y1="${140+r*50}" x2="482" y2="${140+r*50}" stroke="${edge}" opacity=".6"/>`).join('')}</g>`; title='ROUPEIRO'; }
-  else if(x.includes('arquivo')){ art=`<rect x="255" y="112" width="210" height="220" rx="10" fill="${body}" stroke="${edge}"/><g>${[0,1,2,3].map(i=>`<rect x="277" y="${132+i*46}" width="166" height="34" rx="8" fill="#ffffff" stroke="${edge}"/><line x1="338" y1="${149+i*46}" x2="382" y2="${149+i*46}" stroke="#9fb0c0" stroke-width="4"/>`).join('')}</g>`; title='ARQUIVO'; }
-  else if(x.includes('armario')||x.includes('armario')){ art=`<rect x="244" y="92" width="232" height="250" rx="10" fill="${body}" stroke="${edge}"/><line x1="360" y1="92" x2="360" y2="342" stroke="${edge}"/><rect x="282" y="150" width="156" height="10" rx="4" fill="#d4dee9"/><rect x="282" y="224" width="156" height="10" rx="4" fill="#d4dee9"/>`; title='ARMÁRIO'; }
-  else if(x.includes('sapateira')){ art=`<rect x="250" y="108" width="220" height="214" rx="10" fill="${body}" stroke="${edge}"/>${[0,1,2].map(i=>`<line x1="270" y1="${160+i*42}" x2="450" y2="${160+i*42}" stroke="${edge}"/>`).join('')}`; title='SAPATEIRA'; }
-  else { art=`<rect x="246" y="90" width="228" height="252" rx="10" fill="${body}" stroke="${edge}"/>${[0,1,2,3].map(i=>`<line x1="266" y1="${138+i*44}" x2="454" y2="${138+i*44}" stroke="${edge}"/>`).join('')}`; title='ESTANTE'; }
-  return v292Wrap('MÓVEIS DE AÇO',title,sub||'Representação isolada do item.',art,'MÓVEIS')
-}
-function v292AccessoryIllustration(p){
-  const x=normalize(p?.name||''); const dark=/preta|preto/.test(x); const c={main:dark?'#2d333c':'#f9fbfd',edge:dark?'#161b22':'#b9c7d5',accent:'#163f73',wire:dark?'#2d333c':'#8fa1b3'}; let art='',title='ACESSÓRIO',sub='';
-  if(x.includes('bandeja')){ art=`<polygon points="220,210 500,210 470,280 250,280" fill="${c.main}" stroke="${c.edge}"/><rect x="235" y="196" width="250" height="18" rx="6" fill="#dde7f1" stroke="${c.edge}"/>`; title='BANDEJA'; sub=x.includes('ponta')?'PONTA':x.includes('canto')?'CANTO':x.includes('base')?'BASE':'GÔNDOLA'; }
-  else if(x.includes('painel de tela')){ art=`<rect x="228" y="118" width="264" height="180" rx="12" fill="#ffffff" stroke="#c1cfdd"/>${[0,1,2,3,4,5].map(i=>`<line x1="248" y1="${138+i*24}" x2="472" y2="${138+i*24}" stroke="#d6dfe8"/>`).join('')}${[0,1,2,3,4,5,6].map(i=>`<line x1="${248+i*32}" y1="138" x2="${248+i*32}" y2="258" stroke="#d6dfe8"/>`).join('')}`; title='PAINEL DE TELA'; }
-  else if(x.includes('painel')){ art=`<rect x="240" y="122" width="240" height="170" rx="12" fill="#ffffff" stroke="#c5d1de"/>${[0,1,2,3].map(i=>`<line x1="240" y1="${156+i*34}" x2="480" y2="${156+i*34}" stroke="#d9e2eb"/>`).join('')}`; title=x.includes('canto')?'PAINEL DE CANTO':x.includes('ponta')?'PAINEL DE PONTA':'PAINEL'; }
-  else if(x.includes('coluna')){ art=`<rect x="340" y="92" width="40" height="250" rx="8" fill="${c.main}" stroke="${c.edge}"/>${[0,1,2,3,4,5,6,7,8,9].map(i=>`<circle cx="360" cy="${118+i*22}" r="3" fill="#7f91a3"/>`).join('')}`; title='COLUNA'; sub=v292ExtractHeightText(p?.name)||''; }
-  else if(x.includes('pe para')||x.includes('pé para')){ art=`<rect x="300" y="98" width="20" height="230" rx="5" fill="#c6d2de" stroke="#9eafc1"/><rect x="400" y="98" width="20" height="230" rx="5" fill="#c6d2de" stroke="#9eafc1"/><rect x="286" y="310" width="148" height="18" rx="8" fill="#163f73"/>`; title='PÉ PARA FORMAR CENTRO'; }
-  else if(x.includes('slg')){ art=`<path d="M250 250 L315 175 L315 205 L470 205 L470 235 L315 235 L315 265 Z" fill="#bbc8d6" stroke="#8fa0b0"/>`; title='SLG'; sub='Suporte lateral para bandeja'; }
-  else if(x.includes('gancho para arco')){ art=`<path d="M285 180 h120 v18 h-120 z" fill="#303844"/><path d="M380 198 q80 0 80 58 q0 46-44 46 q-36 0-36-34 q0-30 28-34" fill="none" stroke="#303844" stroke-width="14" stroke-linecap="round"/>`; title='GANCHO PARA ARCO'; }
-  else if(x.includes('gancho')){ art=`<rect x="220" y="190" width="180" height="18" rx="7" fill="#2d333c"/><path d="M400 198 q110 0 110 84 q0 52-48 52 q-42 0-42-38 q0-32 30-36" fill="none" stroke="#2d333c" stroke-width="18" stroke-linecap="round"/>${x.includes('porta preco')?'<rect x="254" y="168" width="112" height="18" rx="5" fill="#eef5fb" stroke="#bed0e0"/>':''}`; title='GANCHO'; sub=x.includes('porta preco')?'Com porta-preço':''; }
-  else if(x.includes('aparador')){ art=`<path d="M220 180 h280 v26 h-116 v98 h-48 v-98 h-116 z" fill="#dbe5ef" stroke="#a3b3c2"/>`; title='APARADOR'; }
-  else if(x.includes('regua')){ art=`<rect x="204" y="208" width="312" height="24" rx="10" fill="#f7fafc" stroke="#c5d1dd"/>${[0,1,2,3,4,5].map(i=>`<line x1="${230+i*46}" y1="214" x2="${230+i*46}" y2="226" stroke="#9bb0c3"/>`).join('')}`; title='RÉGUA'; }
-  else if(x.includes('divisoria')){ art=`<rect x="344" y="126" width="32" height="184" rx="6" fill="#e7eef5" stroke="#bfd0df"/><rect x="250" y="220" width="220" height="16" rx="6" fill="#d7e2ec" stroke="#b6c7d7"/>`; title='DIVISÓRIA'; }
-  else if(x.includes('arco vass')){ art=`<path d="M250 260 q110-160 220 0" fill="none" stroke="#95a6b8" stroke-width="18" stroke-linecap="round"/><rect x="238" y="256" width="20" height="54" rx="8" fill="#95a6b8"/><rect x="462" y="256" width="20" height="54" rx="8" fill="#95a6b8"/>`; title='ARCO VASSOUREIRO'; }
-  else if(x.includes('porta etiquetas')||x.includes('porta etiqueta')){ art=`<rect x="176" y="198" width="368" height="42" rx="10" fill="#f9fdff" stroke="#bfd0df"/><rect x="192" y="212" width="336" height="14" rx="5" fill="#eaf3fb"/>`; title='PORTA ETIQUETAS'; }
-  else if(x.includes('balancinho')){ art=`<rect x="240" y="184" width="240" height="26" rx="10" fill="#303844"/><path d="M258 210 q0 72 102 72 q102 0 102-72" fill="none" stroke="#303844" stroke-width="16" stroke-linecap="round"/>`; title=x.includes('ponta')?'BALANCINHO PONTA':'BALANCINHO'; }
-  else if(x.includes('carrinho')){ art=`<path d="M228 188 h42 l22 92 h168 l42-66 h-194" fill="none" stroke="#2d333c" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><circle cx="328" cy="304" r="18" fill="#2d333c"/><circle cx="468" cy="304" r="18" fill="#2d333c"/><path d="M300 202 h140" stroke="#93c01f" stroke-width="10"/>`; title='CARRINHO'; sub=v292First(/(\d+L)/i,p?.name)||''; }
-  else if(x.includes('banca aramada')){ art=`<rect x="220" y="188" width="280" height="110" rx="12" fill="#ffffff" stroke="#c6d4e0"/>${[0,1,2,3].map(i=>`<line x1="240" y1="${210+i*24}" x2="480" y2="${210+i*24}" stroke="#d7e1eb"/>`).join('')}`; title='BANCA ARAMADA'; }
-  else if(x.includes('cesto')){ art=`<rect x="228" y="182" width="264" height="110" rx="12" fill="#ffffff" stroke="#bccbd9"/>${[0,1,2,3].map(i=>`<line x1="248" y1="${206+i*20}" x2="472" y2="${206+i*20}" stroke="#d7e2ec"/>`).join('')}${[0,1,2,3,4,5].map(i=>`<line x1="${248+i*38}" y1="196" x2="${248+i*38}" y2="278" stroke="#d7e2ec"/>`).join('')}`; title='CESTO'; sub=x.includes('ponta')?'PARA PONTA':x.includes('divisoria')?'COM DIVISÓRIAS':''; }
-  else if(x.includes('testeira')){ art=`<rect x="190" y="180" width="340" height="72" rx="16" fill="#f6fafc" stroke="#c4d2df"/><text x="360" y="225" text-anchor="middle" class="i">TESTEIRA</text>`; title='TESTEIRA'; }
-  else { art=`<rect x="220" y="170" width="280" height="130" rx="16" fill="#f7fafc" stroke="#c7d3df"/><text x="360" y="240" text-anchor="middle" class="i">ACESSÓRIO</text>`; title='ACESSÓRIO'; }
-  return v292Wrap('ACESSÓRIOS',title,sub||'Item isolado do catálogo S.A.',art,p?.category||'ACESSÓRIO')
-}
-function v292ExpositorIllustration(p){
-  const x=normalize(p?.name||''); const lat=x.includes('lateral'); const ponta=x.includes('ponta'); let title='EXPOSITOR DE PISO';
-  const art=`<rect x="220" y="102" width="18" height="230" rx="4" fill="#a5b3bf"/><rect x="482" y="102" width="18" height="230" rx="4" fill="#a5b3bf"/><rect x="238" y="140" width="244" height="28" rx="6" fill="#163f73"/><rect x="238" y="212" width="244" height="28" rx="6" fill="#163f73"/><rect x="250" y="168" width="220" height="16" rx="3" fill="#dbe4ed"/><rect x="250" y="240" width="220" height="16" rx="3" fill="#dbe4ed"/><rect x="228" y="290" width="264" height="28" rx="6" fill="#f0f5fa" stroke="#c6d2de"/>`;
-  if(lat) title='EXPOSITOR LATERAL'; else if(ponta) title='EXPOSITOR DE PONTA'; else if(x.includes('continuacao')) title='EXPOSITOR CONTINUAÇÃO'; else title='EXPOSITOR INICIAL';
-  return v292Wrap('EXPOSITOR',title,v292ExtractHeightText(p?.name)||'Módulo isolado.',art,'EXPOSITOR')
-}
-function v292SAImage(p){
-  const x=normalize([p?.name,p?.category,p?.line].join(' '));
-  if(x.includes('porta pallet')||x.includes('ppx')) return v292PortaPalletIllustration(p);
-  if(x.includes('mini porta pallet')||x.includes('mpp')) return v292MiniPalletIllustration(p);
-  if(x.includes('modulo')&&x.includes('expositor de piso')) return v292ExpositorIllustration(p);
-  if(['gondolas new plus 40x30','gondolas new plus 50x40','gondolas super plus 50x40'].includes(normalize(p?.category||'')) || x.includes('gondola') || x.includes('podium')) return v292GondolaIllustration(p);
-  if(normalize(p?.category||'')==='farmacia e rack' || x.includes('rack') || x.includes('balcao') || x.includes('checkout') || x.includes('check out') || x.includes('check stand')) return v292RackIllustration(p);
-  if(normalize(p?.category||'')==='moveis de aco' || x.includes('roupeiro') || x.includes('armario') || x.includes('arquivo') || x.includes('estante') || x.includes('sapateira')) return v292FurnitureIllustration(p);
-  if(normalize(p?.category||'')==='acessorios' || x.includes('bandeja') || x.includes('painel') || x.includes('coluna') || x.includes('gancho') || x.includes('slg') || x.includes('cesto') || x.includes('divisoria') || x.includes('porta etiqueta') || x.includes('aparador') || x.includes('regua') || x.includes('arco vass') || x.includes('balancinho') || x.includes('carrinho') || x.includes('banca aramada') || x.includes('testeira')) return v292AccessoryIllustration(p);
-  return '';
-}
-function v292ImageMode(p){ if(p?.image) return 'exact'; if(v292IsSA(p) && v292SAImage(p)) return 'isolated'; return 'reference' }
-const v292ProductImageBase=productImage;
-productImage=function(p){ if(p?.image) return p.image; if(v292IsSA(p)){ const img=v292SAImage(p); if(img) return img } return v292ProductImageBase(p) };
-if(typeof v251CatalogImage==='function'){ v251CatalogImage=function(p){ return productImage(p) } }
-function v292MarkCatalogCards(){
-  const cards=$$('#view-catalog .catalog-v25-card');
-  for(const card of cards){
-    const old=card.querySelector('.catalog-v291-ref'); if(old) old.remove();
-    if(card.querySelector('.catalog-v292-ref')) continue;
-    const title=card.querySelector('.catalog-v25-title')?.textContent||''; const code=card.querySelector('.catalog-v25-code')?.textContent||'';
-    const p=(state.catalog||[]).find(x=>title.trim()===String(x.name||'').trim() && (!x.code||code.includes(x.code)));
-    if(!p) continue;
-    const mode=v292ImageMode(p);
-    if(mode==='isolated'){ const image=card.querySelector('.catalog-v25-image'); if(image) image.insertAdjacentHTML('beforeend','<span class="catalog-v291-ref v292-ref" style="background:rgba(232,245,253,.96);border-color:rgba(91,147,204,.45);color:#144e86">item isolado</span>') }
-  }
-}
-function renderImageReview(){
-  const root=$('#view-image-review'); if(!root) return; if(isSellerOnly()){root.innerHTML='<div class="empty">Acesso restrito à gestão.</div>';return}
-  const all=(state.catalog||[]).filter(v292IsSA); const exact=all.filter(p=>!!p.image).length; const isolated=all.filter(p=>v292ImageMode(p)==='isolated').length; const list=(state.catalog||[]).filter(p=>v292IsSA(p) && (!v291ReviewCategory || p.category===v291ReviewCategory) && (!v291ReviewSearch || normalize([p.code,p.name,p.category,p.line].join(' ')).includes(normalize(v291ReviewSearch))));
-  const cats=[...new Set(all.map(p=>p.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));
-  root.innerHTML=`<div class="view-head"><div><h1>Revisão de imagens</h1><p>Catálogo S.A. tratado por item isolado. Onde não há foto exata cadastrada, o sistema exibe uma ilustração específica do produto ou componente.</p></div></div>
-  <div class="imgreview-note"><b>Nesta etapa:</b> saímos do modelo genérico por família. Os itens S.A. agora são mostrados como <b>item isolado</b>, com identificação visual específica por tipo de produto.</div>
-  <div class="imgreview-kpis"><div class="imgreview-kpi"><small>Itens S.A.</small><strong>${all.length}</strong></div><div class="imgreview-kpi"><small>Foto exata cadastrada</small><strong>${exact}</strong></div><div class="imgreview-kpi"><small>Itens isolados</small><strong>${isolated}</strong></div><div class="imgreview-kpi"><small>Exibidos no filtro</small><strong>${list.length}</strong></div></div>
-  <div class="imgreview-toolbar"><div class="searchbox"><input value="${escapeHtml(v291ReviewSearch)}" placeholder="Buscar código ou produto..." oninput="v291ReviewSearch=this.value;renderImageReview()"></div><select onchange="v291ReviewCategory=this.value;renderImageReview()"><option value="">Todas as categorias</option>${cats.map(c=>`<option value="${escapeHtml(c)}" ${v291ReviewCategory===c?'selected':''}>${escapeHtml(c)}</option>`).join('')}</select><button class="btn" onclick="v291ReviewSearch='';v291ReviewCategory='';renderImageReview()">Limpar</button></div>
-  <div class="imgreview-grid">${list.slice(0,300).map(p=>{const mode=v292ImageMode(p); return `<article class="imgreview-card"><div class="imgreview-image"><img src="${productImage(p)}" onerror="this.src='${placeholderSvg('Produto')}'"><span class="imgref-badge ${mode==='exact'?'exact':''}" style="${mode==='isolated'?'background:#e8f5fd;border-color:#c2ddf3;color:#14538d':''}">${mode==='exact'?'Foto cadastrada':'Item isolado'}</span></div><div class="imgreview-body"><div class="imgreview-code">${escapeHtml(p.code||'Sem código')}</div><div class="imgreview-title">${escapeHtml(p.name)}</div><div class="imgreview-meta">${escapeHtml(p.category||'—')}${p.line?' • '+escapeHtml(p.line):''}</div><div class="imgreview-source">${mode==='exact'?'Imagem cadastrada no produto':'Ilustração isolada gerada para este item / componente'}</div><div class="imgreview-actions"><button class="btn sm" onclick="openProductDetails('${p.id}')">Ver produto</button>${isAdmin()?`<button class="btn sm green" onclick="openProductModal('${p.id}')">Editar</button>`:''}</div></div></article>`}).join('')}</div>${list.length>300?`<div class="hint" style="text-align:center;margin-top:12px">Mostrando os primeiros 300 de ${list.length}. Use busca ou categoria para revisar os demais.</div>`:''}`
-}
-const v292RenderCatalogBase=renderCatalog; renderCatalog=function(){ v292RenderCatalogBase(); setTimeout(v292MarkCatalogCards,0) };
-const v292RenderAllBase=renderAll; renderAll=function(){ v292RenderAllBase(); renderImageReview(); setTimeout(v292MarkCatalogCards,0) };
-const v292ShowViewBase=showView; showView=function(v){ if(v==='image-review'&&isSellerOnly()){toast('Acesso restrito à gestão'); v='catalog'} const r=v292ShowViewBase(v); if(v==='image-review'){ $('#topTitle').textContent='Revisão de imagens'; renderImageReview() } return r };
 
 
 /* ===== v2.6.1.2 • runtime fix + inicialização robusta ===== */

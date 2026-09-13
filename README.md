@@ -196,19 +196,11 @@ Não requer SQL novo.
 Não requer SQL novo. Mantenha a pasta `functions/` atual no GitHub.
 
 
-## v2.9.1 — Imagens de referência S.A.
-- os itens S.A. sem foto passam a exibir uma imagem relacionada à família do produto;
-- a interface identifica claramente essas imagens como **imagem de referência**;
-- foto real cadastrada no produto sempre tem prioridade;
-- nova tela **Revisão de imagens** para conferir o catálogo por código/categoria;
-- não altera preços, clientes, orçamentos ou permissões;
-- não exige SQL.
-
-As referências são provisórias e serão substituídas progressivamente por imagens exatas.
-
-
-## v2.9.2 — Itens isolados S.A.
-- substitui referências genéricas por família por ilustrações isoladas por item/tipo;
-- revisão visual mais específica para os 536 itens S.A.;
-- fotos exatas continuam tendo prioridade quando cadastradas;
-- não exige SQL.
+## v2.9.3 — Fotos reais + edição do produto no orçamento
+- volta ao comportamento de fotos reais/referências fotográficas da v2.9;
+- remove a tela de revisão de imagens;
+- remove ilustrações artificiais;
+- adiciona **Editar item** e **Trocar produto** diretamente em cada linha do orçamento;
+- alterações manuais da linha não modificam o catálogo mestre;
+- regras de vendedor continuam protegidas;
+- não requer SQL.
