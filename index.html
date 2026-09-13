@@ -654,6 +654,47 @@ body.theme-dark .kanban-col{background:rgba(18,31,50,.68)}.kanban-card{border-ra
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 
+
+<style id="v291-image-ref-css">
+/* ===== v2.9.1 • imagens provisórias SA ===== */
+body.role-seller .nav button[data-view="image-review"]{display:none!important}
+.imgref-badge{
+  display:inline-flex;align-items:center;gap:5px;padding:4px 7px;border-radius:999px;
+  background:#fff3d9;border:1px solid #edd19b;color:#8d620d;font-size:8px;font-weight:950
+}
+.imgref-badge.exact{background:#eaf8ef;border-color:#bfe6cf;color:#216f45}
+.imgreview-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.imgreview-kpi{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:13px;box-shadow:var(--v29-shadow)}
+.imgreview-kpi small{display:block;color:var(--muted);font-size:8px;font-weight:900;text-transform:uppercase}
+.imgreview-kpi strong{display:block;font-size:20px;margin-top:4px}
+.imgreview-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.imgreview-toolbar .searchbox{flex:1;min-width:240px}
+.imgreview-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.imgreview-card{border:1px solid var(--line);background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 4px 15px rgba(16,44,85,.05)}
+.imgreview-card:hover{border-color:rgba(147,192,31,.4);box-shadow:0 12px 28px rgba(16,44,85,.09)}
+.imgreview-image{aspect-ratio:1.25/1;background:#f7f9fc;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.imgreview-image img{width:100%;height:100%;object-fit:contain}
+.imgreview-image .imgref-badge{position:absolute;left:8px;top:8px}
+.imgreview-body{padding:11px}
+.imgreview-code{font-size:8px;color:var(--muted);font-weight:900}
+.imgreview-title{font-size:10px;line-height:1.35;font-weight:950;margin:4px 0;min-height:42px}
+.imgreview-meta{font-size:8px;color:var(--muted);line-height:1.4;min-height:33px}
+.imgreview-source{font-size:7px;color:var(--muted);margin-top:6px;border-top:1px solid var(--line);padding-top:6px}
+.imgreview-actions{display:flex;gap:6px;margin-top:8px}
+.imgreview-note{
+  border:1px solid #ecd49f;background:#fff8e9;border-radius:12px;padding:10px 12px;margin-bottom:12px;
+  color:#765817;font-size:9px;line-height:1.5
+}
+.catalog-v291-ref{
+  position:absolute;right:7px;bottom:7px;z-index:2;padding:3px 6px;border-radius:999px;
+  background:rgba(255,247,225,.94);border:1px solid rgba(224,185,101,.62);color:#80570a;
+  font-size:7px;font-weight:950;backdrop-filter:blur(4px)
+}
+@media(max-width:1180px){.imgreview-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:850px){.imgreview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.imgreview-kpis{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.imgreview-grid{grid-template-columns:1fr}.imgreview-title{min-height:0}}
+</style>
+
 </head>
 <body>
 <div id="authGate" class="auth-gate">
@@ -710,6 +751,7 @@ body.theme-dark .kanban-col{background:rgba(18,31,50,.68)}.kanban-card{border-ra
     <button data-view="quotes"><span class="ico">▤</span>Orçamentos</button>
     <button data-view="kanban"><span class="ico">▥</span>Kanban comercial</button>
     <button data-view="catalog"><span class="ico">▦</span>Catálogo</button>
+    <button data-view="image-review"><span class="ico">▧</span>Revisão de imagens</button>
     <button data-view="kits"><span class="ico">▧</span>Kits por loja</button>
     <button data-view="planner"><span class="ico">▧</span>Planner 2D</button>
     <button data-view="clients"><span class="ico">♙</span>Clientes</button>
@@ -728,6 +770,7 @@ body.theme-dark .kanban-col{background:rgba(18,31,50,.68)}.kanban-card{border-ra
     <section class="view" id="view-quotes"></section>
     <section class="view" id="view-catalog"></section>
     <section class="view" id="view-kanban"></section>
+  <section class="view" id="view-image-review"></section>
   <section class="view" id="view-kits"></section>
   <section class="view" id="view-planner"></section>
     <section class="view" id="view-clients"></section>
@@ -3210,6 +3253,157 @@ try{
 }catch{}
 
 setTimeout(()=>v29SetSync(cloudReady?'online':'offline',cloudReady?'Online':'Modo local'),250);
+
+
+
+/* ===== v2.9.1 • imagens de referência provisórias SA ===== */
+const V291_IMG = {
+  newplus:'https://carrefourbr.vtexassets.com/arquivos/ids/206982777/image-0.jpg?v=638999256216830000',
+  ponta:'https://images.tcdn.com.br/img/img_prod/994915/ponta_de_gondola_podium_new_plus_1_25m_com_base_e_3_bandejas_637_1_d972bfef2a4ef011256b9f7615ae22db.jpg',
+  gondolaKit:'https://images.tcdn.com.br/img/img_prod/994915/gondola_new_plus_1_70m_kit_1_inicial_1_continuacao_1_ponta_podium_2_30_metros_657_1_8181a91220b967c992473bfecc2bc775.jpg',
+  bandeja:'https://http2.mlstatic.com/D_NQ_NP_951634-MLB79341098645_092024-O-bandeja-sa-new-plus-de-gondola-30-x-91cm-suporte-lateral.webp',
+  gancho:'https://imgs.pontofrio.com.br/1548973571/1xg.jpg',
+  cesto:'https://www.sagrupo.com/wp-content/uploads/2020/01/cesto-600x600.jpg',
+  checkout:'https://simaqcampinas.com.br/site/catalogo/667/intalacoes_lojas_campinas_0006.jpg',
+  farmacia:'https://www.expometal.com.br/arquivos/segmentos/be1b344b836f628911ca6a7aa4887cbc_expositor_fermacias_expomental.jpg',
+  miniPallet:'https://img.olx.com.br/images/19/195323022864782.jpg',
+  portaPallet:'https://static.wixstatic.com/media/577b22_82d2b23ca56b45ddbb820d342f7e7d54~mv2.jpg/v1/fill/w_1000%2Ch_579%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01/577b22_82d2b23ca56b45ddbb820d342f7e7d54~mv2.jpg',
+  moveisAco:'https://www.cadesul.com.br/upload/product/4NVHHYdsBkdu0oP8anYszpqbpdm6n9NCoGDaebv0.jpg',
+  carrinho:'https://imgs.extra.com.br/1576383182/3xg.jpg?imwidth=500'
+};
+
+const V291_SOURCE = {
+  newplus:'Referência de produto SA Gôndolas / varejo',
+  ponta:'Referência New Plus',
+  gondolaKit:'Referência New Plus',
+  bandeja:'Referência de bandeja New Plus',
+  gancho:'Referência visual de gancho',
+  cesto:'Grupo SA — imagem de cesto',
+  checkout:'Referência visual de frente de loja',
+  farmacia:'Referência visual de exposição para farmácia',
+  miniPallet:'Referência visual de Mini Porta Pallet',
+  portaPallet:'Referência visual de Porta Pallet',
+  moveisAco:'Referência visual de móvel de aço',
+  carrinho:'Referência visual de carrinho 90 L'
+};
+
+function v291IsSA(p){
+  const m=normalize(p?.manufacturer||'');
+  return m==='s.a.'||m==='sa'||m.includes('sa gond')||m.includes('s.a');
+}
+function v291ImageRule(p){
+  if(!v291IsSA(p) || p?.image)return null;
+  const text=normalize([p.name,p.category,p.line].join(' '));
+
+  if(text.includes('carrinho')) return {key:'carrinho',url:V291_IMG.carrinho};
+  if(text.includes('check-out')||text.includes('check out')||text.includes('check stand')||text.includes('checkout')) return {key:'checkout',url:V291_IMG.checkout};
+  if(text.includes('mini porta pallet')||text.includes('mini porta palete')) return {key:'miniPallet',url:V291_IMG.miniPallet};
+  if(text.includes('porta pallet')||text.includes('porta palete')) return {key:'portaPallet',url:V291_IMG.portaPallet};
+  if(text.includes('armario')||text.includes('armário')||text.includes('roupeiro')||text.includes('arquivo')||text.includes('estante')) return {key:'moveisAco',url:V291_IMG.moveisAco};
+  if(text.includes('farmacia')||text.includes('farmácia')||text.includes('rack')||text.includes('expositor')||text.includes('balcao')||text.includes('balcão')) return {key:'farmacia',url:V291_IMG.farmacia};
+  if(text.includes('gancho')) return {key:'gancho',url:V291_IMG.gancho};
+  if(text.includes('cesto')||text.includes('divisoria')||text.includes('divisória')||text.includes('vassoureiro')||text.includes('balancinho')) return {key:'cesto',url:V291_IMG.cesto};
+  if(text.includes('bandeja')||text.includes('slg')||text.includes('aparador')||text.includes('porta etiqueta')||text.includes('regua')||text.includes('régua')||text.includes('painel')||text.includes('coluna')||text.includes('pe para')||text.includes('pé para')) return {key:'bandeja',url:V291_IMG.bandeja};
+  if(text.includes('ponta de gondola')||text.includes('ponta de gôndola')||text.includes('podium')) return {key:'ponta',url:V291_IMG.ponta};
+  if(text.includes('super plus')) return {key:'gondolaKit',url:V291_IMG.gondolaKit};
+  return {key:'newplus',url:V291_IMG.newplus};
+}
+function v291ReferenceImage(p){return v291ImageRule(p)?.url||''}
+function v291ImageSource(p){
+  const r=v291ImageRule(p);return r?V291_SOURCE[r.key]||'Imagem de referência':'';
+}
+function v291IsReference(p){return !!(!p?.image && v291ImageRule(p))}
+
+/* Todos os 536 itens SA sem foto passam a receber imagem relacionada por classe.
+   A foto exata do produto, quando cadastrada no banco, sempre tem prioridade. */
+const v291ProductImageBase=productImage;
+productImage=function(p){
+  if(p?.image)return v291ProductImageBase(p);
+  const ref=v291ReferenceImage(p);
+  return ref||v291ProductImageBase(p);
+};
+if(typeof v251CatalogImage==='function'){
+  v251CatalogImage=function(p){return productImage(p)}
+}
+
+/* Badge visual para não confundir referência com fotografia exata. */
+function v291MarkReferenceCards(){
+  const cards=$$('#view-catalog .catalog-v25-card');
+  for(const card of cards){
+    if(card.querySelector('.catalog-v291-ref'))continue;
+    const title=card.querySelector('.catalog-v25-title')?.textContent||'';
+    const code=card.querySelector('.catalog-v25-code')?.textContent||'';
+    const p=(state.catalog||[]).find(x=>title.trim()===String(x.name||'').trim() && (!x.code||code.includes(x.code)));
+    if(p&&v291IsReference(p)){
+      const image=card.querySelector('.catalog-v25-image');
+      if(image)image.insertAdjacentHTML('beforeend','<span class="catalog-v291-ref">imagem de referência</span>');
+    }
+  }
+}
+
+/* Área própria para revisão em lotes. */
+let v291ReviewSearch='';
+let v291ReviewCategory='';
+function v291ReviewProducts(){
+  const t=normalize(v291ReviewSearch);
+  return (state.catalog||[]).filter(p=>{
+    if(!v291IsSA(p))return false;
+    if(v291ReviewCategory&&p.category!==v291ReviewCategory)return false;
+    if(t&&!normalize([p.code,p.name,p.category,p.line].join(' ')).includes(t))return false;
+    return true;
+  });
+}
+function renderImageReview(){
+  const root=$('#view-image-review');if(!root)return;
+  if(isSellerOnly()){root.innerHTML='<div class="empty">Acesso restrito à gestão.</div>';return}
+  const all=(state.catalog||[]).filter(v291IsSA);
+  const exact=all.filter(p=>!!p.image).length;
+  const refs=all.filter(v291IsReference).length;
+  const list=v291ReviewProducts();
+  const cats=[...new Set(all.map(p=>p.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));
+
+  root.innerHTML=`<div class="view-head"><div><h1>Revisão de imagens</h1><p>Primeira cobertura visual do catálogo S.A. As imagens abaixo são referências por família até substituirmos pelas fotografias exatas de cada código.</p></div></div>
+  <div class="imgreview-note"><b>Importante:</b> nenhuma imagem provisória substitui o campo de foto real do produto. Assim que cadastrarmos uma foto exata, ela passa a ter prioridade automaticamente.</div>
+  <div class="imgreview-kpis">
+    <div class="imgreview-kpi"><small>Itens S.A.</small><strong>${all.length}</strong></div>
+    <div class="imgreview-kpi"><small>Foto exata cadastrada</small><strong>${exact}</strong></div>
+    <div class="imgreview-kpi"><small>Com referência provisória</small><strong>${refs}</strong></div>
+    <div class="imgreview-kpi"><small>Exibidos no filtro</small><strong>${list.length}</strong></div>
+  </div>
+  <div class="imgreview-toolbar">
+    <div class="searchbox"><input value="${escapeHtml(v291ReviewSearch)}" placeholder="Buscar código ou produto..." oninput="v291ReviewSearch=this.value;renderImageReview()"></div>
+    <select onchange="v291ReviewCategory=this.value;renderImageReview()"><option value="">Todas as categorias</option>${cats.map(c=>`<option value="${escapeHtml(c)}" ${v291ReviewCategory===c?'selected':''}>${escapeHtml(c)}</option>`).join('')}</select>
+    <button class="btn" onclick="v291ReviewSearch='';v291ReviewCategory='';renderImageReview()">Limpar</button>
+  </div>
+  <div class="imgreview-grid">${list.slice(0,300).map(p=>{
+    const ref=v291IsReference(p);
+    return `<article class="imgreview-card">
+      <div class="imgreview-image"><img src="${productImage(p)}" onerror="this.src='${placeholderSvg('Produto')}'"><span class="imgref-badge ${ref?'':'exact'}">${ref?'Referência provisória':'Foto cadastrada'}</span></div>
+      <div class="imgreview-body">
+        <div class="imgreview-code">${escapeHtml(p.code||'Sem código')}</div>
+        <div class="imgreview-title">${escapeHtml(p.name)}</div>
+        <div class="imgreview-meta">${escapeHtml(p.category||'—')}${p.line?' • '+escapeHtml(p.line):''}</div>
+        <div class="imgreview-source">${escapeHtml(ref?v291ImageSource(p):'Imagem cadastrada no produto')}</div>
+        <div class="imgreview-actions"><button class="btn sm" onclick="openProductDetails('${p.id}')">Ver produto</button>${isAdmin()?`<button class="btn sm green" onclick="openProductModal('${p.id}')">Editar</button>`:''}</div>
+      </div>
+    </article>`
+  }).join('')}</div>
+  ${list.length>300?`<div class="hint" style="text-align:center;margin-top:12px">Mostrando os primeiros 300 de ${list.length}. Use busca ou categoria para revisar os demais.</div>`:''}`;
+}
+
+const v291RenderCatalogBase=renderCatalog;
+renderCatalog=function(){v291RenderCatalogBase();setTimeout(v291MarkReferenceCards,0)};
+
+const v291RenderAllBase=renderAll;
+renderAll=function(){v291RenderAllBase();renderImageReview();setTimeout(v291MarkReferenceCards,0)};
+
+const v291ShowViewBase=showView;
+showView=function(v){
+  if(v==='image-review'&&isSellerOnly()){toast('Acesso restrito à gestão');v='catalog'}
+  const r=v291ShowViewBase(v);
+  if(v==='image-review'){$('#topTitle').textContent='Revisão de imagens';renderImageReview()}
+  return r;
+};
 
 
 /* ===== v2.6.1.2 • runtime fix + inicialização robusta ===== */
