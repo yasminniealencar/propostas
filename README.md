@@ -205,3 +205,10 @@ Não requer SQL novo. Mantenha a pasta `functions/` atual no GitHub.
 - não exige SQL.
 
 As referências são provisórias e serão substituídas progressivamente por imagens exatas.
+
+
+## v2.9.2 — Itens isolados S.A.
+- substitui referências genéricas por família por ilustrações isoladas por item/tipo;
+- revisão visual mais específica para os 536 itens S.A.;
+- fotos exatas continuam tendo prioridade quando cadastradas;
+- não exige SQL.
