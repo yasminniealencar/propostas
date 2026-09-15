@@ -204,3 +204,12 @@ Não requer SQL novo. Mantenha a pasta `functions/` atual no GitHub.
 - alterações manuais da linha não modificam o catálogo mestre;
 - regras de vendedor continuam protegidas;
 - não requer SQL.
+
+
+## v2.9.4 — Correção RLS de clientes
+- novos clientes enviam `created_by` explicitamente;
+- vendedor pode usar cliente criado por outro usuário sem sobrescrever o cadastro mestre;
+- ADM/Dono/Gerente podem atualizar cadastros compartilhados;
+- Dono (`owner`) passa a ser reconhecido pelo backend como perfil administrativo;
+- não apaga clientes nem orçamentos existentes;
+- requer executar o SQL `inovar_v2_9_4_fix_rls_clientes.sql`.

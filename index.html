@@ -3418,6 +3418,58 @@ renderQuote=function(){
 };
 
 
+
+/* ===== v2.9.4 • correção definitiva de RLS de clientes ===== */
+async function cloudSaveClient(c){
+  if(!cloudReady||!c)return c;
+
+  const base={
+    name:String(c.name||'').trim(),
+    phone:c.phone||null,
+    document:c.document||null,
+    address:c.address||null,
+    cep:c.cep||null,
+    city:c.city||null,
+    uf:c.uf||null,
+    updated_by:currentAuth.id
+  };
+
+  const {data:existing,error:findError}=await sb
+    .from('clients')
+    .select('id,created_by')
+    .eq('id',c.id)
+    .maybeSingle();
+  if(findError)throw findError;
+
+  if(!existing){
+    const {error}=await sb.from('clients').insert({
+      id:c.id,
+      ...base,
+      created_by:currentAuth.id
+    });
+    if(error)throw error;
+    return c;
+  }
+
+  const elevated=['owner','admin','manager'].includes(v261Role());
+  const ownClient=existing.created_by===currentAuth.id;
+
+  /*
+    Vendedor pode usar um cliente compartilhado em seu orçamento,
+    mas não sobrescreve o cadastro mestre criado por outro usuário.
+    O snapshot do orçamento continua preservando os dados usados na proposta.
+  */
+  if(!ownClient&&!elevated)return c;
+
+  const {error}=await sb
+    .from('clients')
+    .update(base)
+    .eq('id',c.id);
+  if(error)throw error;
+  return c;
+}
+
+
 /* ===== v2.6.1.2 • runtime fix + inicialização robusta ===== */
 let inovarBootRunning=false;
 let inovarBootDone=false;
